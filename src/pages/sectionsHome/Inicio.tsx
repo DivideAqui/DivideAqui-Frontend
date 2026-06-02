@@ -14,7 +14,6 @@ export function Inicio(){
   return (
     <>
       <section className="sct1" id="homeInicio">
-        
         <div className={`DivIcones ${isFocused ? 'DivIcones-hidden' : ''}`}>
           <div className="DivLado-esquerdo">
             <img src={Amazon} alt="Amazon" id="ImgIconeFlutuante" className={isFocused ? 'ImgIconeFlutuante-animado-ECima' : ''}/>
@@ -40,8 +39,9 @@ export function Inicio(){
         <button className="BtnLogin">Entrar</button>
         <button className="BtnCadastrar">Cadastrar</button>
         </div>
-        <img src={Linha} alt="Linha" className="ImgLinha"/>
+             <img src={Linha} alt="Linha" className="ImgLinha"/> 
       </section>
+
     </>
   );
 }

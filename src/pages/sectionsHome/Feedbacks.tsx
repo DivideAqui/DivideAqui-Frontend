@@ -64,6 +64,21 @@ const feedbacksList: Feedback[] = [
 
 export function Feedbacks(){
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [slideWidth, setSlideWidth] = useState(50);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 768) {
+        setSlideWidth(100);
+      } else {
+        setSlideWidth(50);
+      }
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -103,7 +118,7 @@ export function Feedbacks(){
           </button>
 
           <div className="carousel">
-            <div className="carousel-track" style={{ transform: `translateX(-${currentIndex * 50}%)` }}>
+            <div className="carousel-track" style={{ transform: `translateX(-${currentIndex * slideWidth}%)` }}>
               {feedbacksList.map((feedback) => (
                 <div key={feedback.id} className="carousel-slide">
                   <div className="feedback-card">

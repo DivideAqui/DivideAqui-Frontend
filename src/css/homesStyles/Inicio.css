@@ -86,9 +86,7 @@
 .ImgDivIcones-meio-direita{
   margin-left: 10vw;
 }
-.DivIcones-mobile-bottom{
-  display: none;
-} 
+
 .DivIcones{
   display: flex;
   justify-content: space-between;
@@ -158,7 +156,7 @@ position: absolute;
 
 .InpPesquisa {
   z-index: 4;
-  width: 45vw;
+  width: 40vw;
   height: 5vh;
   padding: 35px;
   border-radius: 20px;
@@ -176,7 +174,7 @@ position: absolute;
 
 .H3Subtitulo {
   margin-top: 10vh;
-  margin-bottom: -2vh;
+  margin-bottom: -1vh;
   font-size: 2vw;
   font-family: var(--fonte-titulo);
   font-weight: 400;
@@ -341,16 +339,39 @@ button {
   }
 }
 
-.DivIcones-mobile{
-  display: none;
+@media (max-width: 1800px) {
+  .BtnLogin{
+  margin-right: 20px;
+  border: 3px solid var(--verde-claro);
+  border-radius: 7px;
+  padding: 2vw 3vw;
+  font-family: var(--fonte-texto);
+  color: var(--verde-claro);
+  font-weight: 600;
+  font-size: 1.3em;
 }
 
-@media (max-width: 1600px)  {
-  .DivIcones{
+.BtnCadastrar{
+  border: 3px solid var(--verde-claro);
+  background-color: var(--verde-claro);
+  border-radius: 7px;
+  padding: 2vw 3vw;
+  font-family: var(--fonte-texto);
+  font-weight: 600;
+  color: var(--preto);
+  font-size: 1.3em;
+  animation: btn-glow 4s ease-in-out infinite;
+}
+.H1Titulo {
+  font-size: 4vw;
+  font-family: var(--fonte-titulo);
+  font-weight: 600;
+}
+.DivIcones{
   display: flex;
   justify-content: space-between;
   width: 100vw;
-  padding: 0%;
+  padding: 0 5%;
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -358,30 +379,30 @@ button {
   right: 0;
   transition: opacity 0.6s ease-in-out;
 }
+}
+
+@media (max-width: 600px) {
   .ImgLinha {
-margin-bottom: -20vh;
+margin-bottom: -60vh;
 width: 90vw;
 position: absolute;
 }
 
-}
 
-@media (max-width: 1200px) {
-.H3Subtitulo {
-  margin-top: 10vw;
-  margin-bottom: -1vh;
-  font-size: 3vw;
-  font-family: var(--fonte-titulo);
-  font-weight: 400;
-  position: relative;
-  z-index: 1;
+.DivIcones{
+  display: none;
 }
-.H1Titulo {
+.H3Subtitulo {
+  margin-top: 10vh;
+  margin-bottom: -1vh;
   font-size: 5vw;
   font-family: var(--fonte-titulo);
+  font-weight: 400;
+}
+.H1Titulo {
+  font-size: 2rem;
+  font-family: var(--fonte-titulo);
   font-weight: 600;
-  position: relative;
-  z-index: 1;
 }
 .InpPesquisa {
   z-index: 4;
@@ -406,109 +427,4 @@ width: 36vw;
 .BtnCadastrar{
 width: 36vw;
 } 
-.DivIcones{
-  display: none;
-}
-
-/* Ícones animados para telas pequenas */
-.DivIcones-mobile {
-  display: flex !important;
-  justify-content: center;
-  align-items: center;
-  gap: 60px;
-  position: absolute;
-  top: 25%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
-  pointer-events: none;
-  z-index: 10;
-  transition: opacity 0.3s ease;
-}
-
-.DivIcones-mobile.hidden {
-  opacity: 0;
-}
-
-.icon-mobile-animated {
-  position: relative;
-  width: 100px;
-  height: 100px;
-  object-fit: contain;
-  opacity: 1;
-  animation: flutuante 3s ease-in-out infinite;
-}
-
-.icon-mobile-animated:nth-child(1) {
-  animation-delay: 0s;
-  width: 85px;
-  height: 85px;
-}
-
-.icon-mobile-animated:nth-child(2) {
-  animation-delay: 0.3s;
-  width: 120px;
-  height: 120px;
-}
-
-.icon-mobile-animated:nth-child(3) {
-  animation-delay: 0.6s;
-  width: 85px;
-  height: 85px;
-}
-
-.DivIcones-mobile-bottom {
-  display: flex !important;
-  justify-content: center;
-  align-items: center;
-  gap: 60px;
-  position: absolute;
-  bottom: 8%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 120%;
-  pointer-events: none;
-  z-index: 10;
-  transition: opacity 0.3s ease;
-}
-
-.DivIcones-mobile-bottom.hidden {
-  opacity: 0;
-}
-
-.DivIcones-mobile-bottom .icon-mobile-animated {
-  position: relative;
-  width: 110px;
-  height: 110px;
-  object-fit: contain;
-  opacity: 1;
-  animation: flutuante 3s ease-in-out infinite;
-}
-
-.DivIcones-mobile-bottom .icon-mobile-animated:nth-child(1) {
-  animation-delay: 0s;
-}
-
-.DivIcones-mobile-bottom .icon-mobile-animated:nth-child(2) {
-  animation-delay: 0.3s;  width: 125px;
-  height: 125px;}
-
-.DivIcones-mobile-bottom .icon-mobile-animated:nth-child(3) {
-  animation-delay: 0.6s;
-}
-
-  .ImgLinha {
-margin-bottom: -50vh;
-width: 90vw;
-position: absolute;
-}
-}
-
-@media (max-width: 600px) {
-  .ImgLinha {
-margin-bottom: -60vh;
-width: 90vw;
-position: absolute;
-}
-
 }

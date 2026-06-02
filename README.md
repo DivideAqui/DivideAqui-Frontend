@@ -1,53 +1,164 @@
-# React + TypeScript + Vite
+# 🚀 DivideAqui
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> **Divida gastos de forma inteligente, segura e desconfortável nunca mais!**
 
-Currently, two official plugins are available:
+DivideAqui é uma aplicação web moderna que facilita o compartilhamento de despesas entre amigos, familiares e colegas. Nosso objetivo é reduzir o impacto dos altos custos, oferecendo formas mais econômicas de acesso a serviços e entretenimento.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## ✨ Sobre o Projeto
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+O DivideAqui nasceu como um Trabalho de Conclusão de Curso (TCC) com uma missão clara: **eliminar o desconforto de cobrar conhecidos**.
 
-## Expanding the ESLint configuration
+Com nossa plataforma, você pode:
+- ✅ Encontrar pessoas para dividir gastos
+- ✅ Convidar amigos para compartilhar despesas
+- ✅ Compartilhar custos de forma segura e organizada
+- ✅ Gerar cobranças automaticamente, sem constrangimento
+- ✅ Manter controle total de suas despesas compartilhadas
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 🎯 Funcionalidades Principais
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- **Divisão Inteligente de Despesas**: Calcule automaticamente quanto cada pessoa deve pagar
+- **Convite de Amigos**: Compartilhe links ou códigos para adicionar participantes
+- **Gestão de Grupos**: Organize despesas por grupos de pessoas
+- **Histórico Completo**: Acompanhe todas as transações
+- **Interface Responsiva**: Funciona perfeitamente em desktop, tablet e celular
+- **Design Moderno**: Interface intuitiva e agradável visualmente
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+---
+
+## 🛠️ Tecnologias Utilizadas
+
+- **React 18** - Biblioteca JavaScript para UI
+- **TypeScript** - Tipagem estática para JavaScript
+- **Vite** - Build tool rápido e moderno
+- **CSS3** - Estilos responsivos e modernos
+- **React Icons** - Ícones de qualidade
+- **ESLint** - Análise estática de código
+
+---
+
+## 📦 Instalação
+
+### Pré-requisitos
+- Node.js (v16 ou superior)
+- npm ou yarn
+
+### Passos
+
+1. **Clone o repositório**
+```bash
+git clone https://github.com/seu-usuario/divideaqui.git
+cd divideaqui
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+2. **Instale as dependências**
+```bash
+npm install
+```
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
+3. **Inicie o servidor de desenvolvimento**
+```bash
+npm run dev
+```
+
+4. **Acesse a aplicação**
+Abra seu navegador e acesse `http://localhost:5173`
+
+---
+
+## 🚀 Como Usar
+
+1. **Crie um Grupo**: Inicie um novo grupo de despesas
+2. **Convide Participantes**: Adicione amigos através de links ou códigos
+3. **Registre Despesas**: Adicione cada gasto compartilhado
+4. **Gere Cobranças**: O sistema calcula automaticamente quem deve pagar para quem
+5. **Acompanhe**: Visualize o histórico e status de todas as transações
+
+---
+
+## 📁 Estrutura do Projeto
+
+```
+DivideAqui/
+├── src/
+│   ├── components/        # Componentes reutilizáveis
+│   ├── pages/            # Páginas principais
+│   ├── css/              # Estilos globais e específicos
+│   ├── assets/           # Imagens e ícones
+│   ├── App.tsx           # Componente principal
+│   └── main.tsx          # Ponto de entrada
+├── public/               # Arquivos públicos estáticos
+├── package.json          # Dependências do projeto
+├── tsconfig.json         # Configuração TypeScript
+└── vite.config.ts        # Configuração Vite
+```
+
+---
+
+## 🔧 Scripts Disponíveis
+
+```bash
+# Inicia o servidor de desenvolvimento
+npm run dev
+
+# Build para produção
+npm run build
+
+# Prévia do build em produção
+npm run preview
+
+# Executa o linter
+npm run lint
+```
+
+---
+
+## 💡 Como Funciona
+
+### Fluxo de Uso
+
+1. **Criação de Grupo**: O usuário cria um novo grupo com nome e descrição
+2. **Adição de Membros**: Convida outros usuários para participar
+3. **Registro de Despesa**: Qualquer membro pode adicionar uma despesa (ex: R$ 120 em pizza)
+4. **Cálculo Automático**: O sistema divide o valor entre todos os participantes
+5. **Geração de Débitos**: Cria automaticamente quem deve pagar para quem
+6. **Resolução**: Membros recebem notificações sobre pagamentos pendentes
+
+---
+
+## 🌟 Diferenciais
+
+- 🎨 **Design Responsivo**: Funciona em qualquer dispositivo
+- ⚡ **Performance**: Carregamento rápido com Vite
+- 🔒 **Segurança**: Dados tratados com cuidado
+- 😊 **Experiência Agradável**: Interface intuitiva e moderna
+- 🚀 **Moderno**: Desenvolvido com tecnologias atuais
+
+---
+
+## 📝 Licença
+
+Este projeto é licenciado sob a Licença MIT - veja o arquivo LICENSE para detalhes.
+
+---
+
+## 👥 Contribuidores
+
+Desenvolvido como TCC com ❤️
+
+---
+
+## 📧 Contato
+
+Para dúvidas ou sugestões sobre o DivideAqui, entre em contato através das issues do repositório.
+
+---
+
+**Comece a dividir despesas de forma inteligente agora! 🎉**
 import reactDom from 'eslint-plugin-react-dom'
 
 export default defineConfig([
