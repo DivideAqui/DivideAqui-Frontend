@@ -1,0 +1,220 @@
+/* SECTION 2 */
+.sct2 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--branco);
+  border-radius: 30px;
+  color: rgb(0, 0, 0);
+  padding: 50px 35px;
+  gap: 35px;
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.BolinhaSuperior {
+  position: absolute;
+  top: 5vw;
+  left: -10%;
+  width: 20%;
+  rotate: 90deg;
+  pointer-events: none;
+  z-index: 1;
+}
+.DivBeneficios p {
+  margin-top: 3%;
+  position: absolute;
+  font-size: 2.5vw;
+  font-family: var(--fonte-texto); 
+  line-height: 40px;
+  font-weight: bold;
+  background-color: var(--verde-claro);
+  padding: 1.2%;
+  border-radius: 10px;
+}
+.BolinhaInferior {
+  position: absolute;
+  bottom: 5vw;
+  right: -10%;
+  width: 20%;
+  rotate: 90deg;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.ImgCelular {
+  margin-left: 4vw;
+  width: 80%;
+  height: auto;
+  object-fit: contain;
+}
+
+.DivTexto {
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.H1Titulo-Sobre {
+  color: var(--azul-escuro);
+  margin-top: -15%;
+  font-size: 3.8vw;
+  font-weight: bold;
+  font-family: var(--fonte-titulo);
+  line-height: 4.2vw;
+  font-weight: 600;
+}
+
+.BDestaque-Azul{
+  background: linear-gradient(90deg, #03045E 0%, #053CC8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 800;
+}
+
+.PTexto{
+  font-size: 1.8vw;
+  font-family: var(--fonte-titulo); 
+  line-height: 2.4vw;
+  font-weight: 600;
+}
+
+.DivBeneficios{
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+@media (max-width: 1024px) {
+  .sct2 {
+    flex-direction: column;
+    min-height: auto;
+    padding: 40px 30px;
+    gap: 30px;
+    justify-content: center;
+  }
+  .DivTexto {
+    width: 100%;
+    order: -1;
+    text-align: center;
+  }
+
+  .ImgCelular {
+    width: 60%;
+    max-width: 400px;
+    margin-left: 10vh;
+  }
+
+  .H1Titulo-Sobre {
+    font-size: 8vw;
+    line-height: 10vw;
+    margin-top: 0;
+  }
+
+  .PTexto {
+    font-size: 3vw;
+    line-height: 3.4vw;
+  }
+
+  .DivBeneficios p {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .sct2 {
+    padding: 30px 20px;
+    gap: 20px;
+    min-height: auto;
+  }
+
+  .DivTexto {
+    width: 100%;
+  }
+
+  .ImgCelular {
+    width: 70%;
+    max-width: 350px;
+        margin-left: 6vh;
+  }
+
+  .H1Titulo-Sobre {
+    font-size: 2.2rem;
+    line-height: 2.8rem;
+    margin-top: 0;
+  }
+
+  .PTexto {
+    font-size: 1.1rem;
+    line-height: 1.8rem;
+  }
+
+  .DivBeneficios {
+    gap: 15px;
+  }
+
+  .DivBeneficios p {
+    margin-top: 3%;
+    position: absolute;
+    font-size: 1.1rem;
+    font-family: var(--fonte-texto);
+    line-height: 1.4rem;
+    font-weight: bold;
+    background-color: var(--verde-claro);
+    padding: 12px 20px;
+    border-radius: 10px;
+  }
+
+  .BolinhaSuperior,
+  .BolinhaInferior {
+    width: 30%;
+  }
+}
+
+@media (max-width: 480px) {
+  .sct2 {
+    padding: 25px 15px;
+    gap: 15px;
+  }
+
+  .DivTexto {
+    width: 100%;
+  }
+
+  .ImgCelular {
+    width: 80%;
+    max-width: 300px;
+  }
+
+  .H1Titulo-Sobre {
+    font-size: 1.6rem;
+    line-height: 2rem;
+  }
+
+  .PTexto {
+    font-size: 0.95rem;
+    line-height: 1.5rem;
+  }
+
+  .DivBeneficios p {
+    margin-top: 3%;
+    position: absolute;
+    font-size: 0.9rem;
+    font-family: var(--fonte-texto);
+    line-height: 1.3rem;
+    font-weight: bold;
+    background-color: var(--verde-claro);
+    padding: 10px 15px;
+    border-radius: 10px;
+  }
+
+  .BolinhaSuperior,
+  .BolinhaInferior {
+    width: 40%;
+  }
+}
