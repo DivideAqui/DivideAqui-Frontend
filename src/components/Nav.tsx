@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import "./../css/Nav.css";
-import { FaCircleUser } from "react-icons/fa6";
 import Logo from "../assets/Icons/logo1Branca.png"
 
 
