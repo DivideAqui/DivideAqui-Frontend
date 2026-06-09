@@ -21,7 +21,6 @@ export function Footer() {
                     </article>
                     <article id="art2" className="artLinks">
                         <h1>Acesso rápido:</h1>
-                        <br></br>
                         <a href="#homeInicio" className="linkFooter">Inicio</a>
                         <a href="#homeSobre" className="linkFooter">Sobre</a>
                         <a href="#homeFeedbacks" className="linkFooter">Feedbacks</a>
@@ -30,7 +29,6 @@ export function Footer() {
                     
                     <article id="art3" className="artLinks">
                         <h1>Redes Sociais:</h1>
-                        <br></br>
                         <div id="artIcon">
                             <RiInstagramFill className="iconFooter" />
                             <a href="https://github.com/DivideAqui" target="_blank">

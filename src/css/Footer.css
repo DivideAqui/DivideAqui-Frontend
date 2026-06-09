@@ -1,6 +1,7 @@
 footer {
   font-family: var(--fonte-texto);
-    background:
+
+  background:
     url("../assets/Imgs/texturaFooter.png"),
     linear-gradient(
       to bottom,
@@ -10,217 +11,278 @@ footer {
 
   background-size: cover;
   background-position: center;
+  color: var(--branco);
 }
 
+/* =====================================
+   PRIMEIRA SEÇÃO
+===================================== */
+
 #sctFooter1 {
-  color: var(--branco);
-  max-height: 39vh;
-  padding: 4rem 6rem;
+  padding: clamp(0.8rem, 2vw, 2rem) clamp(1.5rem, 6vw, 6rem) 0;
+  max-height: 24.3125rem; /* 389px */
+  box-sizing: border-box;
 }
 
 #divFooter1 {
+  width: 100%;
+
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 4rem;
+
+  gap: clamp(1.5rem, 2.5vw, 4rem);
 }
+
+/* =====================================
+   LOGO E DESCRIÇÃO
+===================================== */
 
 #art1 {
-  line-height: 1.875rem;
-  margin-right: 15rem;
+  flex: 1;
+  margin: 0;
 }
 
-#sctFooter1 imgLogo1 {
-  width: 19rem;
+#art1 img {
+  width: 21rem;
+  max-width: 100%;
+  height: auto;
+  display: block;
 }
 
 #art1 p {
-  font-size: 1.25rem;
-  padding-left: 1.5rem;
-  margin-top: -0.5rem;
-  line-height: 1.7rem;
-  letter-spacing: 0.10rem;
+  font-size: 1.4rem;
+  padding-left: 1.7rem;
+  margin-top: -0.3rem;
+  margin-bottom: 0;
+  line-height: 1.6rem;
+  letter-spacing: 0.08rem;
 }
 
-.artLinks {
-  margin-left: 5rem;
+/* =====================================
+   COLUNAS
+===================================== */
+
+#art2 {
+  min-width: 11.25rem; /* 180px */
+  margin: 0;
+}
+
+#art3 {
+  min-width: 11.25rem; /* 180px */
+  margin: 0;
 }
 
 .artLinks h1 {
-  font-size: 1.25rem;
-  margin-bottom: -0.2rem;
+  font-size: 1.4rem;
   color: #ffffff6c;
-  font-weight: lighter;
-}
-
-.artLinks .linkFooter {
-   font-weight: 500;
+  font-weight: 300;
+  margin-top: 0;
+  margin-bottom: 0.2rem;
 }
 
 .linkFooter {
   color: var(--branco);
-  font-size: 1.25rem;
-  margin-bottom: 0.5rem;
+  font-size: 1.3rem;
+  margin-bottom: 0.2rem;
   display: block;
   text-decoration: none;
+  transition: 0.3s;
 }
 
 .linkFooter:hover {
   color: var(--verde-claro);
 }
 
-.iconFooter{
-  color: var(--branco);
-}
+/* =====================================
+   REDES SOCIAIS
+===================================== */
 
-.iconFooter:hover{
-  color: var(--verde-claro);
-}
-
-#sctFooter2 {
- 
-  color: var(--branco);
+#artIcon {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
-  max-height: 18vh;
-  padding: 2rem;
+  gap: 0.7rem;
 }
 
 .iconFooter {
+  color: var(--branco);
   font-size: 2rem;
-  margin-right: 0.5rem;
+  transition: 0.3s;
+}
+
+.iconFooter:hover {
+  color: var(--verde-claro);
+}
+
+/* =====================================
+   SEGUNDA SEÇÃO
+===================================== */
+
+#sctFooter2 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  padding: clamp(0.4rem, 0.8vw, 0.75rem) clamp(1rem, 4vw, 2rem) clamp(0.5rem, 1.2vw, 1rem);
+  max-height: 11.25rem; /* 180px */
+  box-sizing: border-box;
 }
 
 #sctFooter2 hr {
   border: none;
-  height: 0.0625rem;
+  height: 1px;
   width: 90%;
-  background-color: var(--branco);
-  margin-bottom: 2.5rem;
+
+  background-color: rgba(255, 255, 255, 0.25);
+
+  margin-top: 0;
+  margin-bottom: 0.7rem;
 }
 
 #sctFooter2 h1 {
-  font-size: 1.3rem;
+  font-size: 1.7rem;
   font-weight: 300;
-  letter-spacing: 0.1rem;
+  letter-spacing: 0.05rem;
+  text-align: center;
+  margin: 0;
 }
 
+@media (min-width: 769px) {
+  #sctFooter2 hr {
+    margin-bottom: 1.4rem;
+  }
+}
 
-@media (max-width: 768px) {
+/* =====================================
+   NOTEBOOKS
+===================================== */
+
+@media (max-width: 1200px) {
+
   #sctFooter1 {
-    padding: 2.5rem 2rem;
-    max-height: auto;
+    padding: 0.3rem 4rem 0rem;
   }
 
-  #divFooter1 {
-    flex-direction: column;
-    gap: 1.5rem;
-    align-items: center;
+  #art1 img {
+    width: 18rem;
   }
 
-  #art1 {
-    margin-right: 0;
+  #art1 p {
+    font-size: 1.2rem;
     line-height: 1.5rem;
   }
 
-  #sctFooter1 imgLogo1 {
-    width: 12rem;
+  .artLinks h1 {
+    font-size: 1.2rem;
+  }
+
+  .linkFooter {
+    font-size: 1.1rem;
+  }
+
+  #sctFooter2 h1 {
+    font-size: 1.3rem;
+  }
+}
+
+/* =====================================
+   TABLET
+===================================== */
+
+@media (max-width: 768px) {
+
+  #sctFooter1 {
+    padding: 2rem;
+  }
+
+  #divFooter1 {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+  }
+
+  #art1 {
+    width: 100%;
+    text-align: center;
+  }
+
+  #art1 img {
+    width: 17rem;
+    margin: 0 auto;
+  }
+
+  #art1 p {
+    padding-left: 0;
+    font-size: 1.1rem;
+    line-height: 1.6rem;
+  }
+}
+
+/* =====================================
+   MOBILE
+===================================== */
+
+@media (max-width: 600px) {
+
+  #divFooter1 {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  #art1,
+  #art2,
+  #art3 {
+    width: 100%;
+  }
+
+  #art1 img {
+    width: 14rem;
   }
 
   #art1 p {
     font-size: 1rem;
-    padding-left: 1rem;
-    line-height: 1.4rem;
-  }
-
-  .artLinks {
-    margin-left: 0;
+    line-height: 1.5rem;
+    margin-top: 0.5rem;
   }
 
   .artLinks h1 {
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
 
   .linkFooter {
     font-size: 1rem;
-    margin-bottom: 0.3rem;
   }
 
-  #sctFooter2 {
-    padding: 1.5rem 1rem;
+  #artIcon {
+    justify-content: center;
+  }
+
+  .iconFooter {
+    font-size: 1.8rem;
   }
 
   #sctFooter2 h1 {
-    font-size: 1.1rem;
+    font-size: 0.95rem;
+    line-height: 1.5rem;
   }
 }
 
-/* Mobile (480px e abaixo) */
-@media (max-width: 480px) {
+/* =====================================
+   CELULARES PEQUENOS
+===================================== */
+
+@media (max-width: 400px) {
+
   #sctFooter1 {
     padding: 1.5rem 1rem;
   }
 
-  #divFooter1 {
-    gap: 1rem;
-  }
-
-  #art1 {
-    text-align: center;
-    line-height: 1.4rem;
-  }
-
-  #sctFooter1 imgLogo1 {
-    width: 10rem;
-  }
-
-  #art1 p {
-    font-size: 0.9rem;
-    padding-left: 0;
-    line-height: 1.3rem;
-    margin-top: -0.3rem;
-  }
-
-  .artLinks {
-    text-align: center;
-  }
-
-  .artLinks h1 {
-    font-size: 0.95rem;
-    margin-bottom: 0.5rem;
-  }
-
-  .linkFooter {
-    font-size: 0.9rem;
-    margin-bottom: 0.2rem;
-  }
-
-  #artIcon {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin-top: 0.5rem;
+  #art1 img {
+    width: 12rem;
   }
 
   .iconFooter {
     font-size: 1.5rem;
-    margin-right: 0;
-  }
-
-  #sctFooter2 {
-    padding: 1rem;
-    max-height: auto;
-  }
-
-  #sctFooter2 h1 {
-    font-size: 0.9rem;
-    margin: 0;
-  }
-
-  #sctFooter2 hr {
-    width: 100%;
-    margin-bottom: 1rem;
   }
 }
