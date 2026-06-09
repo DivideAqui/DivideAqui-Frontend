@@ -63,16 +63,16 @@ export function Nav() {
   return (
     <header className="NavHeader">
       <div className="Navegacao">
-         <div className="NavLogo">
-        <img src={Logo} alt="Logo DivideAqui" />
-      </div>
-   
+        <div className="NavLogo">
+          <img src={Logo} alt="Logo DivideAqui" />
+        </div>
+
         <div className="nav-hamburger" onClick={handleMenuClick} aria-label="Abrir menu" tabIndex={0}>
-            
           <span style={{ transform: menuOpen ? "translateY(12px) rotate(45deg)" : undefined }} />
           <span style={{ opacity: menuOpen ? 0 : 1 }} />
           <span style={{ transform: menuOpen ? "translateY(-12px) rotate(-45deg)" : undefined }} />
         </div>
+
         <nav className={menuOpen ? "open" : ""}>
           {sections.map((section) => (
             <a
@@ -87,14 +87,14 @@ export function Nav() {
               {section.label}
             </a>
           ))}
-        <button className="btn-login">Entrar</button>
-        <button className="btn-cadastro">Cadastrar</button>
+          <button className="btn-login">Entrar</button>
+          <button className="btn-cadastro">Cadastrar</button>
         </nav>
-        
-        
-      </div>
-      <div className="NavActions">
-        
+
+        <div className="NavActions">
+          <button className="btn-login">Entrar</button>
+          <button className="btn-cadastro">Cadastrar</button>
+        </div>
       </div>
     </header>
   );

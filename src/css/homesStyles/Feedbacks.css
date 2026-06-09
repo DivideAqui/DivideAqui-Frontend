@@ -278,15 +278,16 @@
     font-size: 20px;
   }
 }
+@media (max-height: 600px) {
+  .feedbacks-title {
+   margin-top: 20vh;
+   font-size: 1vw;
+  }
+}
+
 
 /* RESPONSIVO CELULAR */
-@media (max-width: 480px) {
-  .sct3 {
-    padding: 40px 16px;
-    margin-top: 120px;
-    min-height: 500px;
-  }
-
+@media (max-height: 890px) {
   .feedbacks-title {
     font-size: 1.4rem;
     margin-bottom: 30px;

@@ -16,7 +16,7 @@
 }
 .ImgLogo{
     width: 6vw;
-    margin-right: 20px;
+    margin-right: 1.5vw;
 }
 
 .CardCTA h1{
@@ -38,11 +38,12 @@
   .DivJustify{
     display: flex;
     align-items: center;
-    gap: 20px; 
+    gap: 1.5vw; 
  }
 
 @media (max-width: 768px) {
     .CardCTA{
+            top: 195vh;
         height: 10%;
         width: 95%;
     }
@@ -50,9 +51,10 @@
         font-size: 3vw;
     }
     .CardCTA h3{
-        font-size: 2vw;
+        font-size: 2.3vw;
     }
     .ImgLogo{
-        width: 10vw;
+        width: 7vw;
     }
-  }
+}
+
