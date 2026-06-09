@@ -333,9 +333,3 @@
 }
 
 /* ── ≤ 420px ── */
-@media (max-width: 420px) {
-  .NavLogo img {
-    width: 10vw;
-    height: 10vw
-  }
-}

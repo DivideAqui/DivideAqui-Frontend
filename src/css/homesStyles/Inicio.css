@@ -371,7 +371,58 @@ button {
     margin-bottom: 0;
   }
   .DivIcones{
-    display: none;
+    display: block;
+    position: absolute;
+    top: 55vh;
+    left: 0;
+    width: 100%;
+    padding: 0;
+    z-index: 1;
+  }
+  .DivLado-esquerdo,
+  .DivLado-direito {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    width: 100%;
+  }
+  .DivLado-esquerdo {
+    margin-bottom: 3rem;
+  }
+  .DivLado-direito {
+    position: relative;
+    top: 0;
+    left: 0;
+    transform: none;
+    margin-top: 50vh;
+    z-index: 2;
+  }
+  .ImgDivIcones-meio-esquerdo,
+  .ImgDivIcones-meio-direita {
+    margin: 0;
+  }
+  .DivLado-esquerdo #ImgIconeFlutuante,
+  .DivLado-direito #ImgIconeFlutuante {
+    width: 8vh;
+  }
+  .DivIcones-hidden {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease-in-out;
+  }
+  .DivIcones .ImgIconeFlutuante-animado,
+  .DivIcones .ImgIconeFlutuante-animado-DCima,
+  .DivIcones .ImgIconeFlutuante-animado-DBaixo,
+  .DivIcones .ImgIconeFlutuante-animado-EBaixo,
+  .DivIcones .ImgIconeFlutuante-animado-ECima {
+    animation: none !important;
+    transition: opacity 0.4s ease-in-out !important;
+  }
+  .DivIcones-hidden img {
+    animation: none !important;
+    transform: none !important;
   }
   .H3Subtitulo {
     margin-top: 10vh;
@@ -381,7 +432,7 @@ button {
     font-weight: 400;
   }
   .H1Titulo {
-    font-size: 2rem;
+    font-size: 6.6vw;
     font-family: var(--fonte-titulo);
     font-weight: 600;
   }
