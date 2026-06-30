@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import { BrowserRouter as Router, Navigate, Route, Routes } from "react-router-dom";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
@@ -31,20 +30,4 @@ export function App() {
       </GoogleOAuthProvider>
     </>
   );
-=======
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
-import { Home } from "./pages/Home";
-
-export function App(){
-  return(
-    <>
-      <Router>
-      <Routes>
-        <Route path="/" element={<Home />}/>
-      </Routes>
-    </Router>
-    </>
-  )
->>>>>>> f516fa4b3ea1a1f3366fd7b423d9869b8d24b1c5
 }

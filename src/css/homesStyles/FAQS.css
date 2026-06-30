@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 /* SECTION 4 */
 .sct4 {
   background: var(--branco);
@@ -302,11 +301,4 @@
   .CardFAQS {
     padding: 12px;
   }
-=======
-/* SECTION 4 */
-.sct4 {
-  background: var(--branco);
-  color: rgb(0, 0, 0);
-  font-size: 2rem;
->>>>>>> f516fa4b3ea1a1f3366fd7b423d9869b8d24b1c5
 }

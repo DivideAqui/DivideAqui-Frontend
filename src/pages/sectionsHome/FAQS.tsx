@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import "./../../css/homesStyles/FAQS.css"
 import BolinhasAzuis from "../../assets/Imgs/bolinhasAzuis.png";
 import ImgPessoa from "../../assets/Imgs/imgPessoa.png";
@@ -46,16 +45,4 @@ export function FAQS(){
         </section>
         </>
     )
-=======
-import "./../../css/homesStyles/FAQS.css"
-
-export function FAQS(){
-    return(
-        <>
-        <section className="sct4" id="homeFAQS">
-            <h1>FAQS</h1>
-        </section>
-        </>
-    )
->>>>>>> f516fa4b3ea1a1f3366fd7b423d9869b8d24b1c5
 }

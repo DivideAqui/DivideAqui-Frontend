@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import "./../../css/homesStyles/CardCTA.css";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
@@ -68,17 +67,4 @@ export function CardCTA() {
       </div>
     </section>
   );
-=======
-import "./../../css/homesStyles/CardCTA.css"
-import Logo from "../../assets/Icons/íconeBranco.png"
-
-export function CardCTA(){
-    return(
-        <>
-        <section className="CardCTA">
-            <div className="DivJustify"> <img src={Logo} alt="Logo" className="ImgLogo" /> <div> <h1>Tem uma assinatura e quer rachar o valor?</h1> <h3>Não pague o pato (nem a conta) sozinho!</h3> </div></div>
-        </section>
-        </>
-    )
->>>>>>> f516fa4b3ea1a1f3366fd7b423d9869b8d24b1c5
 }
