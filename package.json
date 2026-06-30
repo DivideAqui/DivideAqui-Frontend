@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 {
   "name": "divideaqui",
   "private": true,
@@ -44,7 +44,7 @@
     "vite-plugin-image-optimizer": "^2.0.3"
   }
 }
-=======
+
 {
   "name": "divideaqui",
   "private": true,
