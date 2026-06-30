@@ -1,0 +1,249 @@
+.cadastro-page {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+}
+body{
+  font-family: var(--fonte-texto);
+}
+
+.cadastro-side {
+  flex: 1;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.linha{
+  background-color: black;
+  color: black;
+  border: 2px;
+  width: 10.6vw;
+  margin-right: 1vw;
+  margin-left: 1vw;
+  height: 0.2vh;
+  margin-top: 3vh;
+}
+
+
+.SpanLinha{
+  display: flex;
+  margin-top: 2vh;
+  width: 24.8vw;
+}
+
+.SpanLinha h3{
+  font-size: 2vh;
+  margin-top: 2vh;
+}
+
+.Logar {
+  text-decoration: none;
+  color: var(--preto);
+  font-weight: 600;
+  font-size: 1.1vw;
+  font-family: var(--fonte-texto);
+  margin-top: 1vw;
+}
+
+.btn-logar {
+  color: var(--verde-escuro);
+  font-weight: bolder;
+  text-decoration: none;
+}
+
+.Btn-Cadastrar {
+  border: none;
+  outline: none;
+  cursor: pointer;
+
+  margin-top: 3vh;
+  width: 24.8vw;
+  height: 6vh;
+
+  background: var(--verde-escuro);
+  color: var(--preto);
+
+  font-size: 1.4vw;
+  font-family: inherit;
+  font-weight: 700;
+  letter-spacing: 0.05rem;
+
+  border-radius: 7px;
+  overflow: hidden;
+  position: relative;
+  display: inline-block;
+}
+
+.Btn-Cadastrar span {
+  position: relative;
+  z-index: 10;
+  transition: color 0.4s;
+}
+
+.Btn-Cadastrar::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -10%;
+  width: 120%;
+  height: 100%;
+  z-index: 0;
+  background: var(--verde-claro);
+  transform: skew(30deg);
+  transition: transform 0.4s cubic-bezier(0.3, 1, 0.8, 1);
+}
+
+.Btn-Cadastrar:hover::before {
+  transform: translate3d(100%, 0, 0);
+}
+
+.eye-icon-cadastro{
+font-size: 1.3vw;
+position: absolute;
+margin-left: -1.4vw;
+bottom: 37.5vh;
+}
+
+.InpCadastro{
+  border:none;
+  background-image:none;
+  background-color:transparent;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  border-bottom: 2px solid var(--preto);
+  color: rgba(0, 0, 0, 0.486);
+  font-size: 1.5vw;
+  padding-bottom: 1.5vh;
+  width: 25vw;
+  margin-top: 3svh;
+  padding-left: 0.6vw; 
+  box-sizing: border-box; 
+}
+
+.InpCadastro:focus{
+  border:none;
+    background-image:none;
+    background-color:transparent;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    outline: none;
+    border-bottom: 2px solid var(--preto);
+    color: rgba(0, 0, 0, 0.486);
+}
+
+input[type="date"] {
+  font-family: var(--fonte-texto);
+}
+
+.DivSideTexte-cadastro{
+  position: absolute;
+  left: clamp(10px, 5vw, 80px);
+  bottom: clamp(10px, 5vh, 80px);
+  text-align: left;
+  width: min(90vw, 450px);
+}
+
+.DivSideTexte-cadastro h1 {
+  font-size: clamp(1rem, 4vw, 2.2rem);
+  overflow-wrap: break-word;
+}
+
+.logoCadastro {
+  width: 30vw;
+  margin-left: -6vw;
+  margin-top: -10vh;
+  position: relative;
+  z-index: 2;
+}
+
+
+.cadastro-side-left {
+  background: var(--azul-escuro);
+  color: var(--branco);
+}
+
+.cadastro-shader {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  user-select: none;
+}
+
+.cadastro-side-left::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("../assets/Imgs/texturaFundo.png");
+  background-size: cover;
+  background-position: center;
+  background-attachment: absolute;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.cadastro-hero {
+  position: relative;
+  z-index: 2;
+  max-width: 420px;
+  padding: 1.5rem;
+  backdrop-filter: blur(4px);
+}
+
+.cadastro-hero h1 {
+  font-family: var(--fonte-titulo);
+  font-size: clamp(2.25rem, 4vw, 4rem);
+  margin-bottom: 0.75rem;
+}
+
+.cadastro-hero p {
+  font-family: var(--fonte-texto);
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+.cadastro-side-right {
+  background: var(--branco);
+  color: var(--preto);
+}
+
+.cadastro-card {
+  backdrop-filter: blur(8px);
+  border-radius: 24px;
+  padding: 2rem;
+}
+
+.cadastro-card h2 {
+  margin-bottom: 0.75rem;
+  font-family: var(--fonte-titulo);
+}
+
+.cadastro-card p,
+.cadastro-side p {
+  font-family: var(--fonte-texto);
+  line-height: 1.5;
+}
+
+.data-card {
+  font-family: var(--fonte-texto);
+
+}
+
+@media (max-width: 768px) {
+  .cadastro-page {
+    flex-direction: column;
+  }
+
+  #Lfd {
+    display: none;
+  }
+}
+

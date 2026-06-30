@@ -1,0 +1,337 @@
+.login-page {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+}
+body{
+  font-family: var(--fonte-texto);
+}
+
+
+.login-side {
+  flex: 1;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.linha{
+  background-color: black;
+  color: black;
+  border: 2px;
+  width: 10.6vw;
+  margin-right: 1vw;
+  margin-left: 1vw;
+  height: 0.2vh;
+  margin-top: 3vh;
+}
+
+
+.SpanLinha{
+  display: flex;
+}
+
+.SpanLinha h3{
+  font-size: 2vh;
+  margin-top: 1.8vh;
+}
+
+.Asenha{
+  text-decoration: none;
+  color: var(--azul-claro);
+  margin-left: 16vw;
+  font-weight: 600;
+  font-size: 0.9vw;
+  font-family: var(--fonte-texto);
+}
+
+.Btn-Logar {
+  border: none;
+  outline: none;
+  cursor: pointer;
+
+  margin-top: 3vh;
+  width: 24.8vw;
+  height: 6vh;
+
+  background: var(--azul-escuro);
+  color: var(--branco);
+
+  font-size: 1.4vw;
+  font-family: inherit;
+  font-weight: 700;
+  letter-spacing: 0.05rem;
+
+  border-radius: 7px;
+  overflow: hidden;
+  position: relative;
+  display: inline-block;
+}
+
+.Btn-Logar span {
+  position: relative;
+  z-index: 10;
+  transition: color 0.4s;
+}
+
+.Btn-Logar::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -10%;
+  width: 120%;
+  height: 100%;
+  z-index: 0;
+  background: var(--azul-claro);
+  transform: skew(30deg);
+  transition: transform 0.4s cubic-bezier(0.3, 1, 0.8, 1);
+}
+
+.Btn-Logar:hover::before {
+  transform: translate3d(100%, 0, 0);
+}
+.eye-icon{
+font-size: 1.3vw;
+position: absolute;
+margin-left: -1.4vw;
+bottom: 4vh;
+}
+.InpLogin{
+  border:none;
+    background-image:none;
+    background-color:transparent;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    border-bottom: 2px solid var(--preto);
+    color: rgba(0, 0, 0, 0.486);
+    font-size: 1.5vw;
+    width: 25vw;
+    margin-top: 3svh;
+      padding-left: 0.6vw; 
+  box-sizing: border-box; 
+}
+.InpLogin:focus{
+  border:none;
+    background-image:none;
+    background-color:transparent;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    outline: none;
+    border-bottom: 2px solid var(--preto);
+    color: rgba(0, 0, 0, 0.486);
+}
+
+.DivSideTexte{
+   -webkit-animation: text-focus-in 0.8s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+	        animation: text-focus-in 0.8s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+  position: absolute;
+  z-index: 4;
+  margin-left: -22vw;
+  margin-bottom: -80vh;
+  text-align: left;
+}
+.DivSideTexte h1{
+font-size: 2vw;
+}
+
+.DivSideTexte h3{
+margin-top: 1vh;
+font-weight: 400;
+font-size: 1vw;
+}
+
+@-webkit-keyframes roll-in-blurred-left {
+  0% {
+    -webkit-transform: translateX(-1000px) rotate(-720deg);
+            transform: translateX(-1000px) rotate(-720deg);
+    -webkit-filter: blur(50px);
+            filter: blur(50px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateX(0) rotate(0deg);
+            transform: translateX(0) rotate(0deg);
+    -webkit-filter: blur(0);
+            filter: blur(0);
+    opacity: 1;
+  }
+}
+@keyframes roll-in-blurred-left {
+  0% {
+    -webkit-transform: translateX(-1000px) rotate(-720deg);
+            transform: translateX(-1000px) rotate(-720deg);
+    -webkit-filter: blur(50px);
+            filter: blur(50px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateX(0) rotate(0deg);
+            transform: translateX(0) rotate(0deg);
+    -webkit-filter: blur(0);
+            filter: blur(0);
+    opacity: 1;
+  }
+}
+
+
+.ImgLogoLogin {
+  	-webkit-animation: roll-in-blurred-left 0.9s cubic-bezier(0.230, 1.000, 0.320, 1.000) both;
+	        animation: roll-in-blurred-left 0.9s cubic-bezier(0.230, 1.000, 0.320, 1.000) both;
+  width: 30vw;
+  margin-left: -6vw;
+  position: relative;
+  z-index: 2;
+}
+
+
+.login-side-left {
+  background: var(--azul-escuro);
+  color: var(--branco);
+}
+
+.login-shader {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  user-select: none;
+}
+
+.login-side-left::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("../assets/Imgs/texturaFundo.png");
+  background-size: cover;
+  background-position: center;
+  background-attachment: absolute;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.login-hero {
+     -webkit-animation: text-focus-in 0.8s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+	        animation: text-focus-in 0.8s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+  position: relative;
+  z-index: 2;
+  max-width: 420px;
+  padding: 1.5rem;
+  backdrop-filter: blur(4px);
+}
+
+.login-hero h1 {
+  font-family: var(--fonte-titulo);
+  font-size: clamp(2.25rem, 4vw, 4rem);
+  margin-bottom: 0.75rem;
+}
+
+.login-hero p {
+  font-family: var(--fonte-texto);
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+
+
+.login-side-right {
+  background: var(--branco);
+  color: var(--preto);
+}
+
+.login-card {
+  backdrop-filter: blur(8px);
+  border-radius: 24px;
+  padding: 2rem;
+}
+
+.login-card h2 {
+  margin-bottom: 0.75rem;
+  font-family: var(--fonte-titulo);
+}
+
+.login-card p,
+.login-side p {
+  font-family: var(--fonte-texto);
+  line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .login-page {
+    flex-direction: column;
+  }
+
+  .login-side {
+    min-height: 50vh;
+  }
+}
+
+.google-login-button {
+  display: flex;
+  justify-content: center;
+  margin-top: 2.5vh;
+}
+
+.google-login-button > div {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.google-login-button button {
+  width: 25vw;
+  height: 6vh;
+  border-radius: 7px;
+  font-size: 1.1vw;
+  font-weight: 600;
+  border: 1px solid #d3d3d3;
+  background-color: var(--preto);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--branco);
+}
+
+.google-login-button button:hover {
+  background-color: var(--azul-claro);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  border-color: #bbb;
+}
+
+.google-login-button button:active {
+  background-color: #f0f0f0;
+}
+
+.Btn-Google {
+  width: 36vw;
+  height: 6vh;
+  border-radius: 7px;
+  font-size: 1.1vw;
+  font-weight: 600;
+  border: 1px solid #d3d3d3;
+  background-color: #fff;
+  color: #222;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.Btn-Google:hover {
+  background-color: #f8f8f8cc;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+
+.Btn-Google-Icon {
+  width: 1.6rem;
+  height: 1.6rem;
+  margin-right: 0.8rem;
+}
