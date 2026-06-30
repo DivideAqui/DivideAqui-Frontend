@@ -1,15 +1,19 @@
-/* SECTION 4 */
+/* =========================
+   SECTION 4
+========================= */
+
 .sct4 {
   background: var(--branco);
   background-position: center;
   overflow: hidden;
   position: relative;
-  padding: 80px 0;
-  border-radius: 30px;
+  padding: 10vh 0;
+  border-radius: 2vw;
   display: flex;
 }
 
-.DivFAQS{
+.DivFAQS {
+  display: flex;
   flex-direction: column;
   padding-top: 1vh;
   padding-right: 38vw;
@@ -19,8 +23,8 @@
   z-index: 2;
   color: var(--preto);
   font-family: var(--fonte-titulo);
-  font-size: 3.2rem;
-  max-width: 40rem;
+  font-size: clamp(2rem, 3vw, 3.2rem);
+  max-width: 42vw;
 }
 
 .BDestaque-azul {
@@ -29,51 +33,60 @@
 }
 
 .DivFAQS-Texto {
+  margin-top: 9vh;
+  display: flex;
   flex-direction: column;
   align-items: flex-start;
-  max-width: 27rem;
+  max-width: 28vw;
   z-index: 2;
-  margin-left: 9vh;
-  margin-bottom: -21rem;
+  margin-left: 5vw;
+  margin-bottom: -37vh;
   padding-top: 3vh;
   padding-bottom: 55vh;
+  height: 80vh;
 }
 
 .DivFAQS-Texto h3,
-.DivFAQS-Texto p{
+.DivFAQS-Texto p {
   z-index: 2;
   text-align: justify;
+  height: 10vh;
 }
 
 .DivFAQS-Texto h3 {
   color: var(--preto);
   font-family: var(--fonte-titulo);
-  font-size: 1.6rem;
-  padding-top: 2vh;
+  font-size: clamp(1.2rem, 1.5vw, 1.6rem);
+  padding-top: 3.3vh;
 }
 
 .DivFAQS-Texto p {
-  font-size: 1.3rem;
+  font-size: clamp(1rem, 1.2vw, 1.3rem);
   padding-top: 1vh;
+  
 }
 
 .LinhaFAQS {
-    position: absolute;
-    flex-direction: column;
-    align-items: center;
-    top: 28%;
-    left: 14%;
+  margin-top: 4.1vh;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  top: 25.4%;
+  left: 14%;
 }
 
 .LinhaParagrafo {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .CircleFAQS {
-  width: 35px;
-  height: 35px;
+  width: 2vw;
+  height: 2vw;
+  min-width: 30px;
+  min-height: 30px;
   background: var(--azul-escuro);
   color: var(--branco);
   border-radius: 50%;
@@ -86,7 +99,7 @@
 }
 
 #Circle1 {
-  margin-bottom: 0.9vh;
+  margin-bottom: 1vh;
 }
 
 #Circle2 {
@@ -94,50 +107,45 @@
 }
 
 .Linha {
-    width: 0;
-    height: 65px;
-    border-left: 4px dashed var(--azul-claro);
+  width: 0;
+  height: 8vh;
+  border-left: 0.25vw dashed var(--azul-claro);
 }
 
 .CardFAQS {
-    position: relative;
-    background: var(--verde-claro);
-    width: 25vw;
-    height: 10vh;
-    border-radius: 10px;
-  }
+  position: relative;
+  background: var(--verde-claro);
+  width: 25vw;
+  height: 10vh;
+  border-radius: 0.8vw;
+}
 
 .IconCadeado {
-    position: absolute;
-    top: 23%;
-    left: 9%;  
-    font-size: 1px;
-    color: aliceblue;
-  } 
+  position: absolute;
+  top: 23%;
+  left: 9%;
+  font-size: clamp(1.8rem, 2vw, 2.5rem);
+  color: var(--azul);
+}
 
 .CardFAQS h3 {
   text-align: justify;
   font-family: var(--fonte-texto);
   width: 75%;
-  letter-spacing: -0.9px;
+  letter-spacing: -0.05vw;
   line-height: 1.1;
-  font-size: 1.25rem;
-  padding-left: 6vh;
+  font-size: clamp(1rem, 1.2vw, 1.25rem);
+  padding-left: 3vw;
   padding-top: 0.5vh;
-}
-
-.IconCadeado {
-  font-size: 2.5rem;
-  color: var(--azul);
 }
 
 .ImgPessoa {
   position: absolute;
-  right: 20vh;
+  right: 10vw;
   bottom: -15vh;
   width: 40vw;
-  min-width: 300px;
-  max-width: 1200px;
+  
+
 }
 
 .ImgBolinhasAzuis1 {
@@ -145,160 +153,16 @@
   z-index: 0;
   width: 20vw;
   top: 50vh;
-  margin-left: -212vh;
+  left: -10vw;
   rotate: 90deg;
 }
 
 .ImgBolinhasAzuis2 {
   position: absolute;
-  z-index: 0;
+  z-index: 1;
   width: 20vw;
   top: 10vh;
-  margin-right: -212vh;
+  right: -10vw;
   rotate: 90deg;
-  z-index: 1;
 }
 
-/* =========================
-   TABLET (até 1024px)
-========================= */
-@media (max-width: 1024px) {
-  .sct4 {
-    flex-direction: column;
-    align-items: center;
-    padding: 60px 20px;
-  }
-
-  .DivFAQS {
-    padding-right: 0;
-    width: 100%;
-    align-items: center;
-    text-align: center;
-  }
-
-  .DivFAQS h1 {
-    font-size: 2.6rem;
-    max-width: 100%;
-  }
-
-  .DivFAQS-Texto {
-    margin-left: 0;
-    margin-bottom: 0;
-    padding-bottom: 0;
-    max-width: 90%;
-  }
-
-  .LinhaFAQS {
-    display: none; /* simplifica no tablet */
-  }
-
-  .ImgPessoa {
-    position: relative;
-    right: auto;
-    bottom: auto;
-    width: 60%;
-    margin-top: 30px;
-  }
-
-  .CardFAQS {
-    width: 70%;
-    height: auto;
-    padding: 15px;
-  }
-}
-
-/* =========================
-   CELULAR (até 768px)
-   (aqui entra sua adaptação principal)
-========================= */
-@media (max-width: 768px) {
-
-  .sct4 {
-    flex-direction: column;
-    padding: 40px 15px;
-    border-radius: 20px;
-  }
-
-  /* remove imagem do homem no celular */
-  .ImgPessoa {
-    display: none;
-  }
-
-  /* centraliza tudo */
-  .DivFAQS {
-    align-items: center;
-    text-align: center;
-    padding: 0;
-  }
-
-  .DivFAQS h1 {
-    font-size: 2.2rem;
-    max-width: 100%;
-  }
-
-  .DivFAQS-Texto {
-    margin: 0;
-    padding: 0;
-    max-width: 100%;
-  }
-
-  .DivFAQS-Texto h3 {
-    font-size: 1.3rem;
-  }
-
-  .DivFAQS-Texto p {
-    font-size: 1.1rem;
-  }
-
-  /* card ajusta melhor no mobile */
-  .CardFAQS {
-    width: 100%;
-    height: auto;
-    padding: 15px;
-    margin-top: 20px;
-  }
-
-  .CardFAQS h3 {
-    font-size: 1.1rem;
-    padding-left: 50px;
-  }
-
-  .IconCadeado {
-    font-size: 2rem;
-    top: 20%;
-    left: 5%;
-  }
-
-  /* bolinhas decorativas menores ou escondidas */
-  .ImgBolinhasAzuis1,
-  .ImgBolinhasAzuis2 {
-    width: 40vw;
-    opacity: 0.4;
-  }
-}
-
-/* =========================
-   CELULAR PEQUENO (até 480px)
-========================= */
-@media (max-width: 480px) {
-
-  .DivFAQS h1 {
-    font-size: 1.8rem;
-  }
-
-  .DivFAQS-Texto h3 {
-    font-size: 1.1rem;
-  }
-
-  .DivFAQS-Texto p {
-    font-size: 1rem;
-  }
-
-  .CardFAQS h3 {
-    font-size: 1rem;
-  }
-
-  .CardFAQS {
-    padding: 12px;
-  }
-}
