@@ -1,13 +1,15 @@
 /* SEÇÃO FEEDBACKS */
-.sct3 {
-  background-image: url("./../../assets/Imgs/texturaFooter.png"),
-  linear-gradient(135deg, var(--azul-escuro) 0%, #0d2e5a 100%);
+.sctFeedback {
+    background: var(--azul-escuro);
+  background-image: url("./../../assets/Imgs/texturaFooter.png"), url("./../../assets/Imgs/texturaBlurAzul.png");
   background-size: cover;
   background-position: center;
   background-attachment: absolute;
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: 30px;
   color: var(--branco);
   padding: 90px 40px;
-  height: 80vh;
+  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -138,17 +140,17 @@
 /* ESTRELAS */
 .feedback-rating {
   display: flex;
-  gap: 6px;
+  gap: 1px;
 }
 
 .star {
   font-size: 26px;
   color: #ddd;
-  transition: color 0.2s;
+
 }
 
 .star.filled {
-  color: var(--verde-claro);
+  color: var(--verde-escuro);
 }
 
 /* TEXTO */
@@ -232,7 +234,7 @@
 
 /* RESPONSIVO TABLET */
 @media (max-width: 768px) {
-  .sct3 {
+  .sctFeedback {
     padding: 60px 20px;
   }
 

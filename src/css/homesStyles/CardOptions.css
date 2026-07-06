@@ -6,7 +6,7 @@
     top: 94vh;
     left: 50%;
     transform: translateX(-50%);
-    width: 80%;
+    width: 65%;
     height: 12%;
     z-index: 2;
     background-color: var(--branco);
@@ -15,7 +15,7 @@
 }
 .CardOptions h1{
     font-family: var(--fonte-titulo);
-    font-size: 2vw;
+    font-size: 1.8vw;
     white-space: nowrap;
     color: var(--azul-escuro);
     display: flex;

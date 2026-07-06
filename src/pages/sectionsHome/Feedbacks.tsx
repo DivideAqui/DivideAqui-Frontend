@@ -193,7 +193,7 @@ export function Feedbacks() {
   };
 
   return (
-    <section ref={sectionRef} className="sct3" id="homeFeedbacks">
+    <section ref={sectionRef} className="sctFeedback" id="homeFeedbacks">
       <div className="feedbacks-container">
         <h2 className="feedbacks-title">
           Experiência dos nossos{" "}

@@ -56,7 +56,7 @@ export function Sobre() {
   }, []);
 
   return (
-    <section className="sct2" id="homeSobre" ref={sectionRef}>
+    <section className="sctSobre" id="homeSobre" ref={sectionRef}>
       <img src={BolinhasAzul} alt="" className="BolinhaSuperior" />
       <img src={BolinhasAzul} alt="" className="BolinhaInferior" />
 

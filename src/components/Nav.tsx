@@ -17,7 +17,7 @@ const homeSections = [
   { id: "homeInicio", label: "Início" },
   { id: "homeSobre", label: "Sobre" },
   { id: "homeFeedbacks", label: "Feedbacks" },
-  { id: "homeFAQS", label: "FAQS" },
+  { id: "homeComoFunciona", label: "Como Funciona" },
 ];
 
 export function Nav() {

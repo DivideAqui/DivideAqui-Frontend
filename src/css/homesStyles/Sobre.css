@@ -1,11 +1,10 @@
 /* SECTION 2 */
-.sct2 {
+.sctSobre {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
   background: var(--branco);
-  border-radius: 30px;
   color: rgb(0, 0, 0);
   padding: 50px 35px;
   gap: 35px;
@@ -23,17 +22,26 @@
   pointer-events: none;
   z-index: 1;
 }
+
+.DivBeneficios {
+  position: relative;
+  background: var(--verde-claro);
+  width: 25vw;
+  height: 10vh;
+  border-radius: 0.8vw; }
+
 .DivBeneficios p {
-  margin-top: 3%;
-  position: absolute;
-  font-size: 1.9vw;
-  font-family: var(--fonte-texto); 
-  line-height: 40px;
-  font-weight: bold;
-  background-color: var(--verde-claro);
-  padding: 1vw;
-  border-radius: 10px;
+ margin-top: 3%;
+ position: absolute;
+  font-size: clamp(1rem, 1.2vw, 1.25rem);
+ font-family: var(--fonte-texto);
+ line-height: 40px;
+ font-weight: bold;
+ background-color: var(--verde-claro);
+ padding: 1vw;
+ border-radius: 10px;
 }
+
 .BolinhaInferior {
   position: absolute;
   bottom: 5vw;
@@ -75,7 +83,7 @@
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  font-weight: 800;
+  font-weight:900;
 }
 
 .PTexto{
@@ -87,7 +95,7 @@
 
 
 @media (max-height: 800px) {
-  .sct2 {
+  .sctSobre {
     padding: 40px 30px;
     gap: 30px;
   }
@@ -110,15 +118,15 @@
     font-size: 4vh;
     line-height: 5vh;
   }
+
+  
   .DivBeneficios p {
   margin-top: 2vh;
-  position: absolute;
   font-size: 4.8vh;
   font-family: var(--fonte-texto); 
   line-height: 40px;
   font-weight: bold;
-  background-color: var(--verde-claro);
-  padding: 20vw;
+  padding: 1vw 2vw;
   border-radius: 10px;
 }
 }
@@ -132,7 +140,7 @@
 
 
 @media (max-width: 900px) {
-  .sct2 {
+  .sctSobre {
     flex-direction: column;
     min-height: auto;
     padding: 30px 20px;

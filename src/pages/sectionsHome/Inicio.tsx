@@ -18,7 +18,7 @@ export function Inicio(){
 
   return (
     <>
-      <section className="sct1" id="homeInicio">
+      <section className="sectionInicio" id="homeInicio">
         <div className={`DivIcones ${isFocused ? 'DivIcones-hidden' : ''}`}>
           <div className="DivLado-esquerdo">
             <img src={Amazon} alt="Amazon" id="ImgIconeFlutuante" className={isFocused ? 'ImgIconeFlutuante-animado-ECima' : ''}/>

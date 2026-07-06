@@ -1,4 +1,4 @@
-import "./../../css/homesStyles/FAQS.css";
+import "./../../css/homesStyles/ComoFunciona.tsx.css";
 import BolinhasAzuis from "../../assets/Imgs/bolinhasAzuis.png";
 import ImgPessoa from "../../assets/Imgs/imgPessoa.png";
 
@@ -10,7 +10,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export function FAQS() {
+export function ComoFunciona() {
   const sectionRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
@@ -41,7 +41,7 @@ export function FAQS() {
       )
 
         .fromTo(
-          ".DivFAQS h1",
+          ".DivComoFunciona h1",
           {
             opacity: 0,
             y: 80,
@@ -55,7 +55,7 @@ export function FAQS() {
         )
 
         .fromTo(
-          ".DivFAQS-Texto h3, .DivFAQS-Texto p",
+          ".DivComoFunciona-Texto h3, .DivComoFunciona-Texto p",
           {
             opacity: 0,
             y: 60,
@@ -70,7 +70,7 @@ export function FAQS() {
         )
 
         .fromTo(
-          ".LinhaFAQS",
+          ".LinhaComoFunciona",
           {
             opacity: 0,
             y: 80,
@@ -84,7 +84,7 @@ export function FAQS() {
         )
 
         .fromTo(
-          ".CardFAQS",
+          ".CardComoFunciona",
           {
             opacity: 0,
             y: 100,
@@ -132,66 +132,55 @@ export function FAQS() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="sct4" id="homeFAQS">
+    <section ref={sectionRef} className="sctComoFunciona" id="homeComoFunciona">
       <img
         src={BolinhasAzuis}
         alt="BolinhasAzuis"
         className="ImgBolinhasAzuis1"
       />
 
-      <img
-        src={ImgPessoa}
-        alt="ImgPessoa"
-        className="ImgPessoa"
-      />
+      <img src={ImgPessoa} alt="ImgPessoa" className="ImgPessoa" />
 
-      <div className="DivFAQS">
+      <div className="DivComoFunciona">
         <h1>
           Veja como é <b className="BDestaque-azul">fácil</b>:
         </h1>
 
-        <section className="DivFAQS-Texto">
+        <section className="DivComoFunciona-Texto">
           <h3>Crie ou entre em um grupo</h3>
-          <p>
-            Comece do zero ou participe de uma divisão que já existe.
-          </p>
+          <p>Comece do zero ou participe de uma divisão que já existe.</p>
 
           <h3>Adicione as pessoas</h3>
-          <p>
-            Convide amigos ou entre com quem também está interessado.
-          </p>
+          <p>Convide amigos ou entre com quem também está interessado.</p>
 
           <h3>Relaxe!</h3>
-          <p>
-            O sistema cuida das contas pra você, sem cobranças
-            manuais.
-          </p>
+          <p>O sistema cuida das contas pra você, sem cobranças manuais.</p>
         </section>
 
-        <div className="LinhaFAQS">
+        <div className="LinhaComoFunciona">
           <div className="LinhaParagrafo">
-            <div className="CircleFAQS" id="Circle1">
+            <div className="CircleComoFunciona" id="Circle1">
               1
             </div>
             <div className="Linha"></div>
           </div>
 
           <div className="LinhaParagrafo">
-            <div className="CircleFAQS" id="Circle2">
+            <div className="CircleComoFunciona" id="Circle2">
               2
             </div>
             <div className="Linha"></div>
           </div>
 
           <div className="LinhaParagrafo">
-            <div className="CircleFAQS" id="Circle3">
+            <div className="CircleComoFunciona" id="Circle3">
               3
             </div>
             <div className="Linha"></div>
           </div>
         </div>
 
-        <section className="CardFAQS">
+        <section className="CardComoFunciona">
           <GiPadlock className="IconCadeado" size={40} />
           <h3>Suas divisões protegidas do início ao fim.</h3>
         </section>

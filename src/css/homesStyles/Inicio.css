@@ -1,5 +1,4 @@
-.sct1 {
-  
+.sectionInicio {
   background: var(--azul-escuro);
   background-image: url("./../../assets/Imgs/texturaFundo.png"), url("./../../assets/Imgs/texturaBlurAzul.png"), linear-gradient(to top, rgba(184, 251, 60, 0.5), transparent 30%);
   background-size: cover;
@@ -12,7 +11,7 @@
   overflow: hidden;
 }
 
-.sct1::before {
+.sectionInicio::before {
   content: '';
   position: absolute;
   bottom: 0;
@@ -265,7 +264,7 @@
 	        animation: text-focus-in 0.8s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
   margin-top: 10vh;
   margin-bottom: -1vh;
-  font-size: 2vw;
+  font-size: 1em;
   font-family: var(--fonte-titulo);
   font-weight: 400;
 }
@@ -562,7 +561,7 @@ button {
   .H3Subtitulo {
     margin-top: 10vh;
     margin-bottom: -1vh;
-    font-size: 5vw;
+    font-size: 4vw;
     font-family: var(--fonte-titulo);
     font-weight: 400;
   }

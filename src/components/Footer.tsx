@@ -36,7 +36,7 @@ export function Footer() {
                                 <a href="#homeInicio" className="linkFooter">Inicio</a>
                                 <a href="#homeSobre" className="linkFooter">Sobre</a>
                                 <a href="#homeFeedbacks" className="linkFooter">Feedbacks</a>
-                                <a href="#homeFAQS" className="linkFooter">FAQS</a>
+                                <a href="#homeComoFunciona" className="linkFooter">Como Funciona</a>
                             </>
                         )}
                     </article>

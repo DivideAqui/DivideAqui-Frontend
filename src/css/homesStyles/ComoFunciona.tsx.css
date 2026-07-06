@@ -2,7 +2,7 @@
    SECTION 4
 ========================= */
 
-.sct4 {
+.sctComoFunciona {
   background: var(--branco);
   background-position: center;
   overflow: hidden;
@@ -12,14 +12,14 @@
   display: flex;
 }
 
-.DivFAQS {
+.DivComoFunciona {
   display: flex;
   flex-direction: column;
   padding-top: 1vh;
   padding-right: 38vw;
 }
 
-.DivFAQS h1 {
+.DivComoFunciona h1 {
   z-index: 2;
   color: var(--preto);
   font-family: var(--fonte-titulo);
@@ -32,7 +32,7 @@
   font-weight: bolder;
 }
 
-.DivFAQS-Texto {
+.DivComoFunciona-Texto {
   margin-top: 9vh;
   display: flex;
   flex-direction: column;
@@ -46,27 +46,26 @@
   height: 80vh;
 }
 
-.DivFAQS-Texto h3,
-.DivFAQS-Texto p {
+.DivComoFunciona-Texto h3,
+.DivComoFunciona-Texto p {
   z-index: 2;
   text-align: justify;
   height: 10vh;
 }
 
-.DivFAQS-Texto h3 {
+.DivComoFunciona-Texto h3 {
   color: var(--preto);
   font-family: var(--fonte-titulo);
   font-size: clamp(1.2rem, 1.5vw, 1.6rem);
   padding-top: 3.3vh;
 }
 
-.DivFAQS-Texto p {
+.DivComoFunciona-Texto p {
   font-size: clamp(1rem, 1.2vw, 1.3rem);
   padding-top: 1vh;
-  
 }
 
-.LinhaFAQS {
+.LinhaComoFunciona {
   margin-top: 4.1vh;
   position: absolute;
   display: flex;
@@ -82,7 +81,7 @@
   align-items: center;
 }
 
-.CircleFAQS {
+.CircleComoFunciona {
   width: 2vw;
   height: 2vw;
   min-width: 30px;
@@ -112,7 +111,7 @@
   border-left: 0.25vw dashed var(--azul-claro);
 }
 
-.CardFAQS {
+.CardComoFunciona {
   position: relative;
   background: var(--verde-claro);
   width: 25vw;
@@ -128,7 +127,7 @@
   color: var(--azul);
 }
 
-.CardFAQS h3 {
+.CardComoFunciona h3 {
   text-align: justify;
   font-family: var(--fonte-texto);
   width: 75%;
@@ -141,11 +140,9 @@
 
 .ImgPessoa {
   position: absolute;
-  right: 10vw;
-  bottom: -15vh;
+  right: 18vh;
+  bottom: -18vh;
   width: 40vw;
-  
-
 }
 
 .ImgBolinhasAzuis1 {
