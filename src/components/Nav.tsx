@@ -20,11 +20,26 @@ const homeSections = [
   { id: "homeComoFunciona", label: "Como Funciona" },
 ];
 
+const formatDisplayName = (name?: string) => {
+  const parts = name?.trim().split(/\s+/).filter(Boolean) ?? [];
+
+  if (!parts.length) {
+    return "Usuário";
+  }
+
+  if (parts.length <= 3) {
+    return parts.join(" ");
+  }
+
+  return `${parts.slice(0, 3).join(" ")}...`;
+};
+
 export function Nav() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState(homeSections[0].id);
   const { user, logout } = useAuth();
+  const displayName = formatDisplayName(user?.name);
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "auto";
@@ -84,6 +99,47 @@ export function Nav() {
       </NavLink>
     ));
 
+  const renderUserDropdown = () => {
+    if (!user || !userMenuOpen) {
+      return null;
+    }
+
+    return (
+      <div className="user-dropdown">
+        <div className="user-dropdown-header">
+          {user.picture ? (
+            <img
+              src={user.picture}
+              alt={user.name}
+              className="nav-user-avatar"
+              referrerPolicy="no-referrer"
+            />
+          ) : (
+            <span className="nav-user-avatar-fallback">{user.name?.trim()?.charAt(0)?.toUpperCase() || "U"}</span>
+          )}
+          <h3>{displayName}</h3>
+        </div>
+        <Link to="/perfil" onClick={() => setUserMenuOpen(false)}>
+          Meu Perfil
+        </Link>
+        <Link to="/configuracoes" onClick={() => setUserMenuOpen(false)}>
+          Configurações
+        </Link>
+        <button
+          type="button"
+          className="user-dropdown-logout"
+          onClick={() => {
+            logout();
+            setUserMenuOpen(false);
+          }}
+        >
+          Sair
+          <MdOutlineExitToApp className="ExitIcon" />
+        </button>
+      </div>
+    );
+  };
+
   if (!user) {
     return (
       <header className="NavHeader">
@@ -135,6 +191,13 @@ export function Nav() {
 
   return (
     <header className="NavHeader">
+      <div className="NavActions nav-actions-left">
+        <div className="nav-notification">
+          <HiOutlineBell className="nav-bell" />
+          <span className="nav-bell-dot" aria-hidden="true" />
+        </div>
+      </div>
+
       <div className="Navegacao">
         <div className="NavLogo">
           <img src={Logo} alt="Logo DivideAqui" />
@@ -149,68 +212,40 @@ export function Nav() {
         <nav className={menuOpen ? "open" : ""}>{renderNavLinks()}</nav>
 
         <div className="NavActions">
-          <HiOutlineBell className="nav-bell" />
-          <div className="nav-user-fs">
-            <button
-              type="button"
-              className="nav-user"
-              onClick={() => setUserMenuOpen((open) => !open)}
-            >
-              {user.picture ? (
-                <img
-                  src={user.picture}
-                  alt={user.name}
-                  className="nav-user-avatar"
-                  referrerPolicy="no-referrer"
-                />
-              ) : (
-                <span className="nav-user-avatar-fallback">
-                  {user.name?.trim()?.charAt(0)?.toUpperCase() || "U"}
-                </span>
-              )}
+          <Link to="/divisoes" className="btn-cadastro btn-criar-divisao">
+            Criar Divisão
+          </Link>
+        </div>
+      </div>
 
-              <IoIosArrowDown
-                style={{
-                  transform: userMenuOpen ? "rotate(180deg)" : "rotate(0deg)",
-                  transition: "0.3s",
-                }}
+      <div className="NavActions nav-actions-right">
+        <div className="nav-user-fs">
+          <button
+            type="button"
+            className="nav-user"
+            onClick={() => setUserMenuOpen((open) => !open)}
+          >
+            {user.picture ? (
+              <img
+                src={user.picture}
+                alt={user.name}
+                className="nav-user-avatar"
+                referrerPolicy="no-referrer"
               />
-            </button>
-            {userMenuOpen ? (
-              <div className="user-dropdown">
-                <div className="user-dropdown-header">
-                  {user.picture ? (
-                    <img
-                      src={user.picture}
-                      alt={user.name}
-                      className="nav-user-avatar"
-                      referrerPolicy="no-referrer"
-                    />
-                  ) : (
-                    <span className="nav-user-avatar-fallback">{user.name?.trim()?.charAt(0)?.toUpperCase() || "U"}</span>
-                  )}
-                  <h3>{user.name}</h3>
-                </div>
-                <Link to="/perfil" onClick={() => setUserMenuOpen(false)}>
-                  Meu Perfil
-                </Link>
-                <Link to="/configuracoes" onClick={() => setUserMenuOpen(false)}>
-                  Configurações
-                </Link>
-                <button
-                  type="button"
-                  className="user-dropdown-logout"
-                  onClick={() => {
-                    logout();
-                    setUserMenuOpen(false);
-                  }}
-                >
-                  Sair
-                  <MdOutlineExitToApp className="ExitIcon"/>   
-                </button>
-              </div>
-            ) : null}
-          </div>
+            ) : (
+              <span className="nav-user-avatar-fallback">
+                {user.name?.trim()?.charAt(0)?.toUpperCase() || "U"}
+              </span>
+            )}
+
+            <IoIosArrowDown
+              style={{
+                transform: userMenuOpen ? "rotate(180deg)" : "rotate(0deg)",
+                transition: "0.3s",
+              }}
+            />
+          </button>
+          {renderUserDropdown()}
         </div>
       </div>
     </header>

@@ -1,0 +1,586 @@
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+.divisoes-page {
+    background: #F5F5F0;
+    min-height: 100vh;
+    font-family: var(--fonte-texto), "Montserrat", sans-serif;
+    overflow-x: hidden;
+}
+
+.SctHero {
+    background: var(--azul-escuro);
+    background-image: url("./../assets/Imgs/texturaFundo.png"),
+                      url("./../assets/Imgs/texturaBlurAzul.png");
+    background-size: cover;
+    background-position: center;
+    color: var(--branco);
+
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+
+    overflow: hidden;
+
+    height: 60vh;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 1.5rem;
+}
+.hero-image {
+  position: absolute;
+  height: auto;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.9;
+  filter: blur(2px);
+}
+.hero-image--left{
+  top: 10vh;
+  left: 1rem;
+  bottom: 1rem;
+  transform: rotate(-15deg);
+  width: 15vw;
+  max-width: 180px;
+  margin: 0;
+}
+.hero-image--right{
+  right: 1rem;
+  top: 1rem;
+  transform: rotate(35deg);
+  width: 15vw;
+  max-width: 180px;
+  margin: 0;
+}
+
+.search-input{
+  margin-top: 10vh;
+  position: relative;
+  z-index: 1;
+}
+.SctDivision {
+    position: relative;
+    width: 100%;
+    height: 240vh;
+    color: var(--branco);
+
+    padding: 40px 0 32px;
+
+    overflow-x: hidden;
+    z-index: 2;
+}
+.DivServicos {
+    display: flex;
+    justify-content: center; 
+    align-items: center;    
+    flex-wrap: wrap;
+    margin: -4vh auto 0;
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+.DivServicos button{
+    width: 15vw;
+    height: 6.5vh;
+    background-color: var(--branco);
+     box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 1px, rgba(0, 0, 0, 0.07) 0px 2px 2px, rgba(0, 0, 0, 0.07) 0px 4px 4px, rgba(0, 0, 0, 0.07) 0px 8px 8px, rgba(0, 0, 0, 0.07) 0px 16px 16px;
+    color: var( --azul-escuro);
+    font-family: var(--fonte-texto);
+    font-weight: bold;
+    font-size: 1.1vw;
+    margin: 0.5vw;
+    border-radius: 5px;
+    text-align: center;
+    display: flex;
+    align-items: center;    
+    justify-content: center;
+    gap: 8px;               
+}
+.vagas-section {
+    width: 90vw;
+    margin: 0 auto;
+    padding: 20px 0 32px;
+
+    box-sizing: border-box;
+
+    color: var(--azul-escuro);
+    font-family: var(--fonte-texto), "Montserrat", sans-serif;
+
+    overflow: visible;
+}
+
+.vagas-row {
+    width: 100%;
+    margin-bottom: 28px;
+    padding: 0 12px;
+
+    overflow: visible;
+}
+
+.vagas-row__title {
+  width: 100%;
+  margin-bottom: 5vh;
+}
+
+.vagas-row__title h3 {
+  margin: 0;
+  color: var(--azul-escuro);
+  font-size: clamp(1.15rem, 1.8vw, 1.8rem);
+  font-weight: 800;
+}
+
+.vagas-row__stage {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    width: 100%;
+
+    padding: 35px 52px 0;
+
+    overflow: visible;
+}
+.vagas-row__track {
+    display: flex;
+    gap: 18px;
+
+    width: 100%;
+  
+    overflow-x: auto;
+    overflow-y: visible;
+
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    padding: 4vh 10px 14px;
+
+    scroll-snap-type: x proximity;
+}
+.vagas-row__track::-webkit-scrollbar {
+  display: none;
+}
+
+.vagas-card {
+    position: relative;
+
+    flex: 0 0 calc((100% - 36px) / 3);
+
+    min-height: 220px;
+
+    background: var(--branco);
+
+    border-radius: 5px;
+
+    border: 1px solid rgba(3, 4, 94, 0.06);
+
+    padding: 18px 18px 16px;
+
+    scroll-snap-align: start;
+
+    overflow: visible;
+
+    cursor: pointer;
+    transition: transform 180ms ease, box-shadow 180ms ease;
+
+    box-shadow:
+        rgba(0,0,0,.07) 0 1px 1px,
+        rgba(0,0,0,.07) 0 2px 2px,
+        rgba(0,0,0,.07) 0 4px 4px,
+        rgba(0,0,0,.07) 0 8px 8px,
+        rgba(0,0,0,.07) 0 16px 16px;
+}
+
+.vagas-card:hover,
+.vagas-card:focus-visible {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 30px rgba(3, 4, 94, 0.12);
+  outline: none;
+}
+
+.vagas-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 18px;
+}
+
+.vagas-card__icon {
+  position: relative;
+  width: 5vw;
+  height: 10vh;
+  display: grid;
+  place-items: center;
+  border-radius: 18px;
+  color: var(--branco);
+  font-size: 1.7rem;
+  margin-top: -5vh;
+  margin-left: 6px;
+  box-shadow: none;
+  z-index: 2;
+}
+
+.vagas-card__lock {
+  position: absolute;
+  right: -8px;
+  top: -8px;
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--preto);
+  box-shadow: none;
+  font-size: 0.72rem;
+}
+
+.vagas-card__avatars {
+  display: flex;
+  align-items: center;
+}
+
+.vagas-card__avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid var(--branco);
+  margin-left: -10px;
+  cursor: pointer;
+  padding: 0;
+  overflow: hidden;
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vagas-card__avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.vagas-card__avatar:hover,
+.vagas-card__avatar:focus-visible {
+  transform: scale(1.05);
+  outline: none;
+}
+
+.vagas-card__avatar:first-child {
+  margin-left: 0;
+}
+
+.vagas-card__topline {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.vagas-card__price {
+  color: var(--azul-escuro);
+  font-size: 1.4vw;
+  font-weight: 800;
+}
+
+.vagas-row--top .vagas-card__price {
+  color: var(--azul-claro);
+}
+
+.vagas-row--bottom .vagas-card__price {
+  color: var(--verde-escuro);
+}
+
+.vagas-card__body {
+  margin-top: 12px;
+}
+
+.vagas-card__body h4 {
+  margin: 0 0 6px;
+  color: var(--azul-escuro);
+  font-size: 1.4vw;
+  font-weight: 800;
+  line-height: 1.35;
+  margin-top: -5vh;
+}
+
+.vagas-card__body p {
+  margin: 0;
+  color: rgba(3, 4, 94, 0.72);
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.vagas-card__more {
+  position: absolute;
+  right: 18px;
+  bottom: 14px;
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 50%;
+  background: var(--azul-claro);
+  color: var(--branco);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.vagas-row--bottom .vagas-card__more {
+  background: var(--verde-escuro);
+  color: var(--branco);
+}
+
+.vagas-row__arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: auto;
+  height: auto;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: var(--azul-claro);
+  display: grid;
+  place-items: center;
+  box-shadow: none;
+  cursor: pointer;
+  flex-shrink: 0;
+  z-index: 2;
+  font-size: 2rem;
+  padding: 0;
+  line-height: 1;
+  opacity: 1;
+  transition: transform 220ms ease, color 220ms ease, opacity 220ms ease, filter 220ms ease;
+}
+
+.vagas-row__arrow:hover {
+  transform: translateY(-50%) scale(1.1);
+  color: var(--azul-escuro);
+  filter: drop-shadow(0 8px 16px rgba(3, 4, 94, 0.16));
+}
+
+.vagas-row__arrow:active {
+  transform: translateY(-50%) scale(0.92);
+}
+
+.vagas-row__arrow.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-50%) scale(0.84);
+}
+
+.vagas-row__arrow.is-visible {
+  opacity: 1;
+  transform: translateY(-50%) scale(1);
+}
+
+.vagas-row--top .vagas-row__arrow {
+  color: var(--azul-claro);
+}
+
+.vagas-row--bottom .vagas-row__arrow {
+  color: var(--verde-claro);
+}
+
+.vagas-row__arrow--left {
+  left: 10px;
+}
+
+.vagas-row__arrow--right {
+  right: 10px;
+}
+
+.dialog-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  background: rgba(3, 4, 94, 0.08);
+  backdrop-filter: blur(8px);
+  opacity: 0;
+  visibility: hidden;
+}
+
+.dialog-content {
+  width: 30vw;
+  background: var(--branco);
+  border-radius: 11px;
+  padding: 2rem;
+  box-shadow: 0 24px 60px rgba(3, 4, 94, 0.2);
+  color: var(--azul-escuro);
+}
+
+.dialog-header {
+  margin-bottom: 1.5rem;
+}
+
+.dialog-title {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--azul-escuro);
+}
+
+.dialog-description {
+  margin: 0 0 1.5rem;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  text-align: justify;
+  color: rgba(3, 4, 94, 0.72);
+}
+
+.division-dialog__header {
+  display: grid;
+  
+  gap:4vw;
+  display: flex;
+  align-items: space-around;
+}
+
+.division-dialog__service-block {
+  display: flex;
+  justify-content: center;
+}
+
+.division-dialog__icon {
+  width: 5.7vw;
+  height: 11vh;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  color: var(--branco);
+  font-size: 2.3rem;
+}
+
+.division-dialog__leader-block {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.division-dialog__leader-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, var(--azul-claro), var(--verde-claro));
+  flex-shrink: 0;
+}
+
+.division-dialog__leader-avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.division-dialog__leader-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  color: var(--azul-escuro);
+}
+
+.division-dialog__stars {
+  display: flex;
+  gap: 0.2rem;
+  color: var(--azul-claro);
+  font-size: 0.95rem;
+}
+
+.division-dialog__star-icon {
+  font-size: 0.95rem;
+}
+
+.division-dialog__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.division-dialog__title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.division-dialog__price {
+  font-size: 1.8vw;
+  font-weight: 800;
+  color: var(--azul-claro);
+}
+
+.division-dialog__slots {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: rgba(3, 4, 94, 0.72);
+}
+
+.division-dialog__action {
+  margin: 1rem auto 0;
+  border: none;
+  border-radius: 11px;
+  padding: 0.85rem 1.4rem;
+  min-width: 70%;
+  background: var(--azul-claro);
+  color: var(--branco);
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 180ms ease;
+}
+
+.division-dialog__action:hover {
+  background: var(--azul-escuro);
+}
+
+@media (max-width: 980px) {
+  .vagas-card {
+    flex-basis: calc((100% - 18px) / 2);
+  }
+}
+
+@media (max-width: 640px) {
+  .division-dialog__header {
+    grid-template-columns: 1fr;
+  }
+
+  .division-dialog__title-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .dialog-content {
+    padding: 1.25rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .vagas-row {
+    padding: 0 8px;
+  }
+
+  .vagas-card {
+    flex-basis: 100%;
+    min-width: 100%;
+  }
+
+  .vagas-row__arrow {
+    width: 34px;
+    height: 34px;
+  }
+}

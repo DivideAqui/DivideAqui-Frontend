@@ -1,6 +1,7 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useMemo, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
+import { SearchInput } from '../../components/SearchInput';
 import Amazon from "../../assets/Icons/imgAmazon.png";
 import apple from "../../assets/Icons/imgApple.png";
 import canva from "../../assets/Icons/imgCanva.png";
@@ -11,10 +12,122 @@ import Linha from "../../assets/Imgs/linha.png";
 
 import "./../../css/MinCss/HomeInicioMin.css"
 
+type BackendGroup = {
+  gru_id: number;
+  gru_num_part: number;
+  categoria?: {
+    cat_nome?: string | null;
+  };
+  lider?: {
+    usuario?: {
+      usu_nome?: string | null;
+    };
+  };
+  _count?: {
+    participantes: number;
+  };
+};
+
+const API_BASE_URL = "https://divide-aqui-backend.vercel.app";
+
+const getCategoryKey = (value?: string | null) => {
+  const normalized = (value ?? "").trim().toLowerCase();
+
+  if (normalized.includes("stream")) return "streaming";
+  if (normalized.includes("viag")) return "viagens";
+  if (normalized.includes("domest") || normalized.includes("desp") || normalized.includes("custo")) return "despesas";
+
+  return "outros";
+};
+
+const getCategoryTitle = (value?: string | null) => {
+  switch (getCategoryKey(value)) {
+    case "streaming":
+      return "Streaming";
+    case "viagens":
+      return "Viagens";
+    case "despesas":
+      return "Despesas Domésticas";
+    default:
+      return "Outros";
+  }
+};
+
 export function Inicio(){
   const [isFocused, setIsFocused] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [groups, setGroups] = useState<BackendGroup[]>([]);
+  const navigate = useNavigate();
   const { user } = useAuth();
   const hasUserName = Boolean(user?.name);
+
+  useEffect(() => {
+    const loadGroups = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/grupos`);
+        if (!response.ok) return;
+        const data: BackendGroup[] = await response.json();
+        setGroups(data);
+      } catch (error) {
+        console.error('Erro ao buscar grupos da home:', error);
+      }
+    };
+
+    loadGroups();
+  }, []);
+
+  const searchResults = useMemo(() => {
+    const normalized = searchTerm.trim().toLowerCase();
+
+    if (!normalized) {
+      return [];
+    }
+
+    return groups
+      .filter((group) => {
+        const categoryName = group.categoria?.cat_nome ?? '';
+        const leaderName = group.lider?.usuario?.usu_nome ?? '';
+        const haystack = [
+          categoryName,
+          leaderName,
+          getCategoryTitle(categoryName),
+          String(group.gru_id),
+        ]
+          .join(' ')
+          .toLowerCase();
+
+        return haystack.includes(normalized);
+      })
+      .slice(0, 5)
+      .map((group) => {
+        const category = getCategoryKey(group.categoria?.cat_nome);
+        const leaderName = group.lider?.usuario?.usu_nome ?? 'Líder do grupo';
+        const slots = Math.max(0, (group.gru_num_part || 1) - (group._count?.participantes ?? 0));
+
+        return {
+          id: String(group.gru_id),
+          label: `${getCategoryTitle(group.categoria?.cat_nome)} ${group.gru_id}`,
+          subtitle: `Líder: ${leaderName}`,
+          meta: `${slots} vagas`,
+          category,
+        };
+      });
+  }, [groups, searchTerm]);
+
+  const handleSelectResult = (result: { label: string; category?: string }) => {
+    const params = new URLSearchParams();
+    const queryValue = result.label.trim();
+
+    if (queryValue) {
+      params.set('q', queryValue);
+    }
+
+    if (result.category && result.category !== 'outros') {
+      params.set('categoria', result.category);
+    }
+
+    navigate(`/divisoes?${params.toString()}`);
+  };
 
   return (
     <>
@@ -33,23 +146,32 @@ export function Inicio(){
         </div>
         <h3 className="H3Subtitulo">Simples, Rápido e Justo.</h3>
         <h1 className="H1Titulo">O que você vai <b className="BDestaque-verde">dividir</b> hoje?</h1>
-        <input
-          type="text"
-          className={`InpPesquisa ${isFocused ? 'InpPesquisa-focused' : ''}`}
-          placeholder="Pesquise aqui..."
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
+        <SearchInput
+          value={searchTerm}
+          onChange={setSearchTerm}
+          onFocusChange={setIsFocused}
+          results={searchResults}
+          onSelectResult={handleSelectResult}
         />
         <div
           className="DivBtns"
           style={{
-            opacity: hasUserName ? 0 : 1,
-            pointerEvents: hasUserName ? "none" : "auto",
+            opacity: 1,
+            pointerEvents: "auto",
             transition: "opacity 0.25s ease",
           }}
         >
-          <Link to="/login" className="BtnLogin">Entrar</Link>
-          <Link to="/Cadastro" className="BtnCadastrar">Cadastrar</Link>
+          {hasUserName ? (
+            <>
+              <Link to="/divisoes" className="BtnLogin">Criar divisão</Link>
+              <Link to="/divisoes" className="BtnCadastrar">Participar de divisão</Link>
+            </>
+          ) : (
+            <>
+              <Link to="/login" className="BtnLogin">Entrar</Link>
+              <Link to="/Cadastro" className="BtnCadastrar">Cadastrar</Link>
+            </>
+          )}
         </div>
              <img src={Linha} alt="Linha" className="ImgLinha"/> 
       </section>

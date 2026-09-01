@@ -23,22 +23,18 @@
   z-index: 1;
 }
 
-.DivBeneficios {
-  position: relative;
-  background: var(--verde-claro);
-  width: 25vw;
-  height: 10vh;
-  border-radius: 0.8vw; }
+
 
 .DivBeneficios p {
+  white-space: nowrap;
  margin-top: 3%;
  position: absolute;
-  font-size: clamp(1rem, 1.2vw, 1.25rem);
+ font-size: 1.8vw;
  font-family: var(--fonte-texto);
  line-height: 40px;
  font-weight: bold;
  background-color: var(--verde-claro);
- padding: 1vw;
+ padding: 3vh 2vw;
  border-radius: 10px;
 }
 
@@ -69,6 +65,7 @@
 }
 
 .H1Titulo-Sobre {
+  
   color: var(--azul-escuro);
   margin-top: -15%;
   font-size: 3.8vw;
@@ -87,10 +84,12 @@
 }
 
 .PTexto{
+    text-align: justify;
   font-size: 1.7vw;
   font-family: var(--fonte-titulo); 
   line-height: 2.4vw;
   font-weight: 600;
+  width: 28vw;
 }
 
 

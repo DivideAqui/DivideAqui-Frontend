@@ -10,6 +10,7 @@ import { CardOptions } from "./sectionsHome/CardOptions";
 import { Footer } from "./../components/Footer";
 import { CardCTA } from "./sectionsHome/CardCTA";
 
+
 export function Home() {
   useEffect(() => {
     const lenis = new Lenis({
@@ -30,7 +31,7 @@ export function Home() {
   }, []);
 
   return (
-    <>
+    <div className="home-page">
       <Nav />
       <Inicio />
       <CardOptions />
@@ -39,6 +40,6 @@ export function Home() {
       <Feedbacks />
       <ComoFunciona />
       <Footer />
-    </>
+    </div>
   );
 }

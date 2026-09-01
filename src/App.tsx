@@ -20,7 +20,7 @@ export function App() {
             <Routes>
               <Route path="/" element={<Navigate to="/home" replace />} />
               <Route path="/home" element={<Home />} />
-              <Route path="/divisoes" element={<ProtectedRoute><Divisoes /></ProtectedRoute>} />
+              <Route path="/divisoes"  element={<ProtectedRoute><Divisoes /></ProtectedRoute>} />
               <Route path="/historico" element={<ProtectedRoute><Historico /></ProtectedRoute>} />
               <Route path="/login" element={<Login />} />
               <Route path="/Cadastro" element={<Cadastro />} />

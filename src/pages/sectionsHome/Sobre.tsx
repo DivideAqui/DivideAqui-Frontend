@@ -72,11 +72,11 @@ export function Sobre() {
 
         <p className="PTexto">
           Conectar pessoas para dividir
-          <br />
+          
           custos de forma prática, com
-          <br />
+          
           divisão automática de gastos
-          <br />
+          
           e lembretes de pagamento.
         </p>
 

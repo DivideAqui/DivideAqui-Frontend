@@ -2,9 +2,7 @@
   width: 100%;
   min-height: 100vh;
   display: flex;
-}
-body{
-  font-family: var(--fonte-texto);
+  font-family: var(--fonte-texto), "Montserrat", sans-serif;
 }
 
 .cadastro-side {
@@ -106,8 +104,8 @@ body{
 .eye-icon-cadastro{
 font-size: 1.3vw;
 position: absolute;
-margin-left: -1.4vw;
-bottom: 37.5vh;
+margin-left: 23vw;
+margin-top: 15.1vh;
 }
 
 .InpCadastro{
@@ -235,6 +233,9 @@ input[type="date"] {
 .data-card {
   font-family: var(--fonte-texto);
 
+}
+input::-ms-reveal {
+  display: none;
 }
 
 @media (max-width: 768px) {
