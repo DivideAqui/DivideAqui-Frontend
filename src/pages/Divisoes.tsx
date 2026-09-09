@@ -1,4 +1,4 @@
-import { type ReactNode, useEffect, useMemo, useRef, useState } from "react";
+import { type CSSProperties, type ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import Lenis from "lenis";
 import { gsap } from "gsap";
 import { Nav } from "../components/Nav";
@@ -190,8 +190,36 @@ function VagasLinha({
   onSelectItem: (item: CardItem) => void;
 }) {
   const trackRef = useRef<HTMLDivElement | null>(null);
+  const rowRef = useRef<HTMLDivElement | null>(null);
   const [showLeft, setShowLeft] = useState(false);
   const [showRight, setShowRight] = useState(true);
+
+  useEffect(() => {
+    const row = rowRef.current;
+    if (!row) return;
+
+    const titleEl = row.querySelector(".vagas-row__title h3");
+    const cards = row.querySelectorAll(".vagas-card");
+
+    gsap.fromTo(
+      titleEl,
+      { opacity: 0, y: 18 },
+      { opacity: 1, y: 0, duration: 0.55, ease: "power2.out" }
+    );
+
+    gsap.fromTo(
+      cards,
+      { opacity: 0, y: 22, scale: 0.96 },
+      {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        duration: 0.6,
+        stagger: 0.08,
+        ease: "power3.out",
+      }
+    );
+  }, [items]);
 
   useEffect(() => {
     const track = trackRef.current;
@@ -254,7 +282,7 @@ function VagasLinha({
   };
 
   return (
-    <div className={`vagas-row vagas-row--${variant}`}>
+    <div className={`vagas-row vagas-row--${variant}`} ref={rowRef}>
       <div className="vagas-row__title">
         <h3>{title}</h3>
       </div>
@@ -345,6 +373,8 @@ export function Divisoes() {
   const [selectedItem, setSelectedItem] = useState<CardItem | null>(null);
   const [allGroups, setAllGroups] = useState<BackendGroup[]>([]);
   const [loading, setLoading] = useState(true);
+  const [heroPointer, setHeroPointer] = useState({ x: 0, y: 0 });
+  const heroRef = useRef<HTMLElement | null>(null);
   const [searchParams, setSearchParams] = useSearchParams();
 
   const activeCategory = (searchParams.get("categoria") as CategoryKey | "all") ?? "all";
@@ -384,6 +414,32 @@ export function Divisoes() {
   }, [activeCategory, allGroups, normalizedSearch]);
 
   const rows = useMemo(() => buildRowsFromGroups(filteredGroups), [filteredGroups]);
+
+  useEffect(() => {
+    const hero = heroRef.current;
+    if (!hero) return;
+
+    const handlePointerMove = (event: PointerEvent) => {
+      const rect = hero.getBoundingClientRect();
+      const relativeX = (event.clientX - rect.left) / rect.width;
+      const relativeY = (event.clientY - rect.top) / rect.height;
+
+      setHeroPointer({
+        x: (relativeX - 0.5) * 36,
+        y: (relativeY - 0.5) * 18,
+      });
+    };
+
+    const handlePointerLeave = () => setHeroPointer({ x: 0, y: 0 });
+
+    hero.addEventListener("pointermove", handlePointerMove);
+    hero.addEventListener("pointerleave", handlePointerLeave);
+
+    return () => {
+      hero.removeEventListener("pointermove", handlePointerMove);
+      hero.removeEventListener("pointerleave", handlePointerLeave);
+    };
+  }, []);
 
   useEffect(() => {
     let isMounted = true;
@@ -483,11 +539,16 @@ export function Divisoes() {
     setSearchParams(nextParams);
   };
 
+  const heroStyle = {
+    ["--hero-x" as string]: `${heroPointer.x}px`,
+    ["--hero-y" as string]: `${heroPointer.y}px`,
+  } as CSSProperties;
+
   return (
     <>
       <Nav />
       <main className="divisoes-page">
-        <section className="SctHero">
+        <section ref={heroRef} className="SctHero" style={heroStyle}>
           <img src={moeda} alt="" className="hero-image hero-image--left" aria-hidden="true" />
           <img src={moeda} alt="" className="hero-image hero-image--right" aria-hidden="true" />
           <SearchInput
@@ -505,6 +566,7 @@ export function Divisoes() {
               key={key}
               type="button"
               onClick={() => handleCategoryChange(key)}
+              aria-pressed={activeCategory === key}
               className={activeCategory === key ? "is-active" : ""}
             >
               {icon} {label}
