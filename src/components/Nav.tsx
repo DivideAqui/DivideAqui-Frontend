@@ -12,7 +12,6 @@ const navItems = [
   { to: "/home", label: "Home" },
   { to: "/divisoes", label: "Divisões" },
   { to: "/historico", label: "Histórico" },
-  { to: "/meupefil", label: "meuPerfil" },
 ];
 
 const homeSections = [
