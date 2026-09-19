@@ -44,11 +44,15 @@ export function Footer() {
                     <article id="art3" className="artLinks">
                         <h1>Redes Sociais:</h1>
                         <div id="artIcon">
-                            <RiInstagramFill className="iconFooter" />
+                            <a href="https://www.instagram.com/divideaqui.br/" target="_blank">
+                                <RiInstagramFill className="iconFooter" />
+                            </a>
                             <a href="https://github.com/DivideAqui" target="_blank">
                                 <FaGithub className="iconFooter" />
                             </a>
-                            <MdEmail className="iconFooter" />
+                            <a href="mailto:divideaqui81@gmail.com" target="_blank">
+                                <MdEmail className="iconFooter" />
+                            </a>
                         </div>
                     </article>
                     </div>

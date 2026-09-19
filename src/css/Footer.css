@@ -91,6 +91,7 @@ footer {
 
 .linkFooter:hover {
   color: var(--verde-claro);
+  font-weight: bold;
 }
 
 /* =====================================

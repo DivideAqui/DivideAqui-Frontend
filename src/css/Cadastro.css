@@ -1,13 +1,25 @@
+.conteudo-cadastro {
+  width: 25vw;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  margin-top: 3vh;
+}
+
 .cadastro-page {
   width: 100%;
   min-height: 100vh;
   display: flex;
-  font-family: var(--fonte-texto), "Montserrat", sans-serif;
 }
+
+body{
+  font-family: var(--fonte-texto);
+}
+
 
 .cadastro-side {
   flex: 1;
-  min-height: 100vh;
+  min-height: 140vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -17,11 +29,22 @@
   overflow: hidden;
 }
 
-.linha{
+
+.IconCancelar {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  cursor: pointer;
+  outline: none;
+  color: var(--preto);
+}
+
+
+.linha {
   background-color: black;
   color: black;
   border: 2px;
-  width: 10.6vw;
+  width: 100%;
   margin-right: 1vw;
   margin-left: 1vw;
   height: 0.2vh;
@@ -32,13 +55,15 @@
 .SpanLinha{
   display: flex;
   margin-top: 2vh;
-  width: 24.8vw;
+  width: 100%;
 }
+
 
 .SpanLinha h3{
   font-size: 2vh;
   margin-top: 2vh;
 }
+
 
 .Logar {
   text-decoration: none;
@@ -49,28 +74,39 @@
   margin-top: 1vw;
 }
 
+
 .btn-logar {
   color: var(--verde-escuro);
   font-weight: bolder;
   text-decoration: none;
 }
 
+
+.btn-logar:hover {
+  text-decoration: underline;
+}
+
+
 .Btn-Cadastrar {
   border: none;
   outline: none;
   cursor: pointer;
 
+
   margin-top: 3vh;
   width: 24.8vw;
   height: 6vh;
 
+
   background: var(--verde-escuro);
   color: var(--preto);
+
 
   font-size: 1.4vw;
   font-family: inherit;
   font-weight: 700;
   letter-spacing: 0.05rem;
+
 
   border-radius: 7px;
   overflow: hidden;
@@ -78,11 +114,13 @@
   display: inline-block;
 }
 
+
 .Btn-Cadastrar span {
   position: relative;
   z-index: 10;
   transition: color 0.4s;
 }
+
 
 .Btn-Cadastrar::before {
   content: "";
@@ -97,16 +135,62 @@
   transition: transform 0.4s cubic-bezier(0.3, 1, 0.8, 1);
 }
 
+
 .Btn-Cadastrar:hover::before {
   transform: translate3d(100%, 0, 0);
 }
 
-.eye-icon-cadastro{
-font-size: 1.3vw;
-position: absolute;
-margin-left: 23vw;
-margin-top: 15.1vh;
+
+.senha-container-cadastro {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 }
+
+
+.senha-input-wrapper-cadastro {
+    position: relative;
+    width: 100%;
+}
+
+
+.senha-input-wrapper-cadastro .InpCadastro {
+    width: 100%;
+}
+
+
+.eye-icon-cadastro {
+    position: absolute;
+    right: 1.3vw;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--preto);
+    font-size: 1.2vw;
+}
+
+
+    input[type="password"]::-ms-reveal,
+    input[type="password"]::-ms-clear,
+    input[type="password"]::-webkit-credentials-auto-fill-button {
+    display: none;
+}
+
+
+label {
+  display: block;
+  font-size: 1.1vw;
+  text-align: left;
+  font-family: var(--fonte-titulo);
+}
+
 
 .InpCadastro{
   border:none;
@@ -115,58 +199,85 @@ margin-top: 15.1vh;
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
   box-shadow: none;
-  border-bottom: 2px solid var(--preto);
-  color: rgba(0, 0, 0, 0.486);
-  font-size: 1.5vw;
-  padding-bottom: 1.5vh;
-  width: 25vw;
-  margin-top: 3svh;
-  padding-left: 0.6vw; 
-  box-sizing: border-box; 
-}
-
-.InpCadastro:focus{
-  border:none;
-    background-image:none;
-    background-color:transparent;
-    -webkit-box-shadow: none;
-    -moz-box-shadow: none;
-    box-shadow: none;
-    outline: none;
-    border-bottom: 2px solid var(--preto);
-    color: rgba(0, 0, 0, 0.486);
-}
-
-input[type="date"] {
+  border: 0.1px solid var(--preto);
+  color: var(--preto);
+  font-size: 1vw;
+  padding-bottom: 0.3vh;
+  width: 100%;
+  height: 6vh;
+  margin-top: 2vh;
+  margin-bottom: 2vh;
+  padding-left: 0.8vw;
+  box-sizing: border-box;
   font-family: var(--fonte-texto);
 }
 
-.DivSideTexte-cadastro{
-  position: absolute;
-  left: clamp(10px, 5vw, 80px);
-  bottom: clamp(10px, 5vh, 80px);
-  text-align: left;
-  width: min(90vw, 450px);
+
+.InpCadastro:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px #d6fa927e inset;
 }
+
+
+input[type="date"] {
+  font-family: var(--fonte-texto);
+  font-weight: 100;
+  color: var(--preto);
+}
+
+
+input[type="date"]::-webkit-datetime-edit {
+    color: var(--preto);
+}
+
+input[type="date"]:valid::-webkit-datetime-edit {
+    color: #03030396; /* preenchido */
+}
+
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    width: 1vw;
+    height: 1vw;
+    margin-right: 1.3vw;
+    cursor: pointer;
+    transform: translateY(0.1vh);
+}
+
+.DivSideTexte-cadastro{
+  -webkit-animation: text-focus-in 0.8s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+          animation: text-focus-in 0.8s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+  position: absolute;
+  z-index: 4;
+  margin-left: -5vw;
+  margin-bottom: -60vh;
+  text-align: left;
+}
+
 
 .DivSideTexte-cadastro h1 {
-  font-size: clamp(1rem, 4vw, 2.2rem);
-  overflow-wrap: break-word;
+  font-size: 2vw;
+   width: 40vw;
 }
 
+
 .logoCadastro {
+    -webkit-animation: roll-in-blurred-left 0.9s cubic-bezier(0.230, 1.000, 0.320, 1.000) both;
+          animation: roll-in-blurred-left 0.9s cubic-bezier(0.230, 1.000, 0.320, 1.000) both;
   width: 30vw;
   margin-left: -6vw;
-  margin-top: -10vh;
+  margin-top: -15vh;
   position: relative;
   z-index: 2;
 }
 
 
+
+
 .cadastro-side-left {
   background: var(--azul-escuro);
   color: var(--branco);
+  user-select: none;
 }
+
 
 .cadastro-shader {
   position: absolute;
@@ -175,6 +286,7 @@ input[type="date"] {
   pointer-events: none;
   user-select: none;
 }
+
 
 .cadastro-side-left::before {
   content: "";
@@ -188,6 +300,7 @@ input[type="date"] {
   z-index: 1;
 }
 
+
 .cadastro-hero {
   position: relative;
   z-index: 2;
@@ -196,11 +309,13 @@ input[type="date"] {
   backdrop-filter: blur(4px);
 }
 
+
 .cadastro-hero h1 {
   font-family: var(--fonte-titulo);
   font-size: clamp(2.25rem, 4vw, 4rem);
   margin-bottom: 0.75rem;
 }
+
 
 .cadastro-hero p {
   font-family: var(--fonte-texto);
@@ -208,10 +323,13 @@ input[type="date"] {
   line-height: 1.6;
 }
 
+
 .cadastro-side-right {
   background: var(--branco);
   color: var(--preto);
+  align-items: center;
 }
+
 
 .cadastro-card {
   backdrop-filter: blur(8px);
@@ -219,10 +337,12 @@ input[type="date"] {
   padding: 2rem;
 }
 
+
 .cadastro-card h2 {
   margin-bottom: 0.75rem;
   font-family: var(--fonte-titulo);
 }
+
 
 .cadastro-card p,
 .cadastro-side p {
@@ -230,21 +350,122 @@ input[type="date"] {
   line-height: 1.5;
 }
 
+
 .data-card {
   font-family: var(--fonte-texto);
 
+
 }
-input::-ms-reveal {
-  display: none;
-}
+
 
 @media (max-width: 768px) {
   .cadastro-page {
     flex-direction: column;
   }
 
+
   #Lfd {
     display: none;
   }
+
+
+  .login-page {
+    flex-direction: column;
+  }
+
+
+  .login-side {
+    min-height: 50vh;
+  }
 }
 
+
+.google-cadastro-button {
+  display: flex;
+  justify-content: center;
+  margin-top: 2.5vh;
+}
+
+
+.google-cadastro-button > div {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+
+.google-cadastro-button button {
+  width: 100%;
+  height: 7vh;
+  border-radius: 7px;
+  font-size: 1.1vw;
+  font-weight: 600;
+  border: 1px solid #d3d3d3;
+  background-color: var(--preto);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--branco);
+}
+
+
+.google-cadastro-button button:hover {
+  background-color: var(--verde-claro);
+  color: var(--preto);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  border-color: #bbb;
+}
+
+
+.google-cadastro-button button:active {
+  background-color: #f0f0f0;
+}
+
+
+.Btn-Google {
+  width: 100%;
+  height: 6vh;
+  border-radius: 7px;
+  font-size: 1.1vw;
+  font-weight: 600;
+  border: 1px solid #d3d3d3;
+  background-color: #fff;
+  color: #222222;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.Btn-Google:hover {
+  background-color: #f8f8f8cc;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+
+
+.Btn-Google-Icon {
+  width: 1.6rem;
+  height: 1.6rem;
+  margin-right: 0.8rem;
+}
+
+@media (max-width: 768px) {
+
+    .cadastro-side-left {
+        display: none;
+    }
+
+    .cadastro-side-right {
+        width: 100%;
+        min-height: 100vh;
+        flex: 1;
+        padding: 2rem;
+        box-sizing: border-box;
+    }
+    .conteudo-cadastro {
+      width: 30%;
+    }
+}

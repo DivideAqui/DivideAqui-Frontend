@@ -5,6 +5,8 @@ import { Home } from "./pages/Home";
 import { Login } from "./pages/login";
 import { Cadastro } from "./pages/Cadastro";
 import { Divisoes } from "./pages/Divisoes";
+import { MeuPerfil } from "./pages/meuPerfil";
+import { MeusGrupos } from "./pages/meusGrupos";
 import { Historico } from "./pages/Historico";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { AuthProvider } from "./hooks/useAuth";
@@ -22,6 +24,8 @@ export function App() {
               <Route path="/home" element={<Home />} />
               
               <Route path="/historico" element={<ProtectedRoute><Historico /></ProtectedRoute>} />
+              <Route path="/meuperfil" element={<ProtectedRoute><MeuPerfil /></ProtectedRoute>} />
+              <Route path="/meusgrupos" element={<ProtectedRoute><MeusGrupos /></ProtectedRoute>} />
               <Route path="/login" element={<Login />} />
               <Route path="/divisoes" element={<Divisoes />} />
               <Route path="/Cadastro" element={<Cadastro />} />

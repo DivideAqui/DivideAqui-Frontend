@@ -4,13 +4,15 @@ import "./../css/Nav.css";
 import { useAuth } from "../hooks/useAuth";
 import Logo from "../assets/Icons/logo1Branca.png";
 import { IoIosArrowDown } from "react-icons/io";
-import { HiOutlineBell } from "react-icons/hi";
-import { MdOutlineExitToApp } from "react-icons/md";
+import { IoMdNotifications } from "react-icons/io";
+import { IoIosExit } from "react-icons/io";
+
 
 const navItems = [
   { to: "/home", label: "Home" },
   { to: "/divisoes", label: "Divisões" },
   { to: "/historico", label: "Histórico" },
+  { to: "/meupefil", label: "meuPerfil" },
 ];
 
 const homeSections = [
@@ -119,11 +121,11 @@ export function Nav() {
           )}
           <h3>{displayName}</h3>
         </div>
-        <Link to="/perfil" onClick={() => setUserMenuOpen(false)}>
+        <Link to="/meuperfil" onClick={() => setUserMenuOpen(false)}>
           Meu Perfil
         </Link>
-        <Link to="/configuracoes" onClick={() => setUserMenuOpen(false)}>
-          Configurações
+        <Link to="/meusgrupos" onClick={() => setUserMenuOpen(false)}>
+          Meus grupos
         </Link>
         <button
           type="button"
@@ -134,7 +136,7 @@ export function Nav() {
           }}
         >
           Sair
-          <MdOutlineExitToApp className="ExitIcon" />
+          <IoIosExit className="ExitIcon" />
         </button>
       </div>
     );
@@ -193,7 +195,7 @@ export function Nav() {
     <header className="NavHeader">
       <div className="NavActions nav-actions-left">
         <div className="nav-notification">
-          <HiOutlineBell className="nav-bell" />
+          <IoMdNotifications className="nav-bell" />
           <span className="nav-bell-dot" aria-hidden="true" />
         </div>
       </div>

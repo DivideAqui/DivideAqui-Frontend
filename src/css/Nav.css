@@ -22,6 +22,10 @@
   cursor: pointer;
 }
 
+.nav-bell:hover {
+  color: var(--verde-claro);
+}
+
 .nav-notification {
   position: relative;
   display: inline-flex;
@@ -77,6 +81,7 @@
   z-index: 1201;
   margin-left: 0;
 }
+
 .NavLogo img {
   height: 200px;
   max-height: 210px;
@@ -113,7 +118,6 @@
 
 .nav-user-name {
   font-weight: 600;
-
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -138,7 +142,6 @@
 }
 
 .user-dropdown-header h3{
-  
   font-family: var(--fonte-titulo);
   font-size: 1.2vw;
   color: var(--azul-escuro);
@@ -147,7 +150,6 @@
 
 .user-dropdown a,
 .user-dropdown button {
- 
   margin-top: 1vh;
   border: none;
   background: transparent;
@@ -163,6 +165,12 @@
     font-family: var(--fonte-texto);
     font-weight: 600;
     font-size: 1.1vw;
+}
+
+.user-dropdown a:hover,
+.user-dropdown button:hover {
+  background-color: var(--azul-escuro);
+  color: var(--branco);
 }
 
 .ExitIcon{
@@ -185,7 +193,6 @@
 }
 
 .user-dropdown-header h3{
-  
   font-family: var(--fonte-titulo);
   font-size: 1.2vw;
   color: var(--preto);
@@ -388,8 +395,8 @@
   color: #111;
 }
 .btn-cadastro:hover {
-  background: #fff;
-  color: #222;
+  background: var(--verde-escuro);
+  color: #111;
 }
 
 /* ── Hamburguer ── */

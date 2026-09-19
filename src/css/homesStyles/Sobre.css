@@ -26,7 +26,7 @@
 
 
 .DivBeneficios p {
-  white-space: nowrap;
+ white-space: nowrap;
  margin-top: 3%;
  position: absolute;
  font-size: 1.8vw;
@@ -84,12 +84,12 @@
 }
 
 .PTexto{
-    text-align: justify;
-  font-size: 1.7vw;
+  text-align: justify;
+  font-size: 1.07vw;
   font-family: var(--fonte-titulo); 
   line-height: 2.4vw;
   font-weight: 600;
-  width: 28vw;
+  width: 30vw;
 }
 
 
@@ -109,19 +109,19 @@
 
   .H1Titulo-Sobre {
     margin-top: -10%;
-    font-size: 9vh;
+    font-size: 8vh;
     line-height: 9vh;
   }
 
   .PTexto {
-    font-size: 4vh;
+    font-size: 3.5vh;
     line-height: 5vh;
   }
 
   
   .DivBeneficios p {
-  margin-top: 2vh;
-  font-size: 4.8vh;
+  margin-top: 1vh;
+  font-size: 4.2vh;
   font-family: var(--fonte-texto); 
   line-height: 40px;
   font-weight: bold;
