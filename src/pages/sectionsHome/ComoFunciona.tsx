@@ -1,10 +1,12 @@
 import "./../../css/homesStyles/ComoFunciona.tsx.css";
+import "../../css/MinCss/ComoFuncionaMin.css";
+
 import BolinhasAzuis from "../../assets/Imgs/bolinhasAzuis.png";
 import ImgPessoa from "../../assets/Imgs/imgPessoa.png";
 
 import { GiPadlock } from "react-icons/gi";
-
 import { useEffect, useRef } from "react";
+
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -39,7 +41,6 @@ export function ComoFunciona() {
           ease: "none",
         }
       )
-
         .fromTo(
           ".DivComoFunciona h1",
           {
@@ -53,7 +54,6 @@ export function ComoFunciona() {
           },
           0
         )
-
         .fromTo(
           ".DivComoFunciona-Texto h3, .DivComoFunciona-Texto p",
           {
@@ -68,7 +68,6 @@ export function ComoFunciona() {
           },
           0.15
         )
-
         .fromTo(
           ".LinhaComoFunciona",
           {
@@ -82,7 +81,6 @@ export function ComoFunciona() {
           },
           0.2
         )
-
         .fromTo(
           ".CardComoFunciona",
           {
@@ -98,7 +96,6 @@ export function ComoFunciona() {
           },
           0.35
         )
-
         .fromTo(
           ".ImgBolinhasAzuis1",
           {
@@ -112,7 +109,6 @@ export function ComoFunciona() {
           },
           0
         )
-
         .fromTo(
           ".ImgBolinhasAzuis2",
           {
@@ -132,63 +128,72 @@ export function ComoFunciona() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="sctComoFunciona" id="homeComoFunciona">
+    <section
+      ref={sectionRef}
+      className="sctComoFunciona"
+      id="homeComoFunciona"
+    >
       <img
         src={BolinhasAzuis}
-        alt="BolinhasAzuis"
+        alt=""
         className="ImgBolinhasAzuis1"
       />
 
-      <img src={ImgPessoa} alt="ImgPessoa" className="ImgPessoa" />
+      <img
+        src={ImgPessoa}
+        alt="Ilustração de uma pessoa utilizando o DivideAqui"
+        className="ImgPessoa"
+      />
 
       <div className="DivComoFunciona">
         <h1>
-          Veja como é <b className="BDestaque-azul">fácil</b>:
+          Veja como é{" "}
+          <span className="BDestaque-azul">fácil</span>:
         </h1>
 
-        <section className="DivComoFunciona-Texto">
+        <div className="DivComoFunciona-Texto">
           <h3>Crie ou entre em um grupo</h3>
-          <p>Comece do zero ou participe de uma divisão que já existe.</p>
+          <p>
+            Comece do zero ou participe de uma divisão que já existe.
+          </p>
 
           <h3>Adicione as pessoas</h3>
-          <p>Convide amigos ou entre com quem também está interessado.</p>
+          <p>
+            Convide amigos ou entre com quem também está interessado.
+          </p>
 
           <h3>Relaxe!</h3>
           <p>O sistema cuida das contas pra você, sem cobranças manuais.</p>
-        </section>
+        </div>
 
         <div className="LinhaComoFunciona">
           <div className="LinhaParagrafo">
-            <div className="CircleComoFunciona" id="Circle1">
-              1
-            </div>
+            <div className="CircleComoFunciona">1</div>
             <div className="Linha"></div>
           </div>
 
           <div className="LinhaParagrafo">
-            <div className="CircleComoFunciona" id="Circle2">
-              2
-            </div>
+            <div className="CircleComoFunciona">2</div>
             <div className="Linha"></div>
           </div>
 
           <div className="LinhaParagrafo">
-            <div className="CircleComoFunciona" id="Circle3">
-              3
-            </div>
-            <div className="Linha"></div>
+            <div className="CircleComoFunciona">3</div>
           </div>
         </div>
 
-        <section className="CardComoFunciona">
+        <div className="CardComoFunciona">
           <GiPadlock className="IconCadeado" size={40} />
-          <h3>Suas divisões protegidas do início ao fim.</h3>
-        </section>
+
+          <h3>
+            Suas divisões protegidas do início ao fim.
+          </h3>
+        </div>
       </div>
 
       <img
         src={BolinhasAzuis}
-        alt="BolinhasAzuis"
+        alt=""
         className="ImgBolinhasAzuis2"
       />
     </section>

@@ -1,4 +1,5 @@
 import "./../../css/homesStyles/Sobre.css";
+import "../../css/MinCss/SobreMin.css"
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -72,11 +73,8 @@ export function Sobre() {
 
         <p className="PTexto">
           Conectar pessoas para dividir
-          
           custos de forma prática, com
-          
           divisão automática de gastos
-          
           e lembretes de pagamento.
         </p>
 

@@ -12,6 +12,10 @@ import "../css/Login.css";
 import Logo from "../assets/Icons/íconeBranco.png";
 import GoogleIcon from "../assets/Icons/google-icon.svg";
 
+const API_BASE_URL = (
+  import.meta.env.VITE_API_URL || "https://divide-aqui-backend.vercel.app"
+).replace(/\/$/, "");
+
 export function Login() {
   const [mostrarSenha, setMostrarSenha] = useState(false);
   const [formData, setFormData] = useState({
@@ -92,49 +96,75 @@ export function Login() {
   const enviar = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!formData.indentificador) {
-    Swal.fire({
+    const identificador = formData.indentificador.trim();
+    const senha = formData.passorwd.trim();
+
+    if (!identificador) {
+      Swal.fire({
         icon: "warning",
         title: "Campo obrigatório",
-        text: "Digite seu e-mail.",
+        text: "Digite seu e-mail ou CPF.",
         confirmButtonText: "OK"
-    });
-    return;
-    }
-    if (!formData.passorwd) {
-        Swal.fire({
-            icon: "warning",
-            title: "Campo obrigatório",
-            text: "Digite sua senha.",
-            confirmButtonText: "OK"
-        });
-        return;
+      });
+      return;
     }
 
-    try {
-        const eEmail = formData.indentificador.includes("@");
+    if (!senha) {
+      Swal.fire({
+        icon: "warning",
+        title: "Campo obrigatório",
+        text: "Digite sua senha.",
+        confirmButtonText: "OK"
+      });
+      return;
+    }
 
-        const enviarBack = {
-            cpf: !eEmail ? formData.indentificador : undefined,
-            email: eEmail ? formData.indentificador : undefined,
-            password: formData.passorwd,
+    const payload = identificador.includes("@")
+      ? {
+          email: identificador.toLowerCase(),
+          password: senha,
+        }
+      : {
+          cpf: identificador.replace(/\D/g, ""),
+          password: senha,
         };
 
-        const resposta = await axios.post(
-            "http://localhost:3344/Login",
-            enviarBack,
-        );
+    try {
+      const resposta = await axios.post(`${API_BASE_URL}/Login`, payload);
+      const token =
+        resposta?.data?.token ??
+        resposta?.data?.accessToken ??
+        resposta?.data?.data?.token ??
+        resposta?.data?.access_token ??
+        null;
 
-        const token = resposta.data.token;
+      if (!token) {
+        throw new Error("Resposta da API não retornou token.");
+      }
 
-        localStorage.setItem("token", token);
-        await loginWithToken(token);
-        navigate("/home", { replace: true });
-
+      localStorage.setItem("token", token);
+      await loginWithToken(token);
+      navigate("/home", { replace: true });
     } catch (error) {
-        console.log(error);
+      console.error("Erro ao realizar login:", error);
+
+      const mensagem = axios.isAxiosError(error)
+        ? (
+            error.response?.data?.message ||
+            error.response?.data?.error ||
+            error.response?.data?.erro ||
+            "Verifique seu e-mail/CPF e senha e tente novamente."
+          )
+        : "Não foi possível fazer login no momento.";
+
+      Swal.fire({
+        icon: "error",
+        title: "Ops!",
+        text: mensagem,
+        confirmButtonText: "Tentar novamente"
+      });
     }
-};
+  };
 
   return (
     <main className="login-page">
@@ -179,7 +209,7 @@ export function Login() {
 
       <div className="login-card">
         
-        <label>Digite seu Email: *</label>
+        <label>Digite seu Email ou CPF: *</label>
 
         <input
           type="text"

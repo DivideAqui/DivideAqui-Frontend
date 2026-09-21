@@ -1,79 +1,85 @@
 /* =========================
-   SECTION 4
+   SECTION 4 - COMO FUNCIONA
 ========================= */
 
 .sctComoFunciona {
-  background: var(--branco);
-  background-position: center;
-  overflow: hidden;
   position: relative;
-  padding: 10vh 0;
-  border-radius: 2vw;
   display: flex;
+  background: var(--branco);
+  border-radius: 2vw;
+  overflow: hidden;
+  padding: 10vh 0;
   font-family: var(--fonte-texto);
 }
 
 .DivComoFunciona {
+  position: relative;
   display: flex;
   flex-direction: column;
-  padding-top: 1vh;
-  padding-right: 38vw;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 7vh 10vw 0 9vw;
+  z-index: 2;
 }
 
 .DivComoFunciona h1 {
+  position: relative;
   z-index: 2;
+  margin: -1rem 0 0 0;
+  margin-left: -6rem;
+  max-width: 600px;
   color: var(--preto);
   font-family: var(--fonte-titulo);
   font-size: clamp(2rem, 3vw, 3.2rem);
-  max-width: 42vw;
 }
 
 .BDestaque-azul {
   color: var(--azul-claro);
-  font-weight: bolder;
+  font-weight: 700;
 }
 
 .DivComoFunciona-Texto {
-  margin-top: 9vh;
+  position: relative;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  max-width: 28vw;
-  z-index: 2;
-  margin-left: 5vw;
-  margin-bottom: -37vh;
-  padding-top: 3vh;
-  padding-bottom: 55vh;
-  height: 80vh;
+  width: min(100%, 450px);
+  margin-top: -0.2rem;
+  padding-top: 1.5rem;
 }
 
 .DivComoFunciona-Texto h3,
 .DivComoFunciona-Texto p {
+  position: relative;
   z-index: 2;
-  text-align: justify;
-  height: 10vh;
+  width: 80%;
+  margin: 0;
+  padding: 0;
+  text-align: left;
 }
 
 .DivComoFunciona-Texto h3 {
   color: var(--preto);
   font-family: var(--fonte-titulo);
   font-size: clamp(1.2rem, 1.5vw, 1.6rem);
-  padding-top: 3.3vh;
+  margin-bottom: 0.2rem;
 }
 
 .DivComoFunciona-Texto p {
   font-size: clamp(1rem, 1.2vw, 1.3rem);
-  padding-top: 1vh;
+  margin-bottom: 2rem;
 }
 
 .LinhaComoFunciona {
-  margin-top: 4.1vh;
   position: absolute;
+  top: 130px;
+  left: 40px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  top: 25.4%;
-  left: 14%;
+  z-index: 3;
 }
 
 .LinhaParagrafo {
@@ -83,73 +89,68 @@
 }
 
 .CircleComoFunciona {
-  width: 2vw;
-  height: 2vw;
-  min-width: 30px;
-  min-height: 30px;
-  background: var(--azul-escuro);
-  color: var(--branco);
-  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: var(--azul-escuro);
+  color: var(--branco);
+  border-radius: 50%;
   font-family: var(--fonte-texto);
-  font-weight: bold;
+  font-weight: 700;
   z-index: 2;
 }
 
-#Circle1 {
-  margin-bottom: 1vh;
-}
-
-#Circle2 {
-  margin-bottom: 1vh;
-}
-
 .Linha {
-  width: 0;
-  height: 8vh;
-  border-left: 0.25vw dashed var(--azul-claro);
+  width: 2px;
+  height: 80px;
+  border-left: 2px dashed var(--azul-claro);
 }
 
 .CardComoFunciona {
   position: relative;
+  display: flex;
+  align-items: center;
+  width: min(100%, 400px);
+  min-height: 80px;
+  margin-top: -0.1rem;
+  margin-left: -6rem;
+  padding: 1rem 1.5rem 1rem 4.5rem;
   background: var(--verde-claro);
-  width: 25vw;
-  height: 10vh;
-  border-radius: 0.8vw;
+  border-radius: 12px;
+  box-sizing: border-box;
 }
 
 .IconCadeado {
   position: absolute;
-  top: 23%;
-  left: 9%;
-  font-size: clamp(1.8rem, 2vw, 2.5rem);
+  left: 1.5rem;
   color: var(--azul);
 }
 
 .CardComoFunciona h3 {
-  text-align: justify;
+  width: 100%;
+  margin: 0;
+  color: var(--preto);
   font-family: var(--fonte-texto);
-  width: 75%;
-  letter-spacing: -0.05vw;
-  line-height: 1.1;
   font-size: clamp(1rem, 1.2vw, 1.25rem);
-  padding-left: 3vw;
-  padding-top: 0.5vh;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+  text-align: left;
 }
 
 .ImgPessoa {
   position: absolute;
-  right: 18vh;
-  bottom: -18vh;
-  width: 40vw;
+  right: 8vw;
+  bottom: -7rem;
+  width: min(40vw, 600px);
+  z-index: 1;
 }
 
 .ImgBolinhasAzuis1 {
   position: absolute;
   z-index: 0;
-  width: 20vw;
+  width: min(20vw, 300px);
   top: 50vh;
   left: -10vw;
   rotate: 90deg;
@@ -158,9 +159,8 @@
 .ImgBolinhasAzuis2 {
   position: absolute;
   z-index: 1;
-  width: 20vw;
+  width: min(20vw, 300px);
   top: 10vh;
   right: -10vw;
   rotate: 90deg;
 }
-

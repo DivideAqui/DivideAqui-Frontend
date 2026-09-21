@@ -1,0 +1,124 @@
+/* Celular */
+@media (max-width: 767px) {
+
+    .sectionInicio {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+
+    .DivTexto {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .H1Titulo-Sobre {
+        color: var(--azul-escuro);
+        margin-top: 10%;
+        font-size: 8vw;
+        font-weight: 600;
+        font-family: var(--fonte-titulo);
+        line-height: 9vw;
+        text-align: center;
+    }
+
+    .PTexto {
+        text-align: justify;
+        font-size: 3.8vw;
+        font-family: var(--fonte-titulo);
+        line-height: 5vw;
+        font-weight: 600;
+        width: 65vw;
+    }
+
+    .ImgCelular {
+    width: 70vw;
+    height: auto;
+    object-fit: contain;
+    transform: translateX(-6vw);
+    }
+
+    .BolinhaSuperior {
+    position: absolute;
+    top: 25vw;
+    left: -10%;
+    rotate: 90deg;
+    pointer-events: none;
+    z-index: 1;
+    }
+
+    .BolinhaInferior {
+    position: absolute;
+    bottom: 20vw;
+    right: -10%;
+    rotate: 90deg;
+    pointer-events: none;
+    z-index: 1;
+    }
+}
+
+/* Tablet */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .sectionInicio {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+
+    .DivTexto {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .H1Titulo-Sobre {
+        color: var(--azul-escuro);
+        margin-top: 1%;
+        font-size: 7vw;
+        font-weight: 600;
+        font-family: var(--fonte-titulo);
+        line-height: 9vw;
+        text-align: center;
+    }
+
+    .PTexto {
+        text-align: justify;
+        font-size: 3.4vw;
+        font-family: var(--fonte-titulo);
+        line-height: 5vw;
+        font-weight: 600;
+        width: 56vw;
+    }
+
+    .ImgCelular {
+        width: 60vw;
+        height: auto;
+        object-fit: contain;
+        transform: translateX(-6vw);
+    }
+
+    .BolinhaSuperior {
+        position: absolute;
+        top: 15vw;
+        left: -13%;
+        rotate: 90deg;
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    .BolinhaInferior {
+        position: absolute;
+        bottom: 20vw;
+        right: -13%;
+        rotate: 90deg;
+        pointer-events: none;
+        z-index: 1;
+    }
+}
