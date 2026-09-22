@@ -23,8 +23,6 @@
   z-index: 1;
 }
 
-
-
 .DivBeneficios p {
  white-space: nowrap;
  margin-top: 3%;
@@ -85,9 +83,9 @@
 
 .PTexto{
   text-align: justify;
-  font-size: 1.07vw;
+  font-size: 1.4vw;
   font-family: var(--fonte-titulo); 
-  line-height: 2.4vw;
+  line-height: 2.2vw;
   font-weight: 600;
   width: 30vw;
 }

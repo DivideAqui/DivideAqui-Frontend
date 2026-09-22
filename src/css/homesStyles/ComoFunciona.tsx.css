@@ -19,7 +19,7 @@
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 7vh 10vw 0 9vw;
+  padding: 7vh 10vw 0 5vw;
   z-index: 2;
 }
 
@@ -31,7 +31,7 @@
   max-width: 600px;
   color: var(--preto);
   font-family: var(--fonte-titulo);
-  font-size: clamp(2rem, 3vw, 3.2rem);
+  font-size: clamp(3rem, 3vw, 3.2rem);
 }
 
 .BDestaque-azul {
@@ -54,7 +54,7 @@
 .DivComoFunciona-Texto p {
   position: relative;
   z-index: 2;
-  width: 80%;
+  width: 90%;
   margin: 0;
   padding: 0;
   text-align: left;
@@ -63,19 +63,19 @@
 .DivComoFunciona-Texto h3 {
   color: var(--preto);
   font-family: var(--fonte-titulo);
-  font-size: clamp(1.2rem, 1.5vw, 1.6rem);
+  font-size: clamp(1.8rem, 1.5vw, 1.6rem);
   margin-bottom: 0.2rem;
 }
 
 .DivComoFunciona-Texto p {
-  font-size: clamp(1rem, 1.2vw, 1.3rem);
+  font-size: clamp(1.5rem, 1.2vw, 1.3rem);
   margin-bottom: 2rem;
 }
 
 .LinhaComoFunciona {
   position: absolute;
-  top: 130px;
-  left: 40px;
+  top: 150px;
+  left: 5px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -92,8 +92,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   background: var(--azul-escuro);
   color: var(--branco);
   border-radius: 50%;
@@ -104,7 +104,7 @@
 
 .Linha {
   width: 2px;
-  height: 80px;
+  height: 100px;
   border-left: 2px dashed var(--azul-claro);
 }
 
@@ -112,9 +112,9 @@
   position: relative;
   display: flex;
   align-items: center;
-  width: min(100%, 400px);
+  width: min(100%, 450px);
   min-height: 80px;
-  margin-top: -0.1rem;
+  margin-top: 0.5rem;
   margin-left: -6rem;
   padding: 1rem 1.5rem 1rem 4.5rem;
   background: var(--verde-claro);
@@ -129,21 +129,22 @@
 }
 
 .CardComoFunciona h3 {
-  width: 100%;
+  width: 90%;
   margin: 0;
   color: var(--preto);
   font-family: var(--fonte-texto);
-  font-size: clamp(1rem, 1.2vw, 1.25rem);
+  font-size: clamp(1.3rem, 1.2vw, 1.25rem);
   line-height: 1.3;
   letter-spacing: -0.02em;
   text-align: left;
+  padding-left: 0.5rem;
 }
 
 .ImgPessoa {
   position: absolute;
   right: 8vw;
   bottom: -7rem;
-  width: min(40vw, 600px);
+  width: min(40vw, 900px);
   z-index: 1;
 }
 
@@ -152,7 +153,7 @@
   z-index: 0;
   width: min(20vw, 300px);
   top: 50vh;
-  left: -10vw;
+  left: -8vw;
   rotate: 90deg;
 }
 
@@ -161,6 +162,6 @@
   z-index: 1;
   width: min(20vw, 300px);
   top: 10vh;
-  right: -10vw;
+  right: -8vw;
   rotate: 90deg;
 }
