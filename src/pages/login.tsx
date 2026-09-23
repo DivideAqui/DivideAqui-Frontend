@@ -125,7 +125,7 @@ export function Login() {
           password: senha,
         }
       : {
-          cpf: identificador.replace(/\D/g, ""),
+          cpf: identificador,
           password: senha,
         };
 

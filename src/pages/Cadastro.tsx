@@ -217,6 +217,7 @@ export function Cadastro() {
         confirmButtonText: "Continuar"
       });
       navigate("/home", { replace: true });
+      
 
       } catch (e) {
         console.error("Erro no cadastro:", e);
@@ -227,11 +228,11 @@ export function Cadastro() {
           text: e instanceof Error ? e.message : "Erro desconhecido.",
           confirmButtonText: "Tentar novamente"
         });
-
+        
       } finally {
         setCarregando(false);
       }
-
+      
   };
 
   return (
