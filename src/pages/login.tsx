@@ -9,8 +9,10 @@ import Swal from "sweetalert2";
 
 import { useAuth } from "../hooks/useAuth";
 import "../css/Login.css";
+import "../css/sweetAlert/sweetAlert.css"
 import Logo from "../assets/Icons/íconeBranco.png";
 import GoogleIcon from "../assets/Icons/google-icon.svg";
+
 
 const API_BASE_URL = (
   import.meta.env.VITE_API_URL || "https://divide-aqui-backend.vercel.app"
@@ -104,8 +106,9 @@ export function Login() {
         icon: "warning",
         title: "Campo obrigatório",
         text: "Digite seu e-mail ou CPF.",
-        confirmButtonText: "OK"
-      });
+        confirmButtonText: "OK",
+      }
+    );
       return;
     }
 
@@ -114,7 +117,7 @@ export function Login() {
         icon: "warning",
         title: "Campo obrigatório",
         text: "Digite sua senha.",
-        confirmButtonText: "OK"
+        confirmButtonText: "OK",
       });
       return;
     }
@@ -125,7 +128,7 @@ export function Login() {
           password: senha,
         }
       : {
-          cpf: identificador,
+          cpf: identificador.replace(/\D/g, ""),
           password: senha,
         };
 
@@ -161,7 +164,7 @@ export function Login() {
         icon: "error",
         title: "Ops!",
         text: mensagem,
-        confirmButtonText: "Tentar novamente"
+        confirmButtonText: "Tentar novamente",
       });
     }
   };
@@ -200,7 +203,7 @@ export function Login() {
     <button
       type="button"
       className="IconCancelar-login"
-      onClick={() => navigate(-1)}
+      onClick={() => navigate("/home")}
     >
       <IoCloseSharp size={25} />
     </button>

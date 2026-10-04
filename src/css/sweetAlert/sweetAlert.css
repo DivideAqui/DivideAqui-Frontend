@@ -1,0 +1,168 @@
+/* =========================
+   SWEET ALERT GLOBAL
+   ========================= */
+
+.swal2-popup {
+    background: #F5F5F0 !important;
+    border-radius: 4px !important;
+    font-family: var(--fonte-texto) !important;
+    padding: 2rem !important;
+    box-shadow:
+        rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+        rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+}
+
+
+/* =========================
+   ÍCONE
+   ========================= */
+
+.swal2-icon {
+    background-color: var(--azul-claro);
+    border: none !important;
+    margin-bottom: 2rem;
+}
+
+
+/* =========================
+   ERRO - X
+   ========================= */
+
+.swal2-icon.swal2-error {
+    color: white !important;
+}
+
+.swal2-icon.swal2-error [class^="swal2-x-mark-line"] {
+    background-color: white !important;
+    height: 0.35rem !important;
+}
+
+
+/* =========================
+   INFORMAÇÃO - !
+   ========================= */
+
+.swal2-icon.swal2-info {
+    color: white !important;
+    font-weight: 800 !important;
+}
+
+
+/* =========================
+   SUCESSO - ✓
+   ========================= */
+
+.swal2-icon.swal2-success {
+    color: white !important;
+}
+
+.swal2-icon.swal2-success .swal2-success-line-tip,
+.swal2-icon.swal2-success .swal2-success-line-long {
+    background-color: white !important;
+    height: 0.35rem !important;
+}
+
+.swal2-icon.swal2-success .swal2-success-ring {
+    border-color: white !important;
+}
+
+
+/* =========================
+   AVISO - !
+   ========================= */
+
+.swal2-icon.swal2-warning {
+    color: white !important;
+    font-weight: 800 !important;
+}
+
+
+/* =========================
+   PERGUNTA - ?
+   ========================= */
+
+.swal2-icon.swal2-question {
+    color: white !important;
+    font-weight: 800 !important;
+}
+
+/* =========================
+   TÍTULO
+   ========================= */
+
+.swal2-title {
+    color: #0C0C0C !important;
+    font-size: 1.7rem !important;
+    font-family: var(--fonte-titulo) !important;
+    margin: 0 0 0.5rem !important;
+    padding: 0 !important;
+}
+
+
+/* =========================
+   TEXTO
+   ========================= */
+
+.swal2-html-container {
+      color: #0C0C0C !important;
+    font-size: 1.2rem !important;
+    width: min(90%, 30rem) !important;
+    max-width: 30rem !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    text-align: center !important;
+}
+
+
+/* =========================
+   BOTÃO
+   ========================= */
+
+.swal2-confirm {
+    background: var(--azul-claro);
+    color: white !important;
+    border-radius: 4px !important;
+    padding: 0.8rem 5rem !important;
+    margin-bottom: 2rem;
+    font-family: var(--fonte-titulo) !important;
+    font-weight: 600;
+    border: none !important;
+    transition: transform 0.4s cubic-bezier(0.3, 1, 0.8, 1);
+}
+
+
+/* =========================
+   HOVER DO BOTÃO
+   ========================= */
+
+.swal2-confirm:hover {
+    background: var(--azul-escuro) ;
+    transform: scale(1.05);
+    transition: transform 0.4s cubic-bezier(0.3, 1, 0.8, 1);
+}
+
+
+/* =========================
+   EFEITO DO BOTÃO
+   ========================= */
+
+.swal2-confirm::before {
+    transform: translate3d(100%, 0, 0);
+}
+
+/* =========================
+   PADRÃO VERDE
+   ========================= */
+
+.meu-icone-verde {
+    background-color: var(--verde-escuro);
+}
+
+.meu-botao-verde {
+    background-color: var(--verde-escuro);
+    color:#0C0C0C;
+}
+
+.meu-botao-verde:hover {
+    background: var(--verde-escuro) !important;
+}

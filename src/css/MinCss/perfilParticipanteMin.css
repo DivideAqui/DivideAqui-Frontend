@@ -1,0 +1,176 @@
+/* =========================================================
+   CELULAR
+   ========================================================= */
+
+@media (max-width: 767px) {
+
+    .perfil-participante-fundo {
+        width: 100%;
+        height: clamp(9rem, 15vh, 12rem);
+        min-height: 0;
+    }
+
+    .cabecalho-participante {
+        width: min(80%, 68.75rem);
+        min-height: clamp(8rem, 20vh, 12rem);
+    }
+
+    .cabecalho-participante,
+    .descricao-usuario,
+    .avaliar-usuario,
+    .participante-divisoes,
+    .participante-avaliacoes {
+        position: relative;
+        top: 1.5rem;
+    }
+
+    .participante-user-avatar {
+        width: clamp(5rem, 22vw, 8rem);
+        height: clamp(5rem, 22vw, 8rem);
+        border: clamp(0.18rem, 0.7vw, 0.23rem) solid var(--verde-claro);
+    }
+
+    .dados-usuario {
+        padding-top: clamp(1rem, 4vw, 2rem);
+    }
+
+    .nome-usuario {
+        font-size: clamp(0.9rem, 3.5vw, 1.2rem);
+    }
+
+    .estrelas {
+        padding-bottom: 0.1rem;
+    }
+
+    .estrela {
+        font-size: clamp(0.9rem, 3vw, 1.1rem);
+    }
+
+    .descricao-usuario,
+    .avaliar-usuario {
+        padding: clamp(1rem, 4vw, 1.5rem);
+    }
+
+    .descricao-usuario {
+        margin-top: clamp(0.5rem, 2vw, 1rem);
+        margin-bottom: 0;
+    }
+
+    .descricao-usuario h3 {
+        font-size: clamp(0.6rem, 2vw, 0.8rem);
+        line-height: 1.3;
+        width: 100%;
+    }
+
+    .textos-avaliacao {
+        margin-left: 0;
+    }
+
+    .textos-avaliacao h1 {
+        font-size: clamp(0.6rem, 2vw, 0.8rem);
+        margin: 0;
+        width: 90%;
+    }
+
+    .textos-avaliacao h2 {
+        display: none;
+    }
+
+    .estrela2 {
+        width: clamp(1.7rem, 7vw, 2.2rem);
+        min-width: clamp(1.7rem, 7vw, 2.2rem);
+        height: clamp(1.7rem, 7vw, 2.2rem);
+        font-size: clamp(1.3rem, 5vw, 1.7rem);
+    }
+
+    .estrela-button {
+        font-size: clamp(0.9rem, 3vw, 1.1rem);
+    }
+
+    .estrelas-avaliar {
+        margin-left: 0;
+    }
+
+    .estrelas-avaliar h3 {
+        margin: 0.3rem 0 0;
+        font-size: clamp(0.3rem, 1.5vw, 0.5rem);
+        font-weight: 300;
+        text-align: center;
+    }
+
+    .check-avaliacao-button {
+        font-size: clamp(0.8rem, 3vw, 1rem);
+        margin-left: 0;
+    }
+
+    .participante-divisoes,
+    .participante-feedbacks {
+        margin-bottom: clamp(0.7rem, 2vw, 1rem);
+        margin-top: clamp(0.7rem, 2vw, 1rem);
+    }
+
+    .titulo-participante {
+        font-size: clamp(0.8rem, 3vw, 1rem);
+    }
+
+    .participante-divisoes-vazio,
+    .participante-feedbacks-vazio {
+        font-size: clamp(0.6rem, 2vw, 0.75rem);
+    }
+
+    .dialog-content {
+        width: min(90vw, 37.5rem);
+        max-width: calc(100vw - 2rem);
+        line-height: 2rem;
+    }
+
+    .dialog-content p {
+        padding-top: 0.3rem;
+        line-height: 1.3rem;
+        color: #0f0f0f;
+    }
+
+    .dialog-header {
+        margin-bottom: clamp(1rem, 4vw, 1.5rem);
+    }
+
+    .avaliacao-dialog__textarea {
+        min-height: clamp(10rem, 20vh, 15rem);
+        font-size: clamp(0.85rem, 3vw, 0.95rem);
+    }
+
+    .avaliacao-dialog__estrelas {
+        display: flex;
+        gap: 0;
+        margin-top: 0.5rem;
+        font-size: clamp(1rem, 4vw, 1.2rem);
+    }
+
+    .avaliacao-dialog__contador {
+        text-align: right;
+        font-size: clamp(0.7rem, 2.5vw, 0.8rem);
+        color: #888;
+        padding-right: clamp(1rem, 10vw, 5rem);
+    }
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (min-width: 768px) and (max-width: 1023px) {
+
+    .perfil-participante-fundo {
+        height: clamp(13rem, 28vh, 18rem);
+    }
+
+    .cabecalho-participante {
+        width: min(80%, 68.75rem);
+    }
+
+    .participante-user-avatar {
+        width: clamp(8rem, 18vw, 11rem);
+        height: clamp(8rem, 18vw, 11rem);
+    }
+}

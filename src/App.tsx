@@ -6,6 +6,7 @@ import { Login } from "./pages/login";
 import { Cadastro } from "./pages/Cadastro";
 import { Divisoes } from "./pages/Divisoes";
 import { MeuPerfil } from "./pages/meuPerfil";
+import { PerfilParticipante } from "./pages/perfilParticipante";
 import { MeusGrupos } from "./pages/meusGrupos";
 import { Historico } from "./pages/Historico";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -25,6 +26,7 @@ export function App() {
               
               <Route path="/historico" element={<ProtectedRoute><Historico /></ProtectedRoute>} />
               <Route path="/meuperfil" element={<ProtectedRoute><MeuPerfil /></ProtectedRoute>} />
+              <Route path="/perfilparticipante" element={<ProtectedRoute><PerfilParticipante /></ProtectedRoute>} />
               <Route path="/meusgrupos" element={<ProtectedRoute><MeusGrupos /></ProtectedRoute>} />
               <Route path="/login" element={<Login />} />
               <Route path="/divisoes" element={<Divisoes />} />

@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
 import "../css/Cadastro.css";
+import "../css/sweetAlert/sweetAlert.css"
 import GoogleIcon from "../assets/Icons/google-icon.svg";
 import logoCadastro from "../assets/Icons/íconeBranco.png";
 import { HiEye, HiMiniEyeSlash } from "react-icons/hi2";
@@ -121,7 +122,12 @@ export function Cadastro() {
         icon: "warning",
         title: "Atenção!",
         text: "Você precisa preencher todos os campos.",
-        confirmButtonText: "OK"
+        confirmButtonText: "OK",
+
+        customClass: {
+        icon: "meu-icone-verde",
+        confirmButton: "meu-botao-verde"
+      }
     });
     return;
   }
@@ -130,7 +136,12 @@ export function Cadastro() {
         icon: "error",
         title: "Nome inválido",
         text: "Digite um nome válido.",
-        confirmButtonText: "OK"
+        confirmButtonText: "OK",
+
+        customClass: {
+        icon: "meu-icone-verde",
+        confirmButton: "meu-botao-verde"
+      }
     });
     return;
   }
@@ -139,16 +150,27 @@ export function Cadastro() {
       icon: "error",
       title: "CPF inválido",
       text: "Digite um CPF válido.",
-      confirmButtonText: "OK"
+      confirmButtonText: "OK",
+
+        customClass: {
+        icon: "meu-icone-verde",
+        confirmButton: "meu-botao-verde"
+      }
     });
     return;
   }
+
   if (telefone && !regexTelefone.test(telefone)) {
     Swal.fire({
       icon: "error",
       title: "Telefone inválido",
       text: "Digite um telefone válido.",
-      confirmButtonText: "OK"
+      confirmButtonText: "OK",
+      
+        customClass: {
+        icon: "meu-icone-verde",
+        confirmButton: "meu-botao-verde"
+      }
     });
     return;
   }
@@ -157,16 +179,28 @@ export function Cadastro() {
       icon: "error",
       title: "E-mail inválido",
       text: "Digite um e-mail válido.",
-      confirmButtonText: "OK"
+      confirmButtonText: "OK",
+
+      
+        customClass: {
+        icon: "meu-icone-verde",
+        confirmButton: "meu-botao-verde"
+      }
     });
     return;
   }
+
   if (!regexSenha.test(senha)) {
     Swal.fire({
       icon: "error",
       title: "Senha inválida",
       text: "A senha deve ter pelo menos 8 caracteres, uma letra maiúscula, um número e um caractere especial.",
-      confirmButtonText: "OK"
+      confirmButtonText: "OK",
+      
+        customClass: {
+        icon: "meu-icone-verde",
+        confirmButton: "meu-botao-verde"
+      }
     });
     return;
   }
@@ -201,7 +235,12 @@ export function Cadastro() {
           icon: "error",
           title: "Ops!",
           text: data.erro || "Houve um erro no seu cadastro.",
-          confirmButtonText: "Tentar novamente"
+          confirmButtonText: "Tentar novamente",
+
+        customClass: {
+        icon: "meu-icone-verde",
+        confirmButton: "meu-botao-verde"
+      }
         });
 
         return;
@@ -214,10 +253,15 @@ export function Cadastro() {
         icon: "success",
         title: "Cadastro realizado!",
         text: "Agora vamos dividir!",
-        confirmButtonText: "Continuar"
+        confirmButtonText: "Continuar",
+
+        customClass: {
+        icon: "meu-icone-verde",
+        confirmButton: "meu-botao-verde"
+      }
       });
+
       navigate("/home", { replace: true });
-      
 
       } catch (e) {
         console.error("Erro no cadastro:", e);
@@ -228,11 +272,11 @@ export function Cadastro() {
           text: e instanceof Error ? e.message : "Erro desconhecido.",
           confirmButtonText: "Tentar novamente"
         });
-        
+
       } finally {
         setCarregando(false);
       }
-      
+
   };
 
   return (
@@ -265,7 +309,7 @@ export function Cadastro() {
         <button
           type="button"
           className="IconCancelar"
-          onClick={() => navigate(-1)}>
+          onClick={() => navigate("/home")}>
           <IoCloseSharp size={25} />
         </button>
 
