@@ -268,9 +268,9 @@
 }
 
 .estrela2 {
-    width: 4.375rem;
-    min-width: 4.375rem;
-    height: 4.5rem;
+    width: 4.1rem;
+    min-width: 4.1rem;
+    height: 4.2rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -279,6 +279,7 @@
     font-size: 3rem;
     text-align: center;
     border-radius: 0.25rem;
+
 }
 
 .estrelas-avaliar {
@@ -300,6 +301,7 @@
 
 .estrela-preenchida {
     color: var(--azul-claro);
+    stroke-width: 20;
 }
 
 .estrelas-avaliar h3 {
