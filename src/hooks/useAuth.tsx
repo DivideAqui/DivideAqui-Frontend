@@ -88,7 +88,7 @@ function parseJwtToken(token: string): AuthUser | null {
         : Date.now() + 3600 * 1000;
 
     return {
-      id: String(payload.sub || ""),
+      id: String(payload.id ?? payload.sub ?? ""),
       email: String(payload.email || ""),
       name: String(payload.name || "Usuário"),
       picture:

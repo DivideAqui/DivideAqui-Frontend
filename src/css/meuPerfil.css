@@ -1,0 +1,378 @@
+:root {
+  --pad-x: clamp(20px, 4vw, 48px);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+img,
+svg {
+  max-width: 100%;
+  display: block;
+}
+
+
+.perfil-page {
+   background-color: #f5f5f0;
+  background-image:
+    linear-gradient(var(--azul-escuro), var(--azul-escuro)),
+    linear-gradient(var(--verde-claro), var(--verde-claro));
+  background-repeat: no-repeat;
+  background-size: 50% 50vh, 50% 50vh;
+  background-position:
+    top left,
+    bottom left;
+  position: relative;
+  font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ---------------------------------------------------------
+   HEADER
+--------------------------------------------------------- */
+.perfil-header {
+  background-color: var(--azul-escuro);
+  background-image: url("../assets/Imgs/texturaBlurAzul.png");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  background-blend-mode: lighten;
+
+  border-bottom-right-radius: clamp(28px, 6vw, 75px);
+  position: relative;
+  min-height: clamp(266px, 38vh, 380px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: visible;
+  padding: clamp(20px, 3vw, 32px) 0 0;
+}
+
+.perfil-header-top {
+ display: flex;
+  width: 100%;
+  max-width: 1600px;
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1;
+  height: 60px;
+  padding: 0 clamp(16px, 3vw, 32px)
+}
+
+.logobranco {
+  height: clamp(200px, 8vw, 400px);
+  width: auto;
+  object-fit: contain;
+  margin: 0;
+}
+
+.perfil-close {
+  width: clamp(32px, 3.5vw, 40px);
+  height: clamp(32px, 3.5vw, 40px);
+  border-radius: 50%;
+  border: none;
+  background-color: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  font-size: clamp(20px, 2.5vw, 26px);
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.12s ease;
+}
+
+.perfil-close:hover {
+  background-color: rgba(255, 255, 255, 0.22);
+}
+
+.perfil-close:active {
+  transform: scale(0.92);
+}
+
+.ola-usuario {
+  z-index: 1;
+  margin-top: clamp(20px, 4vw, 36px);
+  font-size: clamp(28px, 5.5vw, 60px);
+  font-weight: 400;
+  color: #ffffff;
+  text-align: center;
+  font-family: var(--fonte-titulo);
+}
+
+.nome-usuario-color {
+  color: var(--verde-claro);
+  font-weight: 800;
+}
+
+/* ---------------------------------------------------------
+   AVATAR (sobreposto entre header e card)
+--------------------------------------------------------- */
+.avatar-wrapper {
+  position: relative;
+  z-index: 2;
+  margin-top: clamp(24px, 4vw, 36px);
+  margin-bottom: clamp(-60px, -6vw, -45px); /* só a base do círculo entra no card */
+}
+
+.avatar-img,
+.avatar-fallback {
+  width: clamp(110px, 14vw, 160px);
+  height: clamp(110px, 14vw, 160px);
+  border-radius: 50%;
+  border: 3px solid var(--verde-claro);
+  object-fit: cover;
+  background-color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.avatar-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  color: var(--azul-escuro);
+  font-family: var(--fonte-texto);
+}
+
+.avatar-editar {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  width: clamp(30px, 3.5vw, 38px);
+  height: clamp(30px, 3.5vw, 38px);
+  border-radius: 50%;
+  background-color: #0000a3;
+  border: none;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.12s ease, filter 0.2s ease;
+}
+
+.avatar-editar:hover {
+  filter: brightness(1.1);
+}
+
+.avatar-editar:active {
+  transform: scale(0.92);
+}
+/* ---------------------------------------------------------
+   context 
+--------------------------------------------------------- */
+.context {
+ min-height: 100vh;
+  background: #f5f5f0;
+  padding: clamp(40px, 7vw, 90px) var(--pad-x) clamp(32px, 4vw, 40px);
+  border-bottom-left-radius: clamp(28px, 6vw, 75px);
+  border-top-left-radius: clamp(28px, 6vw, 75px);
+}
+/* ---------------------------------------------------------
+   CARD (formulário)
+--------------------------------------------------------- */
+.perfil-card {
+  position: relative;
+  width: min(100%, 900px);
+  margin: -50px auto 0;
+  background-color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: clamp(60px, 9vw, 75px) var(--pad-x) clamp(32px, 5vw, 48px);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(16px, 2.5vw, 22px);
+}
+
+.form-group label {
+  display: block;
+  font-family: var(--fonte-texto);
+  font-size: clamp(14px, 1.5vw, 17px);
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 6px;
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background-color: #f5f5f0;
+  border-radius: 8px;
+  box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.15);
+  height: clamp(48px, 5.5vw, 58px);
+  transition: box-shadow 0.2s ease;
+}
+
+.input-wrapper:hover {
+  box-shadow: inset 0 4px 8px rgba(24, 97, 255, 0.15);
+}
+
+.input-wrapper:focus-within {
+  box-shadow: inset 0 0 0 2px #1861ff;
+}
+
+.input-wrapper input {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: transparent;
+  outline: none;
+  padding: 0 44px 0 16px;
+  font-family: var(--fonte-texto);
+  font-size: clamp(14px, 1.4vw, 17px);
+  font-weight: 500;
+  color: #333333;
+}
+
+/* input[type=date] tem UI própria do navegador; garante altura/alinhamento iguais aos outros campos */
+.input-wrapper input[type="date"] {
+  padding-right: 16px;
+  color-scheme: light;
+}
+
+.icone-caneta {
+  position: absolute;
+  right: 16px;
+  color: #1a1a1a;
+  font-size: 15px;
+  pointer-events: auto;
+  transition: transform 0.2s ease;
+}
+
+.input-wrapper:hover .icone-caneta {
+  transform: rotate(-12deg);
+}
+
+/* ---------------------------------------------------------
+   FOOTER
+--------------------------------------------------------- */
+.perfil-page > footer {
+  position: relative;
+  height: clamp(140px, 22vh, 180px);
+  background-color: var(--verde-claro);
+  background-image: url("../assets/Imgs/texturaFooterverde.png");
+  background-blend-mode: soft-light;
+  background-size: cover;
+  background-position: center;
+
+  
+}
+
+
+/* ---------------------------------------------------------
+   ANIMAÇÕES DE ENTRADA
+--------------------------------------------------------- */
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.avatar-wrapper {
+  animation: scaleIn 0.5s ease-out both;
+}
+
+.ola-usuario {
+  animation: fadeSlideUp 0.5s ease-out 0.1s both;
+}
+
+.perfil-card {
+  animation: fadeSlideUp 0.5s ease-out 0.2s both;
+}
+
+/* ---------------------------------------------------------
+   BREAKPOINTS
+--------------------------------------------------------- */
+@media (max-width: 768px) {
+  .perfil-header {
+    min-height: clamp(200px, 32vh, 300px);
+    align-items: flex-start;
+    border-bottom-right-radius: 24px;
+  }
+
+  .avatar-wrapper {
+    align-self: center;
+    margin-bottom: clamp(-70px, -12vw, -50px);
+  }
+
+  .perfil-card {
+    width: 100%;
+    border-radius: 20px;
+    padding-top: clamp(70px, 16vw, 90px);
+  }
+}
+
+@media (max-width: 480px) {
+  .perfil-header-top {
+    justify-content: space-between;
+  }
+
+  .ola-usuario {
+    font-size: clamp(22px, 7vw, 30px);
+    margin-top: 16px;
+  }
+
+  .avatar-img,
+  .avatar-fallback {
+    width: 90px;
+    height: 90px;
+  }
+
+  .avatar-editar {
+    width: 28px;
+    height: 28px;
+  }
+
+  .perfil-card {
+    padding-left: 16px;
+    padding-right: 16px;
+    gap: 16px;
+  }
+
+  .input-wrapper input {
+    padding-right: 38px;
+  }
+}
+.btn-salvar {
+  background-color:var(--azul-escuro) !important;
+  color: #fff !important;
+  transition: background-color 0.2s ease;
+}
+
+.btn-salvar:hover {
+  background-color: var(--verde-escuro) !important;
+}
+
+.btn-cancelar {
+  background-color: var(--azul-escuro) !important;
+  color: #fff !important;
+  transition: background-color 0.2s ease;
+}
+
+.btn-cancelar:hover {
+  background-color: #c62828 !important;
+}

@@ -11,6 +11,7 @@ import { MeusGrupos } from "./pages/meusGrupos";
 import { Historico } from "./pages/Historico";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { AuthProvider } from "./hooks/useAuth";
+import { DetalheDivisão } from "./pages/DetalheDivisão";
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
@@ -28,6 +29,7 @@ export function App() {
               <Route path="/meuperfil" element={<ProtectedRoute><MeuPerfil /></ProtectedRoute>} />
               <Route path="/perfilparticipante" element={<ProtectedRoute><PerfilParticipante /></ProtectedRoute>} />
               <Route path="/meusgrupos" element={<ProtectedRoute><MeusGrupos /></ProtectedRoute>} />
+              <Route path="/detalhedivisão" element={<DetalheDivisão/>} />
               <Route path="/login" element={<Login />} />
               <Route path="/divisoes" element={<Divisoes />} />
               <Route path="/Cadastro" element={<Cadastro />} />
