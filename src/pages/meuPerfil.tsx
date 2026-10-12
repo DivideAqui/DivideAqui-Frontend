@@ -2,10 +2,11 @@ import { FaPen } from "react-icons/fa";
 import { useAuth } from "../hooks/useAuth";
 import LogoBranco from "../assets/Icons/logo1Branca.png";
 import "../css/meuPerfil.css";
+import "../css/sweetAlert/sweetAlert.css";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-
+import { IoCloseSharp } from "react-icons/io5";
 
 const API_BASE_URL = (
   import.meta.env.VITE_API_URL || "https://divide-aqui-backend.vercel.app"
@@ -22,6 +23,7 @@ const CAMPOS_API: Record<string, string> = {
 
 
 export function MeuPerfil() {
+  const navigate = useNavigate();
   const { user } = useAuth();
   const [perfilusu, setPerfilusu] = useState<any>([]);
   const regexSenha = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&_])[A-Za-z\d@$!%*?&_]{8,}$/;
@@ -80,13 +82,13 @@ const formatDisplayName = (name?: string) => {
     showLoaderOnConfirm: true,
     inputValidator: (valor) =>{
       const v = valor.trim();
-      if(!v) return "O campo não pode ficar vazio";
+      if(!v) return "Você precisa preencher todos os campos.";
 
       if(campo === "usu_nome"  && !regexNome.test(v)){
-        return "O nome deve conter apenas letras"
+        return "Digite um nome válido."
       }
       if(campo === "usu_telefone"  && !regexTelefone.test(v)){
-        return "Telefone inválido. Use o formato (xx) xxxxx-xxxx"
+        return "Digite um telefone válido."
       }
       return null;
     },
@@ -98,7 +100,7 @@ const formatDisplayName = (name?: string) => {
           body: JSON.stringify({ [CAMPOS_API[campo]]: valor.trim() }),
         });
         if (!resposta.ok) {
-          Swal.showValidationMessage(`Erro ${resposta.status} ao salvar`);
+          Swal.showValidationMessage(`Erro ${resposta.status} ao salvar.`);
           return;
         }
         return valor.trim();
@@ -122,7 +124,7 @@ const editarSenha = async () => {
     html: `
       <input id="senhaAtual" type="password" class="swal2-input" placeholder="Senha atual">
       <input id="novaSenha" type="password" class="swal2-input" placeholder="Nova senha">
-      <input id="confirmaSenha" type="password" class="swal2-input" placeholder="Confirmar nova senha">
+      <input id="confirmaSenha" type="password" class="swal2-input" placeholder="Confirmar a nova senha">
     `,
     focusConfirm: false,
     showCancelButton: true,
@@ -140,17 +142,17 @@ const editarSenha = async () => {
       const confirmaSenha = (document.getElementById("confirmaSenha") as HTMLInputElement).value;
 
       if (!senhaAtual || !novaSenha || !confirmaSenha) {
-      Swal.showValidationMessage("Preencha todos os campos");
+      Swal.showValidationMessage("Você precisa preencher todos os campos.");
       return;
       }
       if (!regexSenha.test(novaSenha)) {
         Swal.showValidationMessage(
-          "A senha deve ter no mínimo 8 caracteres, com 1 letra maiúscula, 1 número e 1 caractere especial (@$!%*?&_)"
+          "A senha deve ter pelo menos 8 caracteres, uma letra maiúscula, um número e um caractere especial."
         );
         return;
       }
       if (novaSenha !== confirmaSenha) {
-        Swal.showValidationMessage("As senhas não conferem");
+        Swal.showValidationMessage("As senhas não são iguais.");
         return;
   }
 
@@ -187,12 +189,28 @@ const editarSenha = async () => {
     Swal.fire({ icon: "success", title: "Senha alterada!", timer: 1500, showConfirmButton: false });
   }
 };
+
+const [fotoPreview, setFotoPreview] = useState<string | null>(null);
+
+const handleFotoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const arquivo = event.target.files?.[0];
+  if (!arquivo) return;
+  if (!arquivo.type.startsWith("image/")) {
+    Swal.fire("Erro", "Selecione um arquivo de imagem.", "error");
+    return;
+  }
+  const fotoUrl = URL.createObjectURL(arquivo);
+  setFotoPreview(fotoUrl);
+};
+
   return (
     <div className="perfil-page">
       <header className="perfil-header">
         <div className="perfil-header-top">
           <img src={LogoBranco} className="logobranco" alt="Logo DivideAqui" />
-          <Link to="/home" className="perfil-close">x</Link>
+          <button type="button" className="IconCancelar-meuPerfil" onClick={() => navigate("/home")}>
+            <IoCloseSharp size={25} />
+            </button>
         </div>
 
         <p className="ola-usuario">
@@ -202,17 +220,21 @@ const editarSenha = async () => {
         </p>
 
         <div className="avatar-wrapper">
-          {user?.picture ? (
-            <img src={user.picture} className="avatar-img" alt={user.name} />
+          <input type="file" id="upload-foto" accept="image/*" hidden onChange={handleFotoChange}/>
+
+          {fotoPreview || user?.picture ? (
+            <img
+              src={fotoPreview || user?.picture}
+              className="avatar-img"
+              alt={user?.name || "Foto do usuário" }
+            />
           ) : (
-            <div className="avatar-fallback">
-              {user?.name?.trim()?.charAt(0)?.toUpperCase() || "U"}
-            </div>
+            <div className="avatar-fallback">{user?.name?.trim()?.charAt(0)?.toUpperCase() || "U"}</div>
           )}
-          <button type="button" className="avatar-editar">
-            <FaPen />
-          </button>
+
+          <label htmlFor="upload-foto" className="avatar-editar"><FaPen /></label>
         </div>
+
       </header>
       <div className="context">
         <div className="perfil-card">
@@ -222,7 +244,7 @@ const editarSenha = async () => {
               <input
                 type="text"
                 name="nome"
-                placeholder="User000"
+                placeholder="Nome completo"
                 value={perfilusu?.usu_nome ?? ""}
                 readOnly
               />
@@ -239,7 +261,7 @@ const editarSenha = async () => {
               <input
                 type="text"
                 name="descricao"
-                placeholder="--------------------------------------"
+                placeholder="Escreva uma breve descrição sobre você."
                 value={perfilusu?.usu_descricao ?? ""}
                 readOnly
               />
@@ -254,6 +276,7 @@ const editarSenha = async () => {
             <label>Data de Nascimento:</label>
             <div className="input-wrapper">
               <input
+                id="dataNascimento-meuperfil"
                 type="date"
                 name="dataNascimento"
                value={perfilusu?.usu_data_nasc?.slice(0, 10) ?? ""}

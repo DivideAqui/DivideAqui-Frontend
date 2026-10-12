@@ -111,6 +111,19 @@ const [mostrarComentario, setMostrarComentario] = useState(false);
 const [comentario, setComentario] = useState("");
 const [avaliacaoEnviada, setAvaliacaoEnviada] = useState(false);
 
+// RESETA OS ESTADOS AO TROCAR DE PERFIL
+useEffect(() => {
+  setAvaliacaoEnviada(false);
+  setAvaliacao(0);
+  setComentario("");
+  setMostrarComentario(false);
+  setCurrentIndex(0);
+  setFeedbacks([]);
+  setDivisoesUsuarioState([]);
+  setGruposEmComum([]);
+  setMediaAvaliacoes(0);
+}, [perfilUsuarioId]);
+
 // RESPONSIVIDADE DOS CARROSSÉIS
 useEffect(() => {
 const handleResize = () => {
@@ -137,13 +150,15 @@ return () => {
 
 // BUSCA OS DADOS DO PERFIL
 useEffect(() => {
+let cancelado = false;
+
 const buscarDadosPerfil = async () => {
 if (!perfilUsuarioId) return;
 
   try {
     // DADOS DO USUÁRIO
     const usuarioResponse = await fetch(
-      `//divide-aqui-backend.vercel.app/usuario/${perfilUsuarioId}`
+      `https://divide-aqui-backend.vercel.app/usuario/${perfilUsuarioId}`
     );
 
     if (!usuarioResponse.ok) {
@@ -151,13 +166,14 @@ if (!perfilUsuarioId) return;
     }
 
     const usuarioData = await usuarioResponse.json();
+    if (cancelado) return;
     setNomePerfil(usuarioData.usu_nome || "Usuário");
     setFotoPerfil(usuarioData.usu_foto || "");
     setDescricaoUsuario(usuarioData.usu_descricao || "");
 
     // GRUPOS
     const gruposResponse = await fetch(
-      `//divide-aqui-backend.vercel.app/grupos`
+      `https://divide-aqui-backend.vercel.app/grupos`
     );
 
     if (!gruposResponse.ok) {
@@ -165,6 +181,7 @@ if (!perfilUsuarioId) return;
     }
 
     const gruposData = await gruposResponse.json();
+    if (cancelado) return;
 
     /* Isso é usado para EXIBIR as divisões.*/
 
@@ -250,10 +267,16 @@ if (!perfilUsuarioId) return;
 };
 
 buscarDadosPerfil();
+
+return () => {
+  cancelado = true;
+};
 }, [perfilUsuarioId, usuarioLogadoId]);
 
 // BUSCAR AS AVALIAÇÕES
 useEffect(() => {
+let cancelado = false;
+
 const buscarAvaliacoes = async () => {
 if (!perfilUsuarioId) return;
 
@@ -263,7 +286,7 @@ if (!perfilUsuarioId) return;
     const token = localStorage.getItem("token");
 
     const response = await fetch(
-      `//divide-aqui-backend.vercel.app/avaliacoes/${perfilUsuarioId}`,
+      `https://divide-aqui-backend.vercel.app/avaliacoes/${perfilUsuarioId}`,
       {
         method: "GET",
         headers: {
@@ -277,9 +300,10 @@ if (!perfilUsuarioId) return;
     }
 
     const data = await response.json();
+    if (cancelado) return;
 
     const avaliacoesFormatadas: Feedback[] =
-      data.avaliacoes.map(
+      (data.avaliacoes || []).map(
         (avaliacao: any) => ({
           id: Number(avaliacao.ava_id),
           name: avaliacao.usuario_avaliacao_ava_avaliadorTousuario?.usu_nome || "Usuário",
@@ -296,15 +320,21 @@ if (!perfilUsuarioId) return;
     console.error("Erro ao carregar avaliações:",error
     );
   } finally {
-    setCarregandoAvaliacoes(false);
+    if (!cancelado) setCarregandoAvaliacoes(false);
   }
 };
 
 buscarAvaliacoes();
+
+return () => {
+  cancelado = true;
+};
 }, [perfilUsuarioId]);
 
 // BUSCAR MÉDIA DAS AVALIAÇÕES
 useEffect(() => {
+let cancelado = false;
+
 const buscarMedia = async () => {
 if (!perfilUsuarioId) return;
 
@@ -313,7 +343,7 @@ if (!perfilUsuarioId) return;
       localStorage.getItem("token");
 
     const response = await fetch(
-      `//divide-aqui-backend.vercel.app/avaliacoes/${perfilUsuarioId}/media`,
+      `https://divide-aqui-backend.vercel.app/avaliacoes/${perfilUsuarioId}/media`,
       {
         method: "GET",
         headers: {
@@ -328,6 +358,7 @@ if (!perfilUsuarioId) return;
     }
 
     const data = await response.json();
+    if (cancelado) return;
 
     setMediaAvaliacoes(
       Number(data.media) || 0
@@ -340,16 +371,11 @@ if (!perfilUsuarioId) return;
 };
 
 buscarMedia();
-}, [perfilUsuarioId]);
 
-// AVISO SE FOR SEU PRÓPRIO PERFIL
-useEffect(() => {
-  if (
-  !podeAvaliar && usuarioLogadoId !== "0"
-  ) {
-  console.log("Você não pode avaliar a si mesmo");
-  }
-  }, [ podeAvaliar, usuarioLogadoId,]);
+return () => {
+  cancelado = true;
+};
+}, [perfilUsuarioId]);
 
 // CARROSSEL DE AVALIAÇÕES
 useEffect(() => {
@@ -441,7 +467,7 @@ const renderStars = (rating: number) => {
 
 // ENVIAR AVALIAÇÃO
 const enviarAvaliacao = async () => {
-  if (avaliacaoEnviada) {
+  if (avaliacaoEnviada || !podeAvaliar) {
     return;
   }
 
@@ -469,7 +495,7 @@ if (gruposEmComum.length === 0) {
   Swal.fire({
     icon: "warning",
     title: "Atenção!",
-    text: "Você só pode avaliar este usuário se já tiver participado de algum grupo com ele.",
+    text: "Você não pode avaliar este usuário pois não há grupos em comum.",
     confirmButtonText: "OK",
   });
   return;
@@ -478,13 +504,23 @@ if (gruposEmComum.length === 0) {
 try {
   const token = localStorage.getItem("token");
 
+  if (!token) {
+    Swal.fire({
+      icon: "warning",
+      title: "Atenção!",
+      text: "Você precisa estar logado para avaliar.",
+      confirmButtonText: "OK",
+    });
+    return;
+  }
+
   const dadosAvaliacao = {
   ava_nota: avaliacao,
   ava_descricao: comentario.trim(),
   ava_avaliado: Number(perfilUsuarioId),
   };
 
-  const response = await fetch("//divide-aqui-backend.vercel.app/avaliacoes",{
+  const response = await fetch("https://divide-aqui-backend.vercel.app/avaliacoes",{
       method: "POST",
       headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json",
       },
@@ -493,7 +529,7 @@ try {
   );
 
   if (!response.ok) {
-    const erro = await response.json();
+    const erro = await response.json().catch(() => ({}));
 
     if (response.status === 409) {
       Swal.fire({
@@ -520,26 +556,27 @@ try {
     );
   }
 
+  const avaliacaoCriada = await response.json().catch(() => null);
+
   setAvaliacaoEnviada(true);
   setMostrarComentario(false);
   setComentario("");
   setAvaliacao(0);
 
   const novaAvaliacao: Feedback = {
-    id: Date.now(),
+    id: Number(avaliacaoCriada?.ava_id) || Date.now(),
     name: user?.name || "Usuário",
     rating: avaliacao,
     text: comentario.trim(),
-    avatar: user?.picture || `https://api.dicebear.com/7.x/avataaars/svg?seed=${displayName}`,
+    avatar: user?.picture || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.name || "Usuario"}`,
   };
 
   setFeedbacks((prev) => [ novaAvaliacao,...prev,]);
   setCurrentIndex(0);
 
   // Atualiza a média
-  const token2 = localStorage.getItem("token");
-  const mediaResponse = await fetch( `//divide-aqui-backend.vercel.app/avaliacoes/${perfilUsuarioId}/media`,{
-      headers: { Authorization: `Bearer ${token2}`,},
+  const mediaResponse = await fetch( `https://divide-aqui-backend.vercel.app/avaliacoes/${perfilUsuarioId}/media`,{
+      headers: { Authorization: `Bearer ${token}`,},
     }
   );
 
@@ -635,10 +672,13 @@ return (
 
       {/* DESCRIÇÃO DO USUÁRIO */}
       <div className="descricao-usuario">
-        <h3> {descricaoUsuario || "Este usuário ainda não adicionou uma descrição."}</h3>
+        <h3 className={descricaoUsuario ? "com-descricao" : "sem-descricao"}>
+          {descricaoUsuario || "Este usuário ainda não adicionou uma descrição."}
+        </h3>
       </div>
 
-      {/* AVALIAR USUÁRIO */}
+      {/* AVALIAR USUÁRIO (somente em perfis de outros usuários) */}
+      {podeAvaliar && (
       <div className="avaliar-usuario">
         <span className="estrela2"><IoMdStar /></span>
 
@@ -668,39 +708,42 @@ return (
           <h3>Clique nas estrelas para avaliar.</h3>
         </div>
 
-        {podeAvaliar && (
-          <button type="button" className="check-avaliacao-button" title="Clique para avaliar" onClick={() => {
-              if (avaliacao === 0) {
-                Swal.fire({
-                  icon: "warning",
-                  title: "Atenção!",
-                  text: "Selecione pelo menos 1 estrela.",
-                  confirmButtonText:"OK",
-                });
-                return;
-              }
+        <button type="button" className="check-avaliacao-button" title="Clique para avaliar" onClick={() => {
+            if (avaliacaoEnviada) {
+              return;
+            }
 
-              if ( gruposEmComum.length === 0 ) {
-                Swal.fire({
-                  icon: "warning",
-                  title: "Atenção!",
-                  text: "Você só pode avaliar este usuário se já tiver participado de algum grupo com ele.",
-                  confirmButtonText: "OK",
-                });
-                return;
-              }
+            if (avaliacao === 0) {
+              Swal.fire({
+                icon: "warning",
+                title: "Atenção!",
+                text: "Selecione pelo menos 1 estrela.",
+                confirmButtonText:"OK",
+              });
+              return;
+            }
 
-              setMostrarComentario(true);
-            }}
-          >
-            <FaCircleCheck className={ avaliacaoEnviada
-                  ? "check-avaliacao enviado"
-                  : "check-avaliacao"
-              }
-            />
-          </button>
-        )}
+            if ( gruposEmComum.length === 0 ) {
+              Swal.fire({
+                icon: "warning",
+                title: "Atenção!",
+                text: "Você não pode avaliar este usuário pois não há grupos em comum.",
+                confirmButtonText: "OK",
+              });
+              return;
+            }
+
+            setMostrarComentario(true);
+          }}
+        >
+          <FaCircleCheck className={ avaliacaoEnviada
+                ? "check-avaliacao enviado"
+                : "check-avaliacao"
+            }
+          />
+        </button>
       </div>
+      )}
 
       {/* MODAL DA AVALIAÇÃO */}
       <Dialog open={mostrarComentario} onOpenChange={ setMostrarComentario }>
@@ -716,7 +759,7 @@ return (
             <DialogHeader>
               <DialogTitle>Como foi essa parceria?</DialogTitle>
               <DialogDescription>
-                <p>Diga o que achou de dividir com esse usuário.</p>
+                Diga o que achou de dividir com esse usuário.
               </DialogDescription>
             </DialogHeader>
 

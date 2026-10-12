@@ -1,176 +1,234 @@
-/* =========================================================
-   CELULAR
-   ========================================================= */
+/* TELAS GRANDES (>= 1440px) */
+@media (min-width: 1440px) {
 
-@media (max-width: 767px) {
+    .perfil-participante-container {
+        --largura-conteudo: min(80%, 75rem);
+    }
+}
 
-    .perfil-participante-fundo {
-        width: 100%;
-        height: clamp(9rem, 15vh, 12rem);
-        min-height: 0;
+/* TABLET E MENORES (<= 1023px) */
+@media (max-width: 1023px) {
+
+    .perfil-participante-container {
+        --largura-conteudo: min(90%, 68.75rem);
     }
 
-    .cabecalho-participante {
-        width: min(80%, 68.75rem);
-        min-height: clamp(8rem, 20vh, 12rem);
+    .IconCancelar-perfilParticipante {
+        font-size: 2.4rem;
     }
 
-    .cabecalho-participante,
-    .descricao-usuario,
-    .avaliar-usuario,
-    .participante-divisoes,
-    .participante-avaliacoes {
-        position: relative;
-        top: 1.5rem;
+    .participante-feedback-card {
+        min-height: 13rem;
     }
+}
 
-    .participante-user-avatar {
-        width: clamp(5rem, 22vw, 8rem);
-        height: clamp(5rem, 22vw, 8rem);
-        border: clamp(0.18rem, 0.7vw, 0.23rem) solid var(--verde-claro);
+/* <= 980px: 2 divisões por vez (igual ao TSX) */
+@media (max-width: 980px) {
+
+    .participante-divisao-slide {
+        width: 50%;
     }
+}
 
-    .dados-usuario {
-        padding-top: clamp(1rem, 4vw, 2rem);
-    }
+/* <= 768px: 1 avaliação por vez (igual ao TSX) */
+@media (max-width: 768px) {
 
-    .nome-usuario {
-        font-size: clamp(0.9rem, 3.5vw, 1.2rem);
-    }
-
-    .estrelas {
-        padding-bottom: 0.1rem;
-    }
-
-    .estrela {
-        font-size: clamp(0.9rem, 3vw, 1.1rem);
-    }
-
-    .descricao-usuario,
-    .avaliar-usuario {
-        padding: clamp(1rem, 4vw, 1.5rem);
-    }
-
-    .descricao-usuario {
-        margin-top: clamp(0.5rem, 2vw, 1rem);
-        margin-bottom: 0;
-    }
-
-    .descricao-usuario h3 {
-        font-size: clamp(0.6rem, 2vw, 0.8rem);
-        line-height: 1.3;
-        width: 100%;
-    }
-
-    .textos-avaliacao {
-        margin-left: 0;
-    }
-
-    .textos-avaliacao h1 {
-        font-size: clamp(0.6rem, 2vw, 0.8rem);
-        margin: 0;
-        width: 90%;
+    .IconCancelar-perfilParticipante {
+        font-size: 2rem;
     }
 
     .textos-avaliacao h2 {
         display: none;
     }
 
-    .estrela2 {
-        width: clamp(1.7rem, 7vw, 2.2rem);
-        min-width: clamp(1.7rem, 7vw, 2.2rem);
-        height: clamp(1.7rem, 7vw, 2.2rem);
-        font-size: clamp(1.3rem, 5vw, 1.7rem);
+    .participante-feedback-slide {
+        width: 100%;
     }
 
-    .estrela-button {
-        font-size: clamp(0.9rem, 3vw, 1.1rem);
+    .participante-divisoes-carousel-wrapper,
+    .participante-feedback-carousel-wrapper {
+        gap: 0.4rem;
     }
 
-    .estrelas-avaliar {
+    .participante-divisoes-carousel-arrow,
+    .participante-feedback-carousel-arrow {
+        width: 2.2rem;
+        height: 2.2rem;
+        font-size: 1rem;
+    }
+
+    .participante-divisoes-carousel-arrow-left,
+    .participante-divisoes-carousel-arrow-right,
+    .participante-feedback-carousel-arrow-left,
+    .participante-feedback-carousel-arrow-right {
         margin-left: 0;
+        margin-right: 0;
+    }
+
+    .participante-feedback-card {
+        min-height: 11rem;
+        gap: 0.5rem;
+    }
+
+    .participante-divisao-card {
+        min-height: 12rem;
+    }
+
+    .dialog-content {
+        width: min(92vw, 37.5rem);
+        max-width: calc(100vw - 2rem);
+        padding: 1.25rem;
+        padding-top: 2.5rem;
+        line-height: 1.6rem;
+    }
+
+    .dialog-content p {
+        line-height: 1.4rem;
+    }
+
+    .dialog-header {
+        margin-bottom: 1rem;
+    }
+
+    .IconCancelar-avaliacao {
+        top: 1rem;
+        right: 1rem;
+    }
+
+    .avaliacao-dialog__enviar {
+        min-height: 3rem;
+    }
+
+    .participante-divisao-dialog-icone {
+        width: 3.5rem;
+        height: 3.5rem;
+        font-size: 1.6rem;
+    }
+}
+
+/* <= 600px: o bloco de avaliação vira 2 linhas
+   linha 1: ícone | texto | check
+   linha 2: estrelas centralizadas */
+@media (max-width: 600px) {
+
+    .avaliar-usuario {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 0.75rem 0.75rem;
+        padding: 1rem;
+    }
+
+    .avaliar-usuario .estrela2 {
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    .avaliar-usuario .textos-avaliacao {
+        grid-column: 2;
+        grid-row: 1;
+        flex: none;
+    }
+
+    .avaliar-usuario .check-avaliacao-button {
+        grid-column: 3;
+        grid-row: 1;
+    }
+
+    .avaliar-usuario .estrelas-avaliar {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 
     .estrelas-avaliar h3 {
-        margin: 0.3rem 0 0;
-        font-size: clamp(0.3rem, 1.5vw, 0.5rem);
-        font-weight: 300;
+        margin-top: 0.5rem;
+        font-size: 0.7rem;
+    }
+
+    .estrela-button {
+        margin-bottom: 0;
+    }
+
+    .descricao-usuario h3 {
         text-align: center;
     }
+}
 
-    .check-avaliacao-button {
-        font-size: clamp(0.8rem, 3vw, 1rem);
-        margin-left: 0;
+/* <= 480px: 1 divisão por vez (igual ao TSX) */
+@media (max-width: 480px) {
+
+    .perfil-participante-container {
+        --largura-conteudo: 92%;
+        padding-bottom: 3rem;
     }
 
-    .participante-divisoes,
-    .participante-feedbacks {
-        margin-bottom: clamp(0.7rem, 2vw, 1rem);
-        margin-top: clamp(0.7rem, 2vw, 1rem);
+    .participante-divisao-slide {
+        width: 100%;
     }
 
-    .titulo-participante {
-        font-size: clamp(0.8rem, 3vw, 1rem);
+    .participante-divisoes-carousel-wrapper {
+        margin-top: 1rem;
+    }
+
+    .participante-divisao-dialog-info {
+        grid-template-columns: 1fr;
+    }
+
+    .participante-divisao-dialog-header {
+        gap: 0.75rem;
+    }
+
+    .participante-divisao-dialog-body > p {
+        text-align: left;
     }
 
     .participante-divisoes-vazio,
     .participante-feedbacks-vazio {
-        font-size: clamp(0.6rem, 2vw, 0.75rem);
+        font-size: 0.8rem;
     }
 
-    .dialog-content {
-        width: min(90vw, 37.5rem);
-        max-width: calc(100vw - 2rem);
-        line-height: 2rem;
-    }
-
-    .dialog-content p {
-        padding-top: 0.3rem;
-        line-height: 1.3rem;
-        color: #0f0f0f;
-    }
-
-    .dialog-header {
-        margin-bottom: clamp(1rem, 4vw, 1.5rem);
-    }
-
-    .avaliacao-dialog__textarea {
-        min-height: clamp(10rem, 20vh, 15rem);
-        font-size: clamp(0.85rem, 3vw, 0.95rem);
-    }
-
-    .avaliacao-dialog__estrelas {
-        display: flex;
-        gap: 0;
-        margin-top: 0.5rem;
-        font-size: clamp(1rem, 4vw, 1.2rem);
-    }
-
-    .avaliacao-dialog__contador {
-        text-align: right;
-        font-size: clamp(0.7rem, 2.5vw, 0.8rem);
-        color: #888;
-        padding-right: clamp(1rem, 10vw, 5rem);
+    .participante-feedback-header {
+        flex-direction: column;
+        align-items: flex-start;
     }
 }
 
-
-/* =========================================================
-   TABLET
-   ========================================================= */
-
-@media (min-width: 768px) and (max-width: 1023px) {
-
-    .perfil-participante-fundo {
-        height: clamp(13rem, 28vh, 18rem);
-    }
+/* <= 360px: telas muito pequenas */
+@media (max-width: 360px) {
 
     .cabecalho-participante {
-        width: min(80%, 68.75rem);
+        gap: 0.75rem;
     }
 
-    .participante-user-avatar {
-        width: clamp(8rem, 18vw, 11rem);
-        height: clamp(8rem, 18vw, 11rem);
+    .participante-divisao-card {
+        padding: 1rem 0.875rem 0.875rem;
+    }
+
+    .participante-divisoes-carousel-arrow,
+    .participante-feedback-carousel-arrow {
+        width: 1.9rem;
+        height: 1.9rem;
+        font-size: 0.85rem;
+    }
+
+    .dialog-content {
+        padding: 1rem;
+        padding-top: 2.25rem;
+    }
+}
+
+/* TELAS BAIXAS (celular deitado) */
+@media (max-height: 480px) and (orientation: landscape) {
+
+    .dialog-content,
+    .participante-divisao-dialog {
+        max-height: 92vh;
+    }
+
+    .avaliacao-dialog__textarea {
+        min-height: 5rem;
     }
 }

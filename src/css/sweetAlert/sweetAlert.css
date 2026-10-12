@@ -6,7 +6,7 @@
     background: #F5F5F0 !important;
     border-radius: 4px !important;
     font-family: var(--fonte-texto) !important;
-    padding: 2rem !important;
+    padding: 2rem;
     box-shadow:
         rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
         rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
@@ -122,7 +122,7 @@
     background: var(--azul-claro);
     color: white !important;
     border-radius: 4px !important;
-    padding: 0.8rem 5rem !important;
+    padding: 0.8rem 5rem;
     margin-bottom: 2rem;
     font-family: var(--fonte-titulo) !important;
     font-weight: 600;
@@ -166,3 +166,30 @@
 .meu-botao-verde:hover {
     background: var(--verde-escuro) !important;
 }
+
+/* =========================
+   PADRÃO VERDE
+   ========================= */
+
+.btn-salvar,
+.btn-cancelar {
+    margin: 0 0.5rem;
+    border-radius: 4px !important;
+    font-family: var(--fonte-titulo) !important;
+    font-weight: 600;
+    border: none !important;
+    padding: 0.8rem 3.5rem;
+    background-color: var(--azul-claro);
+    transition: transform 0.4s cubic-bezier(0.3, 1, 0.8, 1) !important;
+}
+
+.btn-salvar:hover {
+  background-color: var(--verde-claro) !important;
+  color: #000 !important;
+}
+
+.btn-cancelar:hover {
+  background-color: #000 !important;
+  
+}
+

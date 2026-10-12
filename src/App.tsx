@@ -9,9 +9,10 @@ import { MeuPerfil } from "./pages/meuPerfil";
 import { PerfilParticipante } from "./pages/perfilParticipante";
 import { MeusGrupos } from "./pages/meusGrupos";
 import { Historico } from "./pages/Historico";
+import { DetalheDivisão } from "./pages/DetalheDivisão";
+
 import ProtectedRoute from "./components/ProtectedRoute";
 import { AuthProvider } from "./hooks/useAuth";
-import { DetalheDivisão } from "./pages/DetalheDivisão";
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
@@ -27,7 +28,7 @@ export function App() {
               
               <Route path="/historico" element={<ProtectedRoute><Historico /></ProtectedRoute>} />
               <Route path="/meuperfil" element={<ProtectedRoute><MeuPerfil /></ProtectedRoute>} />
-              <Route path="/perfilparticipante" element={<ProtectedRoute><PerfilParticipante /></ProtectedRoute>} />
+              <Route path="/perfilparticipante/:id" element={<ProtectedRoute><PerfilParticipante /></ProtectedRoute>} />
               <Route path="/meusgrupos" element={<ProtectedRoute><MeusGrupos /></ProtectedRoute>} />
               <Route path="/detalhedivisão" element={<DetalheDivisão/>} />
               <Route path="/login" element={<Login />} />

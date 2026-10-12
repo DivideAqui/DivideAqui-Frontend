@@ -262,8 +262,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .logoCadastro {
     -webkit-animation: roll-in-blurred-left 0.9s cubic-bezier(0.230, 1.000, 0.320, 1.000) both;
           animation: roll-in-blurred-left 0.9s cubic-bezier(0.230, 1.000, 0.320, 1.000) both;
-  width: 30vw;
-  margin-left: -6vw;
+  width: 80vw;
   margin-top: -15vh;
   position: relative;
   z-index: 2;
