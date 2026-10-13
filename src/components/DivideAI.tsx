@@ -107,8 +107,24 @@ export function DivideAI() {
       });
 
       if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.erro || "Erro ao enviar mensagem");
+        let errorMsg = "Erro ao enviar mensagem";
+        try {
+          const data = await response.json();
+          errorMsg = data.erro || errorMsg;
+        } catch {
+          // Response não é JSON, tenta pegar texto do erro
+          try {
+            const text = await response.text();
+            if (text.includes("<!DOCTYPE") || text.includes("<html")) {
+              errorMsg = "Servidor indisponível. Tente novamente mais tarde.";
+            } else {
+              errorMsg = text.substring(0, 200) || errorMsg;
+            }
+          } catch {
+            // Mantém a mensagem padrão
+          }
+        }
+        throw new Error(errorMsg);
       }
 
       const data: RespostaIA = await response.json();
