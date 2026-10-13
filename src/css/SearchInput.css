@@ -131,3 +131,19 @@
   font-size: 0.86rem;
   color: rgba(3, 4, 94, 0.7);
 }
+
+@media (max-width: 600px) {
+  .SearchInputWrapper {
+    width: 80vw;
+  }
+
+  .SearchInputWrapper-focused {
+    width: 95vw;
+  }
+
+
+  .SearchInputIcon {
+    right: 0.9rem;
+    font-size: 1rem;
+  }
+}

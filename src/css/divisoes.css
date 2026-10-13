@@ -272,7 +272,11 @@ body {
 
 .vagas-card__avatars {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
   align-items: center;
+  gap: 2px;
+  max-width: 68%;
 }
 
 .vagas-card__avatar {
@@ -283,12 +287,13 @@ body {
   margin-left: -10px;
   cursor: pointer;
   padding: 0;
-  overflow: hidden;
+  overflow: visible;
   background: transparent;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   transition: transform 180ms ease, filter 180ms ease;
+  position: relative;
 }
 
 .vagas-card__avatar-image {
@@ -309,14 +314,56 @@ body {
   margin-left: 0;
 }
 
-.vagas-card__topline {
+/* Tooltip do avatar */
+.vagas-card__avatar-tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) scale(0.8);
+  background: var(--azul-escuro);
+  color: var(--branco);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 200ms ease, transform 200ms ease;
+  z-index: 100;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.vagas-card__avatar-tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: var(--azul-escuro);
+}
+
+.vagas-card__avatar:hover .vagas-card__avatar-tooltip,
+.vagas-card__avatar:focus-visible .vagas-card__avatar-tooltip {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+}
+
+.vagas-card__body-heading {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  min-width: 0;
 }
 
 .vagas-card__price {
   color: var(--azul-escuro);
-  font-size: 1.4vw;
+  flex: 0 0 auto;
+  text-align: right;
+  white-space: nowrap;
+  font-size: 0.95rem;
   font-weight: 800;
 }
 
@@ -333,12 +380,13 @@ body {
 }
 
 .vagas-card__body h4 {
-  margin: 0 0 6px;
+  min-width: 0;
+  margin: 0;
   color: var(--azul-escuro);
-  font-size: 1.4vw;
+  font-size: 1rem;
   font-weight: 800;
   line-height: 1.35;
-  margin-top: -5vh;
+  overflow-wrap: anywhere;
 }
 
 .vagas-card__body p {
@@ -490,8 +538,67 @@ body {
   .vagas-card {
     flex-basis: 100%;
     min-width: 0;
-    min-height: 200px;
+    min-height: 180px;
+    padding: 14px 14px 12px;
     box-sizing: border-box;
+  }
+
+  .vagas-card__icon {
+    width: 48px;
+    height: 48px;
+    font-size: 1.3rem;
+    margin-top: -4vh;
+    border-radius: 14px;
+  }
+
+  .vagas-card__lock {
+    width: 20px;
+    height: 20px;
+    font-size: 0.6rem;
+  }
+
+  .vagas-card__avatar {
+    width: 28px;
+    height: 28px;
+    margin-left: -8px;
+  }
+
+  .vagas-card__header {
+    margin-bottom: 12px;
+  }
+
+  .vagas-card__body {
+    margin-top: 8px;
+  }
+
+  .vagas-card__body h4 {
+    font-size: 0.9rem;
+    line-height: 1.2;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .vagas-card__body p {
+    font-size: 0.72rem;
+    line-height: 1.4;
+  }
+
+  .vagas-card__price {
+    font-size: 0.85rem;
+  }
+
+  .vagas-card__body .vagas-card__hide-mobile {
+    display: none;
+  }
+
+  .vagas-card__more {
+    width: 26px;
+    height: 26px;
+    right: 12px;
+    bottom: 10px;
+    font-size: 0.75rem;
   }
 
   .vagas-row__arrow {
@@ -521,6 +628,19 @@ body {
 
   .vagas-card {
     flex-basis: 100%;
+    min-height: 160px;
+  }
+
+  .vagas-card__avatars .vagas-card__avatar:nth-child(n+3) {
+    display: none;
+  }
+
+  .vagas-card__body h4 {
+    font-size: 0.85rem;
+  }
+
+  .vagas-card__body p {
+    font-size: 0.7rem;
   }
 }
 .vagas-card__more {
@@ -735,6 +855,59 @@ body {
   color: rgba(3, 4, 94, 0.72);
 }
 
+.division-dialog__stream-details {
+  display: grid;
+  gap: 0.4rem;
+  padding: 0.8rem;
+  border-left: 3px solid var(--azul-claro);
+  background: rgba(5, 60, 200, 0.06);
+  color: var(--azul-escuro);
+}
+
+.division-dialog__stream-details p {
+  margin: 0;
+  line-height: 1.4;
+}
+
+.division-dialog__trip-details {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.division-dialog__trip-details > div:not(.division-dialog__map) {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.7rem;
+  border-left: 3px solid var(--azul-claro);
+  background: rgba(5, 60, 200, 0.06);
+  color: var(--azul-escuro);
+}
+
+.division-dialog__trip-details span {
+  font-size: 0.9rem;
+  line-height: 1.35;
+}
+
+.division-dialog__distance {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: var(--azul-escuro);
+  font-size: 0.95rem;
+}
+
+.division-dialog__map {
+  grid-column: 1 / -1;
+  width: 100%;
+  height: 230px;
+  margin-top: 0.25rem;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(3, 4, 94, 0.15);
+}
+
 .division-dialog__action {
   margin: 1rem auto 0;
   border: none;
@@ -766,6 +939,14 @@ body {
   .division-dialog__title-row {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .division-dialog__trip-details {
+    grid-template-columns: 1fr;
+  }
+
+  .division-dialog__map {
+    grid-column: auto;
   }
 
   .dialog-content {

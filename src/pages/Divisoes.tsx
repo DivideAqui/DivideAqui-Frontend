@@ -8,7 +8,9 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import "../css/divisoes.css";
 import "../css/SearchInput.css";
 import moeda from "../assets/Imgs/moeda.png";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
+import mapboxgl from "mapbox-gl";
+import "mapbox-gl/dist/mapbox-gl.css";
 
 import {
   FaArrowCircleLeft,
@@ -24,25 +26,60 @@ import {
 
 type CategoryKey = "streaming" | "viagens" | "despesas" | "outros";
 
+type ViagemDetalhes = {
+  via_partida?: string | null;
+  via_destino?: string | null;
+};
+
+type StreamingDetalhes = {
+  str_valor?: string | number | null;
+  str_plano?: string | null;
+  str_telas?: number | null;
+};
+
+type ItemDetalhe = {
+  ite_valor: string | number;
+};
+
 type BackendGroup = {
   gru_id: number;
   gru_num_part: number;
-  lid_id: number;
   cat_id: number;
+  gru_nome?: string | null;
+  gru_descricao?: string | null;
+  gru_visibilidade?: boolean | null;
+  gru_cor?: string | null;
+  gru_icone?: string | null;
+  gru_num_vagas?: number | null;
+  gru_criador_id?: number | null;
+  gru_criador_nome?: string | null;
+  criador?: {
+    usu_id: number;
+    usu_nome: string;
+  } | null;
   categoria?: {
     cat_id: number;
     cat_nome: string;
   };
-  lider?: {
-    lid_id: number;
-    usuario?: {
-      usu_id: number;
-      usu_nome: string;
-      usu_avaliacao?: string | null;
-    };
+  mensalidade?: {
+    men_valor?: string | number | null;
   };
+  stream?: StreamingDetalhes | null;
+  item?: ItemDetalhe[];
+  viagem?: ViagemDetalhes | null;
+  detalhes?: ViagemDetalhes | null;
+  participacoes?: Array<{
+    par_id: number;
+    usu_id: number | string;
+    gru_id: number;
+    usuario?: {
+      usu_id: number | string;
+      usu_nome: string;
+      usu_foto?: string | null;
+    };
+  }>;
   _count?: {
-    participantes: number;
+    participacoes: number;
   };
 };
 
@@ -50,19 +87,40 @@ type CardItem = {
   id: string;
   name: string;
   price: string;
+  totalPlanPrice: string | null;
+  planName: string | null;
+  memberCount: number;
+  divisionCount: number;
+  maxParticipants: number;
   slots: number;
   color: string;
   icon: ReactNode;
   leaderName: string;
   leaderAvatar: string;
-  leaderRating: number;
+  leaderRating: number | null;
   description: string;
   category: CategoryKey;
+  partida?: string;
+  destino?: string;
+  privado: boolean;
+  participantes: Array<{
+    id: string;
+    nome: string;
+    avatar: string;
+  }>;
 };
 
-const API_BASE_URL = "https://divide-aqui-backend.vercel.app";
+const API_BASE_URL = import.meta.env.VITE_API_URL;
+const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
+const formatarBRL = (valor: number) =>
+  new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(valor);
 
-const getCategoryKey = (value?: string | null): CategoryKey => {
+const getCategoryKey = (value?: string | null, icon?: string | null): CategoryKey => {
+  const iconKey = (icon ?? "").trim().toLowerCase();
+  if (iconKey === "streaming" || iconKey === "viagens" || iconKey === "despesas" || iconKey === "outros") {
+    return iconKey;
+  }
+
   const normalized = (value ?? "").trim().toLowerCase();
 
   if (normalized.includes("stream")) return "streaming";
@@ -117,31 +175,68 @@ const getGroupDescription = (leaderName: string, category: CategoryKey) => {
 };
 
 const buildCardItemFromGroup = (group: BackendGroup): CardItem => {
-  const category = getCategoryKey(group.categoria?.cat_nome);
-  const leaderName = group.lider?.usuario?.usu_nome ?? "Líder do grupo";
-  const participantTotal = Math.max(1, group.gru_num_part || 1);
-  const currentParticipants = Math.max(0, group._count?.participantes ?? 0);
-  const slots = Math.max(0, participantTotal - currentParticipants);
+  const category = getCategoryKey(group.categoria?.cat_nome, group.gru_icone);
+  const viagem = group.viagem ?? (category === "viagens" ? group.detalhes : null);
+  const leaderName = group.criador?.usu_nome?.trim() || group.gru_criador_nome?.trim() || "Criador da divisão";
+  const participationCount = group._count?.participacoes ?? 0;
+  const creatorIsParticipant = group.gru_criador_id != null;
+  const memberCount = Math.max(1, participationCount + (creatorIsParticipant ? 0 : 1));
+  const configuredCapacity = Math.max(memberCount, group.gru_num_part ?? group.gru_num_vagas ?? memberCount);
+  const maxParticipants = group.stream?.str_telas == null
+    ? configuredCapacity
+    : Math.min(configuredCapacity, group.stream.str_telas);
+  const slots = Math.max(0, maxParticipants - memberCount);
+  const divisionCount = Math.min(maxParticipants, memberCount + (slots > 0 ? 1 : 0));
+  const streamTotal = group.stream?.str_valor == null ? null : Number(group.stream.str_valor);
+  const totalPlanPrice = streamTotal === null || !Number.isFinite(streamTotal)
+    ? null
+    : formatarBRL(streamTotal);
+  const totalItens = group.item?.reduce((total, item) => total + Number(item.ite_valor), 0);
+  const valorAtualItens = group.item && group.item.length > 0 ? formatarBRL(totalItens ?? 0) : null;
+  const perParticipantTotal = streamTotal === null || !Number.isFinite(streamTotal)
+    ? null
+    : Math.round(Math.round(streamTotal * 100) / divisionCount) / 100;
+  const perParticipantPrice = streamTotal !== null && Number.isFinite(streamTotal)
+    ? formatarBRL(perParticipantTotal ?? streamTotal)
+    : valorAtualItens ?? (group.mensalidade?.men_valor != null
+      ? `R$ ${group.mensalidade.men_valor}`
+      : "R$ —");
+
+  // Construir lista de participantes
+  const participantes = (group.participacoes ?? []).map((participacao) => ({
+    id: String(participacao.usuario?.usu_id ?? participacao.usu_id),
+    nome: participacao.usuario?.usu_nome || `Usuário ${participacao.usu_id}`,
+    avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(String(participacao.usuario?.usu_id ?? participacao.usu_id))}`,
+  }));
 
   return {
     id: String(group.gru_id),
-    name: `${getCategoryTitle(group.categoria?.cat_nome)} ${group.gru_id}`,
-    price: "R$ —",
+    name: group.gru_nome?.trim() || `${getCategoryTitle(category)} ${group.gru_id}`,
+    price: perParticipantPrice,
+    totalPlanPrice,
+    planName: group.stream?.str_plano ?? null,
+    memberCount,
+    divisionCount,
+    maxParticipants,
     slots,
-    color: category === "streaming" ? "#00A8E1" : category === "viagens" ? "var(--verde-escuro)" : "var(--verde-escuro)",
+    color: group.gru_cor || (category === "streaming" ? "#00A8E1" : "var(--verde-escuro)"),
     icon: getCategoryIcon(category),
     leaderName,
-    leaderAvatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(leaderName)}`,
-    leaderRating: Math.min(5, Math.max(3, participantTotal)),
-    description: getGroupDescription(leaderName, category),
+    leaderAvatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(String(group.criador?.usu_id ?? group.gru_criador_id ?? leaderName))}`,
+    leaderRating: null,
+    description: group.gru_descricao?.trim() || getGroupDescription(leaderName, category),
     category,
+    partida: viagem?.via_partida?.trim() || undefined,
+    destino: viagem?.via_destino?.trim() || undefined,
+    privado: group.gru_visibilidade === false,
+    participantes,
   };
 };
 
 const buildRowsFromGroups = (groups: BackendGroup[]) => {
   const groupedByCategory = groups.reduce<Record<CategoryKey, BackendGroup[]>>(
     (accumulator, group) => {
-      const categoryKey = getCategoryKey(group.categoria?.cat_nome);
+      const categoryKey = getCategoryKey(group.categoria?.cat_nome, group.gru_icone);
       accumulator[categoryKey] = accumulator[categoryKey] ?? [];
       accumulator[categoryKey].push(group);
       return accumulator;
@@ -171,12 +266,121 @@ const matchesSearchGroup = (group: BackendGroup, query: string) => {
   if (!query) return true;
 
   const categoryName = group.categoria?.cat_nome ?? "";
-  const leaderName = group.lider?.usuario?.usu_nome ?? "";
-  const groupLabel = `${getCategoryTitle(categoryName)} ${group.gru_id}`;
-  const haystack = [categoryName, leaderName, getCategoryTitle(categoryName), groupLabel].join(" ").toLowerCase();
+  const category = getCategoryKey(categoryName, group.gru_icone);
+  const groupLabel = group.gru_nome?.trim() || `${getCategoryTitle(category)} ${group.gru_id}`;
+  const haystack = [categoryName, group.gru_icone ?? "", group.gru_descricao ?? "", getCategoryTitle(category), groupLabel].join(" ").toLowerCase();
 
   return haystack.includes(query);
 };
+
+function MapaViagem({ partida, destino }: { partida: string; destino: string }) {
+  const mapaRef = useRef<HTMLDivElement | null>(null);
+  const [distanciaMetros, setDistanciaMetros] = useState<number | null>(null);
+  const [calculandoDistancia, setCalculandoDistancia] = useState(true);
+  const [erroDistancia, setErroDistancia] = useState(false);
+
+  useEffect(() => {
+    let ativo = true;
+    let mapa: mapboxgl.Map | null = null;
+    setDistanciaMetros(null);
+    setCalculandoDistancia(true);
+    setErroDistancia(false);
+
+    const carregarMapa = async () => {
+      const geocodificar = async (endereco: string) => {
+        const resposta = await fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(endereco)}.json?access_token=${MAPBOX_TOKEN}&country=br&language=pt&limit=1`);
+        if (!resposta.ok) return null;
+        const dados: { features?: Array<{ center: [number, number] }> } = await resposta.json();
+        return dados.features?.[0]?.center ?? null;
+      };
+
+      try {
+        const [coordenadasPartida, coordenadasDestino] = await Promise.all([
+          geocodificar(partida),
+          geocodificar(destino),
+        ]);
+        if (!ativo) return;
+        if (!mapaRef.current || !coordenadasPartida || !coordenadasDestino) {
+          setCalculandoDistancia(false);
+          setErroDistancia(true);
+          return;
+        }
+
+        mapboxgl.accessToken = MAPBOX_TOKEN;
+        mapa = new mapboxgl.Map({
+          container: mapaRef.current,
+          style: "mapbox://styles/mapbox/light-v11",
+          center: coordenadasPartida,
+          zoom: 6,
+          attributionControl: true,
+        });
+
+        new mapboxgl.Marker({ color: "#053CC8" }).setLngLat(coordenadasPartida).addTo(mapa);
+        new mapboxgl.Marker({ color: "#79C734" }).setLngLat(coordenadasDestino).addTo(mapa);
+
+        mapa.once("load", async () => {
+          const origem = coordenadasPartida.join(",");
+          const chegada = coordenadasDestino.join(",");
+          try {
+            const resposta = await fetch(`https://api.mapbox.com/directions/v5/mapbox/driving/${origem};${chegada}?geometries=geojson&overview=full&access_token=${MAPBOX_TOKEN}`);
+            if (!resposta.ok) throw new Error("Não foi possível consultar a rota.");
+
+            const dados: { routes?: Array<{ distance: number; geometry: { type: "LineString"; coordinates: [number, number][] } }> } = await resposta.json();
+            const rota = dados.routes?.[0];
+            if (!rota || !Number.isFinite(rota.distance)) throw new Error("A rota não possui distância disponível.");
+            if (!ativo) return;
+
+            setDistanciaMetros(rota.distance);
+            setCalculandoDistancia(false);
+
+            if (!mapa || mapa.getSource("rota-viagem")) return;
+            mapa.addSource("rota-viagem", { type: "geojson", data: rota.geometry });
+            mapa.addLayer({
+              id: "rota-viagem-linha",
+              type: "line",
+              source: "rota-viagem",
+              paint: { "line-color": "#053CC8", "line-width": 4, "line-opacity": 0.8 },
+            });
+
+            const limites = new mapboxgl.LngLatBounds();
+            limites.extend(coordenadasPartida);
+            limites.extend(coordenadasDestino);
+            mapa.fitBounds(limites, { padding: 36, maxZoom: 12 });
+          } catch {
+            if (ativo) {
+              setCalculandoDistancia(false);
+              setErroDistancia(true);
+            }
+          }
+        });
+      } catch {
+        if (ativo) {
+          setCalculandoDistancia(false);
+          setErroDistancia(true);
+        }
+      }
+    };
+
+    void carregarMapa();
+    return () => {
+      ativo = false;
+      mapa?.remove();
+    };
+  }, [partida, destino]);
+
+  const distanciaFormatada = distanciaMetros === null
+    ? null
+    : new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 1 }).format(distanciaMetros / 1000);
+
+  return (
+    <>
+      <p className="division-dialog__distance" aria-live="polite">
+        Distância da viagem: <strong>{distanciaFormatada ? `${distanciaFormatada} km` : calculandoDistancia ? "Calculando..." : erroDistancia ? "Indisponível" : "—"}</strong>
+      </p>
+      <div className="division-dialog__map" ref={mapaRef} role="application" aria-label={`Mapa do trajeto entre ${partida} e ${destino}`} />
+    </>
+  );
+}
 
 function VagasLinha({
   title,
@@ -193,6 +397,7 @@ function VagasLinha({
   const rowRef = useRef<HTMLDivElement | null>(null);
   const [showLeft, setShowLeft] = useState(false);
   const [showRight, setShowRight] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const row = rowRef.current;
@@ -314,39 +519,66 @@ function VagasLinha({
             >
               <div className="vagas-card__header">
                 <div className="vagas-card__icon" style={{ backgroundColor: item.color }}>
-                  <span className="vagas-card__lock"><FaLock /></span>
+                  {item.privado && <span className="vagas-card__lock"><FaLock /></span>}
                   {item.icon}
                 </div>
 
-                <div className="vagas-card__avatars" aria-label="Participantes">
-                  {Array.from({ length: Math.min(Math.max(1, item.slots + 1), 4) }).map((_, index) => (
-                    <button
-                      key={`${item.id}-avatar-${index}`}
-                      type="button"
-                      className="vagas-card__avatar"
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        onSelectItem(item);
-                      }}
-                      aria-label={`Abrir detalhes de ${item.name}`}
-                    >
-                      <img
-                        src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(`${item.id}-${index}`)}`}
-                        alt={`Participante ${index + 1}`}
-                        className="vagas-card__avatar-image"
-                      />
-                    </button>
-                  ))}
+                <div className="vagas-card__avatars" aria-label={`${item.memberCount} participantes`}>
+                  {item.participantes.length > 0 ? (
+                    item.participantes.map((participante) => (
+                      <button
+                        key={`${item.id}-avatar-${participante.id}`}
+                        type="button"
+                        className="vagas-card__avatar"
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          navigate(`/perfilparticipante/${participante.id}`);
+                        }}
+                        aria-label={`Ver perfil de ${participante.nome}`}
+                        title={`${participante.nome} - Clique para ver o perfil`}
+                      >
+                        <img
+                          src={participante.avatar}
+                          alt={participante.nome}
+                          className="vagas-card__avatar-image"
+                        />
+                        <span className="vagas-card__avatar-tooltip">{participante.nome}</span>
+                      </button>
+                    ))
+                  ) : (
+                    Array.from({ length: item.memberCount }).map((_, index) => (
+                      <button
+                        key={`${item.id}-avatar-${index}`}
+                        type="button"
+                        className="vagas-card__avatar"
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          onSelectItem(item);
+                        }}
+                        aria-label={`Abrir detalhes de ${item.name}`}
+                      >
+                        <img
+                          src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(`${item.id}-${index}`)}`}
+                          alt={`Participante ${index + 1} de ${item.memberCount}`}
+                          className="vagas-card__avatar-image"
+                        />
+                      </button>
+                    ))
+                  )}
                 </div>
               </div>
 
-              <div className="vagas-card__topline">
-                <span className="vagas-card__price">{item.price}</span>
-              </div>
-
               <div className="vagas-card__body">
-                <h4>{item.name}</h4>
-                <p>Vagas disponíveis: {item.slots}</p>
+                <div className="vagas-card__body-heading">
+                  <h4>{item.name}</h4>
+                  <span className="vagas-card__price">
+                    {item.price}{item.category === "streaming" ? " / pessoa" : ""}
+                  </span>
+                </div>
+                <p>Líder: {item.leaderName}</p>
+                {item.planName && <p className="vagas-card__hide-mobile">Plano: {item.planName}</p>}
+                <p className="vagas-card__hide-mobile">{item.memberCount} pessoa(s) no grupo</p>
+                <p className="vagas-card__hide-mobile">Vagas disponíveis: {item.slots}</p>
               </div>
 
               <button type="button" className="vagas-card__more" aria-label="Mais opções">
@@ -390,14 +622,21 @@ export function Divisoes() {
       .filter((group) => matchesSearchGroup(group, normalizedSearch))
       .slice(0, 5)
       .map((group) => {
-        const category = getCategoryKey(group.categoria?.cat_nome);
-        const leaderName = group.lider?.usuario?.usu_nome ?? "Líder do grupo";
-        const slots = Math.max(0, (group.gru_num_part || 1) - (group._count?.participantes ?? 0));
+        const category = getCategoryKey(group.categoria?.cat_nome, group.gru_icone);
+        const leaderName = group.criador?.usu_nome?.trim() || group.gru_criador_nome?.trim() || "Criador da divisão";
+        const participationCount = group._count?.participacoes ?? 0;
+        const creatorIsParticipant = group.gru_criador_id != null;
+        const memberCount = Math.max(1, participationCount + (creatorIsParticipant ? 0 : 1));
+        const configuredCapacity = Math.max(memberCount, group.gru_num_part ?? group.gru_num_vagas ?? memberCount);
+        const maxParticipants = group.stream?.str_telas == null
+          ? configuredCapacity
+          : Math.min(configuredCapacity, group.stream.str_telas);
+        const slots = Math.max(0, maxParticipants - memberCount);
 
         return {
           id: String(group.gru_id),
-          label: `${getCategoryTitle(group.categoria?.cat_nome)} ${group.gru_id}`,
-          subtitle: `Líder: ${leaderName}`,
+          label: group.gru_nome?.trim() || `${getCategoryTitle(category)} ${group.gru_id}`,
+          subtitle: leaderName,
           meta: `${slots} vagas`,
           category,
         };
@@ -406,7 +645,7 @@ export function Divisoes() {
 
   const filteredGroups = useMemo(() => {
     return allGroups.filter((group) => {
-      const categoryKey = getCategoryKey(group.categoria?.cat_nome);
+      const categoryKey = getCategoryKey(group.categoria?.cat_nome, group.gru_icone);
       const categoryMatches = activeCategory === "all" || categoryKey === activeCategory;
       const searchMatches = !normalizedSearch || matchesSearchGroup(group, normalizedSearch);
       return categoryMatches && searchMatches;
@@ -615,10 +854,12 @@ export function Divisoes() {
                     </div>
                     <div className="division-dialog__leader-info">
                       <strong>Líder: {selectedItem.leaderName}</strong>
-                      <div className="division-dialog__stars" aria-label={`Avaliação de ${selectedItem.leaderRating} estrelas`}>
-                        {Array.from({ length: selectedItem.leaderRating }).map((_, index) => (
-                          <FaStar key={index} className="division-dialog__star-icon" />
-                        ))}
+                      <div className="division-dialog__stars" aria-label={selectedItem.leaderRating === null ? "Sem avaliações" : `Avaliação de ${selectedItem.leaderRating} estrelas`}>
+                        {selectedItem.leaderRating === null
+                          ? "Sem avaliações"
+                          : Array.from({ length: selectedItem.leaderRating }).map((_, index) => (
+                              <FaStar key={index} className="division-dialog__star-icon" />
+                            ))}
                       </div>
                     </div>
                   </div>
@@ -628,9 +869,34 @@ export function Divisoes() {
               <div className="division-dialog__body">
                 <div className="division-dialog__title-row">
                   <DialogTitle>{selectedItem.name}</DialogTitle>
-                  <span className="division-dialog__price">{selectedItem.price}</span>
+                  <span className="division-dialog__price">
+                    {selectedItem.price}{selectedItem.category === "streaming" ? " / pessoa" : ""}
+                  </span>
                 </div>
+                {selectedItem.category === "streaming" && (
+                  <div className="division-dialog__stream-details">
+                    <p>Plano: <strong>{selectedItem.planName || "Não informado"}</strong></p>
+                    <p>Valor total atual: <strong>{selectedItem.totalPlanPrice || "R$ —"}</strong></p>
+                    <p>Divisão entre {selectedItem.divisionCount} {selectedItem.divisionCount === 1 ? "pessoa" : "pessoas"}: <strong>{selectedItem.price}</strong></p>
+                  </div>
+                )}
                 <p className="division-dialog__slots">Vagas disponíveis: {selectedItem.slots}</p>
+
+                {selectedItem.category === "viagens" && (
+                  <div className="division-dialog__trip-details">
+                    <div>
+                      <strong>Partida</strong>
+                      <span>{selectedItem.partida || "Não informado"}</span>
+                    </div>
+                    <div>
+                      <strong>Destino</strong>
+                      <span>{selectedItem.destino || "Não informado"}</span>
+                    </div>
+                    {selectedItem.partida && selectedItem.destino && (
+                      <MapaViagem partida={selectedItem.partida} destino={selectedItem.destino} />
+                    )}
+                  </div>
+                )}
 
                 <DialogDescription>
                   {selectedItem.description}

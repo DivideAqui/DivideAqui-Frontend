@@ -209,7 +209,7 @@ export function Nav() {
         <nav className={menuOpen ? "open" : ""}>{renderNavLinks()}</nav>
 
         <div className="NavActions">
-          <Link to="/divisoes" className="btn-cadastro btn-criar-divisao">
+          <Link to="/criarDivisao" className="btn-cadastro btn-criar-divisao">
             Criar Divisão
           </Link>
         </div>

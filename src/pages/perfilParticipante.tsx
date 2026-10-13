@@ -1,5 +1,6 @@
 import "../css/perfilParticipante.css";
 import "../css/MinCss/perfilParticipanteMin.css";
+import "../css/divisoes.css";
 
 import { useAuth } from "../hooks/useAuth";
 import { useState, useEffect } from "react";
@@ -25,11 +26,25 @@ interface Divisao {
   nome: string;
   categoria: string;
   valor: string;
+  price: string;
+  totalPlanPrice: string | null;
+  planName: string | null;
   vagas: number;
-  descricao: string;
+  memberCount: number;
+  slots: number;
+  description: string;
   lider: string;
   liderAvatar: string;
+  liderId?: string;
   icone: "streaming" | "viagens" | "despesas" | "outros";
+  privado: boolean;
+  partida?: string;
+  destino?: string;
+  participantes?: Array<{
+    id: string;
+    nome: string;
+    avatar: string;
+  }>;
 }
 
 const getDivisaoIcon = (icone: Divisao["icone"]) => {
@@ -226,17 +241,61 @@ if (!perfilUsuarioId) return;
           icone = "despesas";
         }
 
+        // Construir lista de participantes
+        const participantes = (grupo.participacoes ?? []).map((participacao: any) => ({
+          id: String(participacao.usuario?.usu_id ?? participacao.usu_id),
+          nome: participacao.usuario?.usu_nome || `Usuário ${participacao.usu_id}`,
+          avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(String(participacao.usuario?.usu_id ?? participacao.usu_id))}`,
+        }));
+
+        // Identificar o líder (criador do grupo)
+        const liderId = String(grupo.gru_criador_id ?? grupo.criador?.usu_id ?? "");
+        const liderNome = grupo.gru_criador_nome || grupo.criador?.usu_nome || "Líder";
+        const liderAvatar = grupo.criador?.usu_foto
+          || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(liderNome)}`;
+
+        // Calcular dados para o card
+        const participationCount = grupo._count?.participacoes ?? 0;
+        const creatorIsParticipant = grupo.gru_criador_id != null;
+        const memberCount = Math.max(1, participationCount + (creatorIsParticipant ? 0 : 1));
+        const maxParticipants = grupo.stream?.str_telas == null
+          ? (grupo.gru_num_part ?? grupo.gru_num_vagas ?? memberCount)
+          : Math.min(grupo.gru_num_part ?? grupo.gru_num_vagas ?? memberCount, grupo.stream.str_telas);
+        const slots = Math.max(0, (grupo.gru_num_vagas || 0));
+
+        const streamTotal = grupo.stream?.str_valor == null ? null : Number(grupo.stream.str_valor);
+        const divisionCount = Math.min(maxParticipants, memberCount + (slots > 0 ? 1 : 0));
+        const perParticipantTotal = streamTotal === null || !Number.isFinite(streamTotal)
+          ? null
+          : Math.round(Math.round(streamTotal * 100) / divisionCount) / 100;
+        const perParticipantPrice = streamTotal !== null && Number.isFinite(streamTotal)
+          ? `R$ ${perParticipantTotal?.toFixed(2).replace(".", ",")}`
+          : "R$ —";
+
+        // Dados da viagem
+        const viagem = grupo.viagem ?? null;
+
         return {
           id: grupo.gru_id,
           nome: grupo.gru_nome || "Sem nome",
           categoria,
           valor: grupo.stream?.str_valor
-            ? `R$ ${Number( grupo.stream.str_valor ).toFixed(2).replace(".", ",")}`: "Valor não informado",
+            ? `R$ ${Number(grupo.stream.str_valor).toFixed(2).replace(".", ",")}` : "Valor não informado",
+          price: perParticipantPrice,
+          totalPlanPrice: streamTotal != null ? `R$ ${streamTotal.toFixed(2).replace(".", ",")}` : null,
+          planName: grupo.stream?.str_plano ?? null,
           vagas: grupo.gru_num_vagas || 0,
-          descricao: grupo.gru_descricao || "Nenhuma descrição informada.",
-          lider: "Líder",
-          liderAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Lider",
+          memberCount,
+          slots,
+          description: grupo.gru_descricao || "Nenhuma descrição informada.",
+          lider: liderNome,
+          liderAvatar: liderAvatar,
+          liderId: liderId,
           icone,
+          privado: grupo.gru_visibilidade === false,
+          partida: viagem?.via_partida?.trim() || undefined,
+          destino: viagem?.via_destino?.trim() || undefined,
+          participantes,
         };
       });
 
@@ -830,18 +889,50 @@ return (
                               {getDivisaoIcon(divisao.icone)}
                             </div>
 
-                            <div className="participante-divisao-card-lider">
-                              <img src={divisao.liderAvatar} alt={divisao.lider}
-                                className="participante-divisao-card-avatar"
-                              />
-                              <span>{divisao.lider}</span>
+                            <div className="participante-divisao-card-participantes">
+                              {divisao.participantes && divisao.participantes.length > 0 ? (
+                                divisao.participantes.slice(0, 4).map((participante) => (
+                                  <button
+                                    key={participante.id}
+                                    type="button"
+                                    className="participante-divisao-card-avatar-btn"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      navigate(`/perfilparticipante/${participante.id}`);
+                                    }}
+                                    title={`${participante.nome} - Clique para ver o perfil`}
+                                  >
+                                    <img src={participante.avatar} alt={participante.nome}
+                                      className="participante-divisao-card-avatar"
+                                    />
+                                    <span className="participante-divisao-card-avatar-tooltip">{participante.nome}</span>
+                                  </button>
+                                ))
+                              ) : (
+                                <div className="participante-divisao-card-lider">
+                                  <img src={divisao.liderAvatar} alt={divisao.lider}
+                                    className="participante-divisao-card-avatar"
+                                  />
+                                  <span>{divisao.lider}</span>
+                                </div>
+                              )}
+                              {divisao.participantes && divisao.participantes.length > 4 && (
+                                <span className="participante-divisao-card-mais">+{divisao.participantes.length - 4}</span>
+                              )}
                             </div>
                           </div>
 
                           <div className="participante-divisao-card-conteudo">
-                            <span className="participante-divisao-card-categoria">{divisao.categoria}</span>
-                            <h2>{divisao.nome}</h2>
-                            <p>{divisao.valor} •{" "}{divisao.vagas}{" "}vagas disponíveis</p>
+                            <div className="participante-divisao-card-conteudo-heading">
+                              <h2>{divisao.nome}</h2>
+                              <span className="participante-divisao-card-conteudo-price">
+                                {divisao.price}{divisao.icone === "streaming" ? " / pessoa" : ""}
+                              </span>
+                            </div>
+                            <p>Líder: {divisao.lider}</p>
+                            {divisao.planName && <p>Plano: {divisao.planName}</p>}
+                            <p>{divisao.memberCount} pessoa(s) no grupo</p>
+                            <p>{divisao.slots} vagas disponíveis</p>
                           </div>
 
                           <span className="participante-divisao-card-abrir">Ver divisão →</span>
@@ -887,52 +978,64 @@ return (
         onOpenChange={(open) => !open && setDivisaoSelecionada(null)}
       >
         {divisaoSelecionada ? (
-          <DialogContent className="participante-divisao-dialog">
+          <DialogContent className="division-dialog">
             <DialogHeader>
-              <div className="participante-divisao-dialog-header">
-                <div className="participante-divisao-dialog-icone"
-                  style={{ backgroundColor: getDivisaoColor(divisaoSelecionada.icone ),
-                  }}
-                >
-                  {getDivisaoIcon( divisaoSelecionada.icone)}
+              <div className="division-dialog__header">
+                <div className="division-dialog__service-block">
+                  <div className="division-dialog__icon" style={{ backgroundColor: getDivisaoColor(divisaoSelecionada.icone) }}>
+                    {divisaoSelecionada.privado && <span className="vagas-card__lock"><FaLock /></span>}
+                    {getDivisaoIcon(divisaoSelecionada.icone)}
+                  </div>
                 </div>
 
-                <div>
-                  <span className="participante-divisao-dialog-categoria">{divisaoSelecionada.categoria}</span>
-
-                  <DialogTitle>{divisaoSelecionada.nome}</DialogTitle>
+                <div className="division-dialog__leader-block">
+                  <div className="division-dialog__leader-avatar">
+                    <img src={divisaoSelecionada.liderAvatar} alt={divisaoSelecionada.lider} className="division-dialog__leader-avatar-image" />
+                  </div>
+                  <div className="division-dialog__leader-info">
+                    <strong>Líder: {divisaoSelecionada.lider}</strong>
+                    <div className="division-dialog__stars">Sem avaliações</div>
+                  </div>
                 </div>
               </div>
             </DialogHeader>
 
-            <div className="participante-divisao-dialog-body">
-              <div className="participante-divisao-dialog-lider">
-                <img src={divisaoSelecionada.liderAvatar}
-                  alt={divisaoSelecionada.lider}
-                />
-
-                <div>
-                  <span>Líder da divisão</span>
-                  <strong>{divisaoSelecionada.lider}</strong>
-                </div>
+            <div className="division-dialog__body">
+              <div className="division-dialog__title-row">
+                <DialogTitle>{divisaoSelecionada.nome}</DialogTitle>
+                <span className="division-dialog__price">
+                  {divisaoSelecionada.price}{divisaoSelecionada.icone === "streaming" ? " / pessoa" : ""}
+                </span>
               </div>
-
-              <div className="participante-divisao-dialog-info">
-                <div>
-                  <span>Valor</span>
-                  <strong>{divisaoSelecionada.valor}
-                  </strong>
+              {divisaoSelecionada.icone === "streaming" && (
+                <div className="division-dialog__stream-details">
+                  <p>Plano: <strong>{divisaoSelecionada.planName || "Não informado"}</strong></p>
+                  <p>Valor total atual: <strong>{divisaoSelecionada.totalPlanPrice || "R$ —"}</strong></p>
+                  <p>Divisão entre {divisaoSelecionada.memberCount} {divisaoSelecionada.memberCount === 1 ? "pessoa" : "pessoas"}: <strong>{divisaoSelecionada.price}</strong></p>
                 </div>
+              )}
+              <p className="division-dialog__slots">Vagas disponíveis: {divisaoSelecionada.slots}</p>
 
-                <div>
-                  <span>Vagas disponíveis</span>
-
-                  <strong>{divisaoSelecionada.vagas}
-                  </strong>
+              {divisaoSelecionada.icone === "viagens" && (
+                <div className="division-dialog__trip-details">
+                  <div>
+                    <strong>Partida</strong>
+                    <span>{divisaoSelecionada.partida || "Não informado"}</span>
+                  </div>
+                  <div>
+                    <strong>Destino</strong>
+                    <span>{divisaoSelecionada.destino || "Não informado"}</span>
+                  </div>
                 </div>
-              </div>
+              )}
 
-              <DialogDescription>{divisaoSelecionada.descricao}</DialogDescription>
+              <DialogDescription>
+                {divisaoSelecionada.description}
+              </DialogDescription>
+
+              <button type="button" className="division-dialog__action">
+                Participar da Divisão
+              </button>
             </div>
           </DialogContent>
         ) : null}

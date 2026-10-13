@@ -41,6 +41,10 @@ const GOOGLE_CLIENT_ID = typeof import.meta !== "undefined"
   ? (import.meta.env.VITE_GOOGLE_CLIENT_ID as string | undefined)
   : undefined;
 
+const API_URL = typeof import.meta !== "undefined"
+  ? (import.meta.env.VITE_API_URL as string | undefined)
+  : undefined;
+
 function getCookie(name: string): string | null {
   if (typeof document === "undefined") return null;
 
@@ -118,6 +122,12 @@ function loadUserFromCookie(): AuthUser | null {
       return null;
     }
 
+    // Restaurar o token do localStorage se não estiver no cookie
+    const storedToken = localStorage.getItem("token");
+    if (storedToken && !user.token) {
+      user.token = storedToken;
+    }
+
     return user;
   } catch {
     removeCookie(COOKIE_NAME);
@@ -145,8 +155,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       } as unknown as Record<string, unknown>;
 
       setCookie(COOKIE_NAME, JSON.stringify(cookieUser), user.expiresAt);
+
+      // Also persist token to localStorage for components that need it (like DivideAI)
+      if (user.token) {
+        localStorage.setItem("token", user.token);
+      }
     } else {
       removeCookie(COOKIE_NAME);
+      localStorage.removeItem("token");
     }
   }, [user]);
 
@@ -157,13 +173,40 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       credentialResponse?.profileObj ?? credentialResponse?.user;
 
     const profilePicture = profileObj?.picture;
+    const googleToken = credentialResponse?.credential as string | undefined;
+    const accessToken = credentialResponse?.access_token ?? credentialResponse?.accessToken;
 
-    const idToken = credentialResponse?.credential as string | undefined;
+    // Primeiro, tenta trocar o token do Google por um token JWT do backend
+    if (googleToken && API_URL) {
+      try {
+        const response = await fetch(`${API_URL}/google-login`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ token: googleToken }),
+        });
 
-    if (idToken) {
+        if (response.ok) {
+          const data = await response.json();
+          const token = data.token ?? data.accessToken ?? data.data?.token;
+
+          if (token) {
+            // Usa o token JWT retornado pelo backend
+            await loginWithToken(token);
+            return;
+          }
+        }
+      } catch (e) {
+        console.error("Erro ao fazer login com Google via backend:", e);
+      }
+    }
+
+    // Fallback: usa as informações locais se o backend não estiver disponível
+    if (googleToken) {
       try {
         const tokenInfoRes = await fetch(
-          `https://oauth2.googleapis.com/tokeninfo?id_token=${encodeURIComponent(idToken)}`
+          `https://oauth2.googleapis.com/tokeninfo?id_token=${encodeURIComponent(googleToken)}`
         );
 
         if (tokenInfoRes.ok) {
@@ -189,7 +232,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               email: String(info.email || ""),
               name: String(info.name || profileObj?.name || "Usuário"),
               picture: safePicture,
-              token: "",
+              token: googleToken,
               expiresAt,
             });
 
@@ -201,21 +244,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       // fallback to parsing the JWT locally if tokeninfo failed
-      const parsedUser = parseJwtToken(idToken);
+      const parsedUser = parseJwtToken(googleToken);
 
       if (parsedUser) {
         setUser({
           ...parsedUser,
           picture: parsedUser.picture || profilePicture,
-          token: "",
+          token: googleToken,
         });
 
         return;
       }
     }
-
-    const accessToken =
-      credentialResponse?.access_token ?? credentialResponse?.accessToken;
 
     if (accessToken) {
       try {
@@ -251,7 +291,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             info.name || profileObj?.name || info.email || "Usuário"
           ),
           picture: safePicture,
-          token: "",
+          token: accessToken,
           expiresAt,
         };
 
