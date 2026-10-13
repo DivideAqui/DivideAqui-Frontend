@@ -144,6 +144,7 @@ svg {
   font-weight: 700;
   color: var(--azul-escuro);
   font-family: var(--fonte-texto);
+  background-color: var(--verde-claro);
 }
 
 .avatar-editar {
