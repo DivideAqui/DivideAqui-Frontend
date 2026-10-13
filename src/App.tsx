@@ -44,9 +44,9 @@ export function App() {
             <Route path="/meuperfil" element={<ProtectedRoute><MeuPerfil /></ProtectedRoute>} />
             <Route path="/perfilparticipante/:id" element={<ProtectedRoute><PerfilParticipante /></ProtectedRoute>} />
             <Route path="/meusgrupos" element={<ProtectedRoute><MeusGrupos /></ProtectedRoute>} />
-            <Route path="/detalhedivisão" element={<DetalheDivisão/>} />
+            <Route path="/detalhedivisão" element={<ProtectedRoute><DetalheDivisão/></ProtectedRoute>} />
             <Route path="/login" element={<Login />} />
-            <Route path="/divisoes" element={<Divisoes />} />
+            <Route path="/divisoes" element={<ProtectedRoute><Divisoes /></ProtectedRoute>} />
             <Route path="/Cadastro" element={<Cadastro />} />
           </Routes>
         </Router>
