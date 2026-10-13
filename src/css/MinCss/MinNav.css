@@ -1,0 +1,162 @@
+/* =========================
+   RESPONSIVIDADE
+   ========================= */
+
+@media (max-width: 1600px) {
+    .Navegacao {
+        width: 75vw;
+    }
+}
+
+@media (max-width: 1200px) {
+    .NavHeader,
+    .NavLogo {
+        height: 160px;
+    }
+
+    .NavHeader {
+        padding: 0 20px;
+        min-height: 160px;
+        margin-top: 2vh;
+    }
+
+    .NavLogo img {
+        height: 130px;
+        max-height: 140px;
+    }
+
+    .Navegacao {
+        width: 90vw;
+        flex: 1;
+        margin: 0 16px;
+        padding: 0 14px;
+    }
+
+    .Navegacao nav {
+        gap: 12px;
+    }
+
+    .Navegacao .iconUser {
+        width: 45px;
+        height: 45px;
+    }
+
+    .Navegacao nav a {
+        font-size: 15px;
+        padding: 6px 10px;
+    }
+
+    .NavActions {
+        height: 120px;
+        gap: 10px;
+    }
+
+    .btn-cadastro,
+    .btn-login {
+        font-size: 14px;
+        padding: 7px 13px;
+    }
+}
+
+@media (max-width: 760px) {
+    .NavHeader,
+    .Navegacao {
+        top: 0;
+        height: 80px;
+        padding: 0 16px;
+    }
+
+    .Navegacao,
+    .Navegacao nav {
+        position: fixed;
+        left: 0;
+        width: 100vw;
+    }
+
+    .NavActions,
+    .nav-user-fs {
+        display: none;
+    }
+
+    .nav-user {
+        display: block;
+    }
+
+    .Navegacao,
+    .Navegacao nav.open,
+    .nav-hamburger {
+        display: flex;
+    }
+
+    .NavHeader {
+        min-height: 80px;
+        align-items: center;
+    }
+
+    .NavLogo {
+        height: 80px;
+    }
+
+    .Navegacao {
+        border-radius: 0;
+        align-items: center;
+        justify-content: space-between;
+        margin: 0;
+        z-index: 1100;
+    }
+
+    .Navegacao nav {
+        top: 80px;
+        background: rgba(5, 30, 80, 0.97);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+        padding: 8px 0 16px;
+        display: none;
+        border-radius: 0 0 16px 16px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        z-index: 1099;
+    }
+
+    .Navegacao nav a {
+        width: 100%;
+        padding: 16px 24px;
+        font-size: 18px;
+        border-radius: 0;
+        border: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        text-align: left;
+        transform: none !important;
+        box-sizing: border-box;
+    }
+
+    .Navegacao nav a:last-child {
+        border-bottom: none;
+    }
+
+    .Navegacao nav a.nav-ativo,
+    .Navegacao nav a:hover {
+        border-radius: 0;
+        border: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: none;
+    }
+
+    .Navegacao .iconUser {
+        width: 40px;
+        height: 40px;
+    }
+
+    .Navegacao nav .btn-cadastro,
+    .Navegacao nav .btn-login {
+        margin: 4px 16px;
+        width: calc(100% - 32px);
+        text-align: center;
+        border-radius: 8px;
+        padding: 14px 0;
+        font-size: 16px;
+        display: block;
+    }
+}

@@ -1,0 +1,827 @@
+:root {
+  --pad-x: clamp(20px, 4vw, 48px);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+img,
+svg {
+  max-width: 100%;
+  display: block;
+}
+
+.detalheDivisao-bg  {
+  background-color: #f5f5f0;
+  background-image:
+    linear-gradient(var(--azul-escuro), var(--azul-escuro)),
+    linear-gradient(var(--verde-claro), var(--verde-claro));
+  background-repeat: no-repeat;
+  background-size: 50% 50vh, 50% 30vh;
+  background-position:
+    top left,
+    bottom left;
+  overflow-x: hidden;
+}
+
+.card {
+  position: relative;
+  font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+/* ---------------------------------------------------------
+   HEADER & CONTENT CONTAINER
+--------------------------------------------------------- */
+.header {
+  height: clamp(180px, 30vh, 340px);
+  background: var(--azul-escuro);
+  background-image: url("../assets/Imgs/texturaFooter.png");
+  background-size: cover;
+  background-position: center;
+   background-size: cover;
+  background-position: center;
+  background-blend-mode: screen;
+  border-bottom-right-radius: clamp(28px, 6vw, 75px);
+}
+
+.content {
+  min-height: 100vh;
+  background: #f5f5f0;
+  border-top-left-radius: clamp(28px, 6vw, 75px);
+  border-bottom-left-radius: clamp(28px, 6vw, 75px);
+  padding: clamp(40px, 7vw, 90px) var(--pad-x) clamp(32px, 4vw, 40px);
+}
+
+/* ---------------------------------------------------------
+   TOPO DO CARD (ícone + título + valor)
+--------------------------------------------------------- */
+.topoCard {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: clamp(16px, 2.5vw, 24px);
+  margin-top: clamp(-200px, -18vw, -80px);
+  margin-bottom: 24px;
+  width: min(100%, 1600px);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.iconApp {
+  width: clamp(110px, 20vw, 300px);
+  height: clamp(110px, 20vw, 300px);
+  background: #1861ff;
+  border-radius: clamp(14px, 2vw, 24px);
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.tituloBloco {
+  font-size: clamp(22px, 3vw, 32px);
+  font-weight: 800;
+  color: #0a0a2c;
+  margin-bottom: 20px;
+}
+
+.infoTopo {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: clamp(16px, 3vw, 20px);
+  flex: 1 1 320px;
+  min-width: 0;
+}
+
+.titulo {
+  font-size: clamp(28px, 5.5vw, 65px);
+  font-weight: 800;
+  color: #0a0a2c;
+  margin-bottom: 4px;
+  line-height: 1.1;
+  font-family: var(--fonte-titulo);
+  overflow-wrap: break-word;
+}
+
+.subtitulo {
+  font-size: clamp(14px, 1.4vw, 18px);
+  color: #4a4a4a;
+  font-family: var(--fonte-texto);
+}
+
+.subtitulo span {
+  color: #1861ff;
+  font-weight: 600;
+  font-family: var(--fonte-texto);
+}
+
+.infoValor {
+  margin-left: auto;
+  text-align: right;
+  margin-bottom: 20px;
+}
+
+.valor {
+  font-size: clamp(30px, 5vw, 60px);
+  font-weight: 700;
+  color: #1861ff;
+  line-height: 1.1;
+  font-family: var(--fonte-texto);
+}
+
+.vencimento {
+  font-size: clamp(14px, 1.4vw, 18px);
+  font-weight: 700;
+  color: #1a1a1a;
+  font-family: var(--fonte-texto);
+}
+
+/* ---------------------------------------------------------
+   COMO FUNCIONA
+--------------------------------------------------------- */
+.comoFunciona {
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(12px, 2vw, 20px);
+  margin-top: clamp(28px, 5vw, 50px);
+  width: min(100%, 1600px);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.comoFunciona .icone {
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  border: 2px solid #1861ff;
+  border-radius: 50%;
+  color: #1861ff;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  margin-top: 4px;
+}
+
+.comoFunciona p {
+  font-size: clamp(16px, 2.2vw, 28px);
+  color: #1a1a1a;
+  line-height: 1.5;
+  font-family: var(--fonte-texto);
+  text-align: justify;
+}
+/* ---------------------------------------------------------
+   area das divs
+--------------------------------------------------------- */
+.pagamento,
+.lk-convidado {
+  min-height: clamp(180px, 20vw, 260px);
+}
+/* ---------------------------------------------------------
+   BLOCO DE PAGAMENTO
+--------------------------------------------------------- */
+.pagamento {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: clamp(24px, 4vw, 40px);
+  width: min(100%, 1600px);
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: clamp(20px, 3vw, 32px) var(--pad-x);
+  margin: clamp(40px, 6vw, 80px) auto 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.pagamento-left {
+  flex: 1 1 360px;
+  min-width: 0;
+  max-width: 800px;
+  font-family: var(--fonte-texto);
+}
+
+.pagamento-heard {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.pagamento-titulo-box {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.pagamento-titulo {
+  font-size: clamp(22px, 3.2vw, 38px);
+  font-weight: 600;
+  color: #000000;
+}
+
+.pagamento-status {
+  color: #84cc16;
+  font-family: var(--fonte-texto);
+  font-size: clamp(22px, 3.2vw, 38px);
+  font-weight: 600;
+}
+
+.pagamento-subtitulo {
+  font-family: var(--fonte-texto);
+  font-size: clamp(15px, 1.6vw, 19px);
+  color: #4a4a4a;
+  margin: 0;
+}
+
+.pg-input-copiar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  padding-top: 12px;
+  gap: clamp(12px, 1.5vw, 16px);
+  width: 100%;
+}
+
+.pg-input-incon {
+  display: flex;
+  align-items: center;
+  background-color: #f5f5f0;
+  padding: 0 clamp(12px, 2vw, 20px);
+  flex: 1 1 240px;
+  min-width: 0;
+  height: clamp(52px, 6vw, 64px);
+  box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.pg-icon {
+  font-family: var(--fonte-texto);
+  font-size: clamp(18px, 2vw, 22px);
+  margin-right: 12px;
+}
+
+.input-link {
+  border: none;
+  background: transparent;
+  outline: none;
+  font-family: var(--fonte-texto);
+  font-size: clamp(14px, 1.5vw, 18px);
+  font-weight: 500;
+  color: #333333;
+  width: 100%;
+  min-width: 0;
+  text-overflow: ellipsis;
+}
+
+.pg-btn-copiar {
+  background-color: #a3e635;
+  color: #000000;
+  font-weight: 700;
+  font-family: var(--fonte-texto);
+  font-size: clamp(15px, 1.6vw, 18px);
+  border: none;
+  border-radius: 12px;
+  padding: 0 clamp(20px, 3vw, 36px);
+  height: clamp(52px, 6vw, 64px);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.pagamento-right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(16px, 2.5vw, 28px);
+  flex: 0 1 auto;
+}
+
+.pg-qrcode {
+  width: clamp(120px, 16vw, 200px);
+  height: clamp(120px, 16vw, 200px);
+  background-color: #d1d5db;
+  border-radius: 16px;
+  margin-right: clamp(0px, 3vw, 50px);
+  flex-shrink: 0;
+}
+
+.texto-qr-code {
+  font-family: var(--fonte-texto);
+  font-size: clamp(16px, 2vw, 24px);
+  color: #000000;
+  text-align: right;
+  line-height: 1.3;
+  max-width: 130px;
+}
+
+/* ---------------------------------------------------------
+   link do convidado
+--------------------------------------------------------- */
+.lk-convidado {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: clamp(24px, 4vw, 40px);
+  width: min(100%, 1600px);
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: clamp(20px, 3vw, 32px) var(--pad-x);
+  margin: clamp(40px, 6vw, 80px) auto 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+.lkc-left {
+  flex: 1 1 360px;
+  min-width: 0;
+  max-width: 800px;
+  font-family: var(--fonte-texto);
+}
+.lkc-heard {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+.lkc-titulo-box {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+.lkc-titulo {
+  font-size: clamp(22px, 3.2vw, 38px);
+  font-weight: 600;
+  color: #000000;
+}
+.lkc-subtitulo {
+  font-family: var(--fonte-texto);
+  font-size: clamp(15px, 1.6vw, 19px);
+  color: #4a4a4a;
+  margin: 0;
+}
+.lkc-input-copiar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  padding-top: 12px;
+  gap: clamp(12px, 1.5vw, 16px);
+  width: 100%;
+}
+.lkc-input-incon {
+  display: flex;
+  align-items: center;
+  background-color: #f5f5f0;
+  padding: 0 clamp(12px, 2vw, 20px);
+  flex: 1 1 240px;
+  min-width: 0;
+  height: clamp(52px, 6vw, 64px);
+  box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+.lkc-icon {
+  font-family: var(--fonte-texto);
+  font-size: clamp(18px, 2vw, 22px);
+  margin-right: 12px;
+}
+.lkc-input-link {
+  border: none;
+  background: transparent;
+  outline: none;
+  font-family: var(--fonte-texto);
+  font-size: clamp(14px, 1.5vw, 18px);
+  font-weight: 500;
+  color: #333333;
+  width: 100%;
+  min-width: 0;
+  text-overflow: ellipsis;
+}
+
+.lkc-btn-copiar {
+  background-color: #a3e635;
+  color: #000000;
+  font-weight: 700;
+  font-family: var(--fonte-texto);
+  font-size: clamp(15px, 1.6vw, 18px);
+  border: none;
+  border-radius: 12px;
+  padding: 0 clamp(20px, 3vw, 36px);
+  height: clamp(52px, 6vw, 64px);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.lkc-right {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: clamp(10px, 1.5vw, 16px);
+  flex: 1 1 auto;
+  width: 100%;
+  max-width: 500px;
+  flex-direction: column;
+}
+
+.lkc-text-rigth {
+  font-family: var(--fonte-texto);
+  font-size: clamp(15px, 1.8vw, 24px);
+  color: #000000;
+  text-align: left;
+  max-width: stretch;
+}
+
+.lkc-rlt-problema {
+  background-color: #053cc8;
+  color: #ffffff;
+  font-weight: 700;
+  font-family: var(--fonte-texto);
+  font-size: clamp(14px, 1.5vw, 16px);
+  border: none;
+  border-radius: 14px;
+  padding: 0 clamp(18px, 2.5vw, 28px);
+  height: clamp(44px, 5vw, 52px);
+  cursor: pointer;
+  flex-shrink: 0;
+  align-self: stretch; /* <-- botão também cola na direita */
+  width: auto;
+}
+
+/*----------------------------------------------------
+   footer
+--------------------------------------------------------- */
+.footer {
+  height: clamp(180px, 30vh, 200px);
+  background-color: var(--verde-claro);
+  background-image: url("../assets/Imgs/texturaFooterverde.png");
+  background-blend-mode: soft-light;
+  background-size: cover;
+  background-position: center;
+  border-top-right-radius: clamp(28px, 6vw, 75px);
+}
+/*----------------------------------------------------
+   BREAKPOINTS
+--------------------------------------------------------- */
+@media (max-width: 1024px) {
+  body {
+    background: #f5f5f0;
+  }
+
+  .topoCard {
+    align-items: flex-start;
+  }
+
+  .infoValor {
+    margin-left: 0;
+    margin-bottom: 0;
+  }
+
+  .pagamento {
+    justify-content: flex-start;
+  }
+
+  .pagamento-right {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .texto-qr-code {
+    text-align: left;
+    max-width: 220px;
+  }
+}
+
+@media (max-width: 768px) {
+  .topoCard {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: clamp(-120px, -14vw, -60px);
+  }
+
+  .infoTopo {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .pagamento {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .pagamento-left {
+    max-width: 100%;
+  }
+
+  .pg-input-copiar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .pg-input-incon,
+  .pg-btn-copiar {
+    width: 100%;
+  }
+
+  .pagamento-right {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .pg-qrcode {
+    margin-right: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .content {
+    padding: 32px 18px 32px;
+    border-top-left-radius: 24px;
+  }
+
+  .header {
+    border-bottom-right-radius: 24px;
+  }
+
+  .comoFunciona .icone {
+    width: 22px;
+    height: 22px;
+    font-size: 15px;
+  }
+}
+/* ---------------------------------------------------------
+   ANIMAÇÕES DE ENTRADA
+--------------------------------------------------------- */
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.iconApp {
+  animation: scaleIn 0.5s ease-out both;
+}
+
+.infoTopo {
+  animation: fadeSlideUp 0.5s ease-out 0.1s both;
+}
+
+.comoFunciona {
+  animation: fadeSlideUp 0.5s ease-out 0.2s both;
+}
+
+.pagamento {
+  animation: fadeSlideUp 0.5s ease-out 0.3s both;
+}
+
+.lk-convidado {
+  animation: fadeSlideUp 0.5s ease-out 0.4s both;
+}
+
+/* ---------------------------------------------------------
+   VALOR (leve pulse único ao carregar)
+--------------------------------------------------------- */
+@keyframes valorPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.04); }
+  100% { transform: scale(1); }
+}
+
+.valor {
+  animation: valorPulse 0.6s ease-out 0.6s both;
+  transform-origin: left center;
+}
+
+/* ---------------------------------------------------------
+   STATUS "Disponível" (bolinha pulsante)
+--------------------------------------------------------- */
+.pagamento-status,
+.lkc-titulo-box .pagamento-status {
+  position: relative;
+  padding-left: 22px;
+}
+
+.pagamento-status::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  background-color: #84cc16;
+  border-radius: 50%;
+  transform: translateY(-50%);
+  animation: statusPulse 1.8s ease-in-out infinite;
+}
+
+@keyframes statusPulse {
+  0% { box-shadow: 0 0 0 0 rgba(132, 204, 22, 0.5); }
+  70% { box-shadow: 0 0 0 8px rgba(132, 204, 22, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(132, 204, 22, 0); }
+}
+
+/* ---------------------------------------------------------
+   INPUT DO LINK (foco/hover)
+--------------------------------------------------------- */
+.pg-input-incon,
+.lkc-input-incon {
+  transition: box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.pg-input-incon:hover,
+.lkc-input-incon:hover {
+  box-shadow: inset 0 4px 8px rgba(24, 97, 255, 0.15);
+}
+
+.pg-input-incon:focus-within,
+.lkc-input-incon:focus-within {
+  box-shadow: inset 0 0 0 2px #1861ff;
+}
+
+.pg-icon,
+.lkc-icon {
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+.pg-input-incon:hover .pg-icon,
+.lkc-input-incon:hover .lkc-icon {
+  transform: rotate(-12deg);
+}
+
+/* ---------------------------------------------------------
+   BOTÃO COPIAR (clique + feedback)
+--------------------------------------------------------- */
+.pg-btn-copiar,
+.lkc-btn-copiar,
+.lkc-rlt-problema {
+  transition: transform 0.12s ease, filter 0.2s ease;
+}
+
+.pg-btn-copiar:hover,
+.lkc-btn-copiar:hover {
+  filter: brightness(1.08);
+}
+
+.pg-btn-copiar:active,
+.lkc-btn-copiar:active,
+.lkc-rlt-problema:active {
+  transform: scale(0.95);
+}
+
+/* classe pra alternar via JS quando o link for copiado */
+.pg-btn-copiar.copiado,
+.lkc-btn-copiar.copiado {
+  background-color: #16a34a;
+  color: #ffffff;
+  animation: copiedBounce 0.35s ease;
+}
+
+@keyframes copiedBounce {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+
+/* ---------------------------------------------------------
+   QR CODE
+--------------------------------------------------------- */
+.pg-qrcode {
+  transition: transform 0.2s ease;
+  animation: fadeSlideUp 0.5s ease-out 0.5s both;
+}
+
+.pg-qrcode:hover {
+  transform: scale(1.04);
+}
+
+/* ---------------------------------------------------------
+   ÍCONE "COMO FUNCIONA"
+--------------------------------------------------------- */
+.comoFunciona .icone {
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.comoFunciona:hover .icone {
+  transform: rotate(10deg);
+}
+
+/* ---------------------------------------------------------
+   Area do Participante
+--------------------------------------------------------- */
+
+.Participantes {
+  width: min(100%, 1600px);
+  background-color: #ffffff;
+  border: 1px solid #d9d9d4;
+  border-radius: 8px;
+  margin: clamp(40px, 6vw, 80px) auto 0;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Cabeçalho e linhas compartilham as MESMAS colunas */
+.Part-cabecalho,
+.Part-linha {
+  display: grid;
+  grid-template-columns: 240px 160px 160px;
+  align-items: center;
+  column-gap: 24px;
+  padding: 0 clamp(16px, 3vw, 40px);
+}
+
+.Part-cabecalho {
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #d9d9d4;
+  height: 68px;
+}
+
+.Part-cabecalho h3 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+/* Participantes fica alinhado à esquerda, Pagamento e Status centralizados */
+.Part-cabecalho h3:nth-child(2),
+.Part-cabecalho h3:nth-child(3) {
+  text-align: center;
+}
+
+.Part-linha {
+  padding-top: 14px;
+  padding-bottom: 14px;
+}
+
+/* Usuário */
+.Part-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.Part-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background-color: #d9d9d4;
+  flex-shrink: 0;
+}
+
+.Part-user-info {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.Part-user-info strong {
+  font-size: 1rem;
+}
+
+.Part-user-info small {
+  font-size: 0.8rem;
+}
+
+/* Pagamento */
+.Part-valor {
+  text-align: center;
+  font-weight: 700;
+}
+
+/* Status */
+.Part-status {
+  text-align: center;
+  font-weight: 700;
+}
+
+.Part-status.pendente {
+  color: #333333;
+}
+
+.Part-status.pago {
+  color: #7ac231;
+}
+
+.Part-status.atrasado {
+  color: #000000;
+}
+

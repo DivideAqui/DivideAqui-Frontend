@@ -1,0 +1,140 @@
+/* =========================
+   DESKTOP
+   ========================= */
+
+@media (min-width: 769px) {
+    #sctFooter2 hr {
+        margin-bottom: 1.4rem;
+    }
+}
+
+
+/* =========================
+   TABLET
+   ========================= */
+
+@media (max-width: 1200px) {
+    #art1 p,
+    .artLinks h1 {
+        font-size: 1.2rem;
+    }
+
+    #sctFooter1 {
+        padding: 0.3rem 4rem 0;
+    }
+
+    #art1 img {
+        width: 18rem;
+    }
+
+    #art1 p {
+        line-height: 1.5rem;
+    }
+
+    .linkFooter {
+        font-size: 1.1rem;
+    }
+
+    #sctFooter2 h1 {
+        font-size: 1.3rem;
+    }
+}
+
+
+/* =========================
+   CELULAR
+   ========================= */
+
+@media (max-width: 768px) {
+    #sctFooter1 {
+        padding: 2rem;
+    }
+
+    #divFooter1 {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 2rem;
+    }
+
+    #art1 {
+        width: 100%;
+        text-align: center;
+    }
+
+    #art1 img {
+        width: 17rem;
+        margin: 0 auto;
+    }
+
+    #art1 p {
+        padding-left: 0;
+        font-size: 1.1rem;
+        line-height: 1.6rem;
+    }
+}
+
+
+/* =========================
+   CELULAR PEQUENO
+   ========================= */
+
+@media (max-width: 600px) {
+    #art1 p,
+    .artLinks h1,
+    .linkFooter {
+        font-size: 1rem;
+    }
+
+    #divFooter1 {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    #art1,
+    #art2,
+    #art3 {
+        width: 100%;
+    }
+
+    #art1 img {
+        width: 14rem;
+    }
+
+    #art1 p {
+        line-height: 1.5rem;
+        margin-top: 0.5rem;
+    }
+
+    #artIcon {
+        justify-content: center;
+    }
+
+    .iconFooter {
+        font-size: 1.8rem;
+    }
+
+    #sctFooter2 h1 {
+        font-size: 0.95rem;
+        line-height: 1.5rem;
+    }
+}
+
+
+/* =========================
+   CELULAR MUITO PEQUENO
+   ========================= */
+
+@media (max-width: 400px) {
+    #sctFooter1 {
+        padding: 1.5rem 1rem;
+    }
+
+    #art1 img {
+        width: 12rem;
+    }
+
+    .iconFooter {
+        font-size: 1.5rem;
+    }
+}

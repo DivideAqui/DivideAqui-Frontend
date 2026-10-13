@@ -1,0 +1,234 @@
+/* TELAS GRANDES (>= 1440px) */
+@media (min-width: 1440px) {
+
+    .perfil-participante-container {
+        --largura-conteudo: min(80%, 75rem);
+    }
+}
+
+/* TABLET E MENORES (<= 1023px) */
+@media (max-width: 1023px) {
+
+    .perfil-participante-container {
+        --largura-conteudo: min(90%, 68.75rem);
+    }
+
+    .IconCancelar-perfilParticipante {
+        font-size: 2.4rem;
+    }
+
+    .participante-feedback-card {
+        min-height: 13rem;
+    }
+}
+
+/* <= 980px: 2 divisões por vez (igual ao TSX) */
+@media (max-width: 980px) {
+
+    .participante-divisao-slide {
+        width: 50%;
+    }
+}
+
+/* <= 768px: 1 avaliação por vez (igual ao TSX) */
+@media (max-width: 768px) {
+
+    .IconCancelar-perfilParticipante {
+        font-size: 2rem;
+    }
+
+    .textos-avaliacao h2 {
+        display: none;
+    }
+
+    .participante-feedback-slide {
+        width: 100%;
+    }
+
+    .participante-divisoes-carousel-wrapper,
+    .participante-feedback-carousel-wrapper {
+        gap: 0.4rem;
+    }
+
+    .participante-divisoes-carousel-arrow,
+    .participante-feedback-carousel-arrow {
+        width: 2.2rem;
+        height: 2.2rem;
+        font-size: 1rem;
+    }
+
+    .participante-divisoes-carousel-arrow-left,
+    .participante-divisoes-carousel-arrow-right,
+    .participante-feedback-carousel-arrow-left,
+    .participante-feedback-carousel-arrow-right {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .participante-feedback-card {
+        min-height: 11rem;
+        gap: 0.5rem;
+    }
+
+    .participante-divisao-card {
+        min-height: 12rem;
+    }
+
+    .dialog-content {
+        width: min(92vw, 37.5rem);
+        max-width: calc(100vw - 2rem);
+        padding: 1.25rem;
+        padding-top: 2.5rem;
+        line-height: 1.6rem;
+    }
+
+    .dialog-content p {
+        line-height: 1.4rem;
+    }
+
+    .dialog-header {
+        margin-bottom: 1rem;
+    }
+
+    .IconCancelar-avaliacao {
+        top: 1rem;
+        right: 1rem;
+    }
+
+    .avaliacao-dialog__enviar {
+        min-height: 3rem;
+    }
+
+    .participante-divisao-dialog-icone {
+        width: 3.5rem;
+        height: 3.5rem;
+        font-size: 1.6rem;
+    }
+}
+
+/* <= 600px: o bloco de avaliação vira 2 linhas
+   linha 1: ícone | texto | check
+   linha 2: estrelas centralizadas */
+@media (max-width: 600px) {
+
+    .avaliar-usuario {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 0.75rem 0.75rem;
+        padding: 1rem;
+    }
+
+    .avaliar-usuario .estrela2 {
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    .avaliar-usuario .textos-avaliacao {
+        grid-column: 2;
+        grid-row: 1;
+        flex: none;
+    }
+
+    .avaliar-usuario .check-avaliacao-button {
+        grid-column: 3;
+        grid-row: 1;
+    }
+
+    .avaliar-usuario .estrelas-avaliar {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .estrelas-avaliar h3 {
+        margin-top: 0.5rem;
+        font-size: 0.7rem;
+    }
+
+    .estrela-button {
+        margin-bottom: 0;
+    }
+
+    .descricao-usuario h3 {
+        text-align: center;
+    }
+}
+
+/* <= 480px: 1 divisão por vez (igual ao TSX) */
+@media (max-width: 480px) {
+
+    .perfil-participante-container {
+        --largura-conteudo: 92%;
+        padding-bottom: 3rem;
+    }
+
+    .participante-divisao-slide {
+        width: 100%;
+    }
+
+    .participante-divisoes-carousel-wrapper {
+        margin-top: 1rem;
+    }
+
+    .participante-divisao-dialog-info {
+        grid-template-columns: 1fr;
+    }
+
+    .participante-divisao-dialog-header {
+        gap: 0.75rem;
+    }
+
+    .participante-divisao-dialog-body > p {
+        text-align: left;
+    }
+
+    .participante-divisoes-vazio,
+    .participante-feedbacks-vazio {
+        font-size: 0.8rem;
+    }
+
+    .participante-feedback-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+/* <= 360px: telas muito pequenas */
+@media (max-width: 360px) {
+
+    .cabecalho-participante {
+        gap: 0.75rem;
+    }
+
+    .participante-divisao-card {
+        padding: 1rem 0.875rem 0.875rem;
+    }
+
+    .participante-divisoes-carousel-arrow,
+    .participante-feedback-carousel-arrow {
+        width: 1.9rem;
+        height: 1.9rem;
+        font-size: 0.85rem;
+    }
+
+    .dialog-content {
+        padding: 1rem;
+        padding-top: 2.25rem;
+    }
+}
+
+/* TELAS BAIXAS (celular deitado) */
+@media (max-height: 480px) and (orientation: landscape) {
+
+    .dialog-content,
+    .participante-divisao-dialog {
+        max-height: 92vh;
+    }
+
+    .avaliacao-dialog__textarea {
+        min-height: 5rem;
+    }
+}
