@@ -51,6 +51,7 @@
     align-items: flex-start;
     gap: clamp(1rem, 4vw, 4rem);
     box-sizing: border-box;
+    margin-top: 3%;
 }
 
 .foto-participante {

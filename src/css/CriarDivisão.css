@@ -319,12 +319,45 @@
 }
 
 .CriarDivisao{
+    position: relative;
     min-height: 100vh;
     height: auto;
     display: flex;
     flex-direction: column;
     background: #03045E;
     background: linear-gradient(90deg,rgba(3, 4, 94, 1) 50%, rgba(245, 245, 240, 1) 0%);
+}
+
+.BtnFechar{
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 10;
+    width: 2.75rem;
+    height: 2.75rem;
+    min-width: 44px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(245, 245, 240, 0.15);
+    border: 2px solid var(--branco);
+    border-radius: 50%;
+    color: var(--branco);
+    font-size: 1.3rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+.BtnFechar:hover{
+    background: rgba(245, 245, 240, 0.3);
+    transform: scale(1.05);
+}
+
+.BtnFechar:active{
+    transform: scale(0.95);
 }
 
 .SctTop {

@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { MdAddCircleOutline } from "react-icons/md";
 import { FaUnlock } from "react-icons/fa";
 import { FaLock } from "react-icons/fa";
+import { FaTimes } from "react-icons/fa";
 import {
   FaArrowCircleLeft,
   FaArrowCircleRight,
@@ -20,6 +21,7 @@ import { MdOutlineAttachMoney } from "react-icons/md";
 import { FaDivide } from "react-icons/fa6";
 import { CiCircleInfo } from "react-icons/ci";
 import { useAuth } from "../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -99,6 +101,7 @@ const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
 export function CriarDivisão() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [etapaAtual, setEtapaAtual] = useState(0);
   const [divisaoSelecionada, setDivisaoSelecionada] = useState<string | null>(null);
   const [nomeDoGrupo, setNomeDoGrupo] = useState("");
@@ -539,6 +542,9 @@ export function CriarDivisão() {
   return (
     <>
       <section className="CriarDivisao">
+        <button className="BtnFechar" onClick={() => navigate("/divisoes")} aria-label="Fechar">
+          <FaTimes />
+        </button>
         <section className="SctTop">
           <h2>Crie a sua <b className="Bdestaque">Divisão!</b></h2>
           <div className="IndicadorEtapas" aria-label={`Etapa ${etapaAtual + 1} de ${etapas.length}`}>

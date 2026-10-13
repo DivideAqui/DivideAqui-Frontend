@@ -163,7 +163,7 @@ export function Inicio(){
         >
           {hasUserName ? (
             <>
-              <Link to="/divisoes" className="BtnLogin">Criar divisão</Link>
+              <Link to="/criarDivisao" className="BtnLogin">Criar divisão</Link>
               <Link to="/divisoes" className="BtnCadastrar">Participar de divisão</Link>
             </>
           ) : (
