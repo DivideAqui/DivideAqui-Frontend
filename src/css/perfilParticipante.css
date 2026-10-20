@@ -27,19 +27,6 @@
     z-index: 1;
 }
 
-/* ÍCONE CANCELAR */
-.IconCancelar-perfilParticipante {
-    position: absolute;
-    top: clamp(1rem, 3vw, 2rem);
-    right: clamp(1rem, 3vw, 2rem);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--branco);
-    z-index: 20;
-    font-size: 3rem;
-}
-
 /* CABEÇALHO: a foto fica metade no azul e metade no branco */
 .cabecalho-participante {
     position: relative;

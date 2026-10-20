@@ -1,0 +1,29 @@
+.IconCancelar {
+  position: absolute;
+  top: clamp(1rem, 3vw, 2rem);
+  right: clamp(1rem, 3vw, 2rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.IconCancelar.branco {
+  color: var(--branco);
+}
+
+.IconCancelar.preto {
+  color: var(--preto);
+}
+
+.IconCancelar:hover {
+  transform: scale(1.15);
+}
+
+.IconCancelar:active {
+  transform: scale(0.9);
+}

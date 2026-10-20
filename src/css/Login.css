@@ -29,18 +29,6 @@ body{
   overflow: hidden;
 }
 
-
-.IconCancelar-login {
-  position: absolute;
-  top: 2rem;
-  right: 3rem;
-  cursor: pointer;
-  color: var(--preto);
-  outline: none;
-  z-index: 1;
-}
-
-
 .linha-login{
   background-color: black;
   color: black;

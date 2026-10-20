@@ -6,10 +6,10 @@ import "../css/sweetAlert/sweetAlert.css";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import { IoCloseSharp } from "react-icons/io5";
+import BtnClose from "../components/btnClose";
 
 const API_BASE_URL = (
-  import.meta.env.VITE_API_URL || "https://divide-aqui-backend.vercel.app"
+  import.meta.env.VITE_API_URL || "http://localhost:3344"
 ).replace(/\/$/, "");
 
 const CAMPOS_API: Record<string, string> = {
@@ -24,7 +24,9 @@ const CAMPOS_API: Record<string, string> = {
 
 export function MeuPerfil() {
   const navigate = useNavigate();
-  const { user } = useAuth();
+
+  const { user, updateUserPicture } = useAuth();
+
   const [perfilusu, setPerfilusu] = useState<any>([]);
   const regexSenha = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&_])[A-Za-z\d@$!%*?&_]{8,}$/;
   const regexNome = /^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/;
@@ -192,15 +194,118 @@ const editarSenha = async () => {
 
 const [fotoPreview, setFotoPreview] = useState<string | null>(null);
 
-const handleFotoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  const arquivo = event.target.files?.[0];
+const handleFotoChange = async (
+  e: React.ChangeEvent<HTMLInputElement>
+) => {
+  const arquivo = e.target.files?.[0];
   if (!arquivo) return;
-  if (!arquivo.type.startsWith("image/")) {
-    Swal.fire("Erro", "Selecione um arquivo de imagem.", "error");
-    return;
+
+  try {
+    if (!["image/jpeg", "image/png", "image/webp"].includes(arquivo.type)) {
+      await Swal.fire({
+        icon: "warning",
+        title: "Formato inválido!",
+        text: "Selecione uma imagem JPEG, PNG ou WebP.",
+      });
+      return;
+    }
+
+    if (arquivo.size > 2 * 1024 * 1024) {
+      await Swal.fire({
+        icon: "warning",
+        title: "Imagem muito grande!",
+        text: "A imagem deve ter no máximo 2 MB.",
+      });
+      return;
+    }
+
+    if (!user?.id) {
+      throw new Error("Usuário não identificado.");
+    }
+
+    const foto = await new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        if (typeof reader.result === "string") {
+          resolve(reader.result);
+        } else {
+          reject(new Error("Não foi possível ler a imagem."));
+        }
+      };
+
+      reader.onerror = () => reject(new Error("Falha ao ler a imagem."));
+      reader.readAsDataURL(arquivo);
+    });
+
+    // Exibe o carregamento sem bloquear a execução
+    void Swal.fire({
+      title: "Salvando foto...",
+      text: "Aguarde um instante.",
+      allowOutsideClick: false,
+      showConfirmButton: false,
+      didOpen: () => Swal.showLoading(),
+    });
+
+    const token = localStorage.getItem("token");
+
+    const resposta = await fetch(
+      `${API_BASE_URL}/usuarioatualizar/${user.id}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify({ foto }),
+      }
+    );
+
+    const resultado = await resposta.json();
+
+   if (!resposta.ok) {
+  throw new Error(
+    resultado.error ||
+    resultado.erro ||
+    `Erro HTTP ${resposta.status}`
+  );
+}
+
+// Atualiza a foto globalmente somente após o sucesso
+updateUserPicture(foto);
+
+    const fotoSalva =
+      resultado.usu_foto ??
+      resultado.usuario?.usu_foto ??
+      foto;
+
+    setFotoPreview(fotoSalva);
+    setPerfilusu((prev: any) => ({
+      ...prev,
+      usu_foto: fotoSalva,
+    }));
+
+    await Swal.fire({
+      icon: "success",
+      title: "Foto atualizada!",
+      text: "Sua foto de perfil foi salva com sucesso.",
+      timer: 1800,
+      showConfirmButton: false,
+    });
+  } catch (erro) {
+    console.error("Erro ao atualizar foto:", erro);
+
+    await Swal.fire({
+      icon: "error",
+      title: "Não foi possível salvar!",
+      text: erro instanceof Error
+        ? erro.message
+        : "Ocorreu um erro inesperado.",
+      confirmButtonText: "Fechar",
+    });
+  } finally {
+    e.target.value = "";
   }
-  const fotoUrl = URL.createObjectURL(arquivo);
-  setFotoPreview(fotoUrl);
 };
 
   return (
@@ -208,9 +313,7 @@ const handleFotoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       <header className="perfil-header">
         <div className="perfil-header-top">
           <img src={LogoBranco} className="logobranco" alt="Logo DivideAqui" />
-          <button type="button" className="IconCancelar-meuPerfil" onClick={() => navigate("/home")}>
-            <IoCloseSharp size={25} />
-            </button>
+          <BtnClose onClick={() => navigate("/home")} />
         </div>
 
         <p className="ola-usuario">
@@ -222,15 +325,17 @@ const handleFotoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         <div className="avatar-wrapper">
           <input type="file" id="upload-foto" accept="image/*" hidden onChange={handleFotoChange}/>
 
-          {fotoPreview || user?.picture ? (
-            <img
-              src={fotoPreview || user?.picture}
-              className="avatar-img"
-              alt={user?.name || "Foto do usuário" }
-            />
-          ) : (
-            <div className="avatar-fallback">{user?.name?.trim()?.charAt(0)?.toUpperCase() || "U"}</div>
-          )}
+        {fotoPreview || perfilusu?.usu_foto || user?.picture ? (
+          <img
+            src={fotoPreview || perfilusu?.usu_foto || user?.picture}
+            className="avatar-img"
+            alt={user?.name || "Foto do usuário"}
+          />
+        ) : (
+          <div className="avatar-fallback">
+            {user?.name?.trim()?.charAt(0)?.toUpperCase() || "U"}
+          </div>
+        )}
 
           <label htmlFor="upload-foto" className="avatar-editar"><FaPen /></label>
         </div>

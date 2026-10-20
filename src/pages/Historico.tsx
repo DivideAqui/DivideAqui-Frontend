@@ -5,19 +5,239 @@ import {
   FiAlertTriangle,
   FiUpload,
   FiMoreHorizontal,
-  FiMonitor,
   FiLock,
-  FiMapPin,
-  FiWifi,
   FiArrowDown,
 } from "react-icons/fi";
+import { FaTv, FaHouseUser, FaEllipsisH } from "react-icons/fa";
 import { FaCar, FaHome } from "react-icons/fa";
 import BolinhasBr from "../assets/Imgs/bolinhasBrancas.png";
-import SpotifyIcon from "../assets/Icons/imgSpotify.png";
-import PrimeVideoIcon from "../assets/Icons/imgPrime.png";
 import "../css/historico.css";
+import { useSearchParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useAuth } from "../hooks/useAuth";
+import type { ReactNode } from "react";
+
+type CategoryKey = "streaming" | "viagens" | "despesas" | "outros";
+
+const categoryButtons: Array<{ key: CategoryKey | "all"; label: string; icon: ReactNode }> = [
+  { key: "all", label: "Todos", icon: <FaEllipsisH /> },
+  { key: "viagens", label: "Viagens", icon: <FaCar /> },
+  { key: "streaming", label: "Streamer", icon: <FaTv /> },
+  { key: "despesas", label: "Custos Domésticos", icon: <FaHouseUser /> },
+  { key: "outros", label: "Outros", icon: <FaEllipsisH /> },
+];
+
+type BackendGroup = {
+  gru_id: number;
+  gru_nome?: string | null;
+  gru_num_part?: number | null;
+  gru_num_vagas?: number | null;
+  gru_icone?: string | null;
+  gru_visibilidade?: boolean | null;
+  categoria?: {
+    cat_nome: string;
+  } | null;
+  mensalidade?: {
+    men_valor?: string | number | null;
+  } | null;
+  stream?: {
+    str_valor?: string | number | null;
+    str_telas?: number | null;
+  } | null;
+  item?: Array<{
+    ite_valor: string | number;
+  }>;
+  participacoes?: Array<{
+    usu_id: number | string;
+    usuario?: {
+      usu_id: number | string;
+      usu_nome: string;
+    } | null;
+  }>;
+  _count?: {
+    participacoes: number;
+  };
+};
+
+type RegistroHistorico = {
+  grupo: string;
+  pagamento: string;
+  dataPagamento: string;
+  vencimento: string;
+  status: "Pago" | "Atrasado" | "Pendente" | string;
+};
+
+type RespostaHistorico = {
+  mensagem: string;
+  historico: RegistroHistorico[];
+};
+
+const getCategoryKey = (nome?: string | null, icone?: string | null): CategoryKey => {
+  const valor = `${icone ?? ""} ${nome ?? ""}`.toLowerCase();
+
+  if (valor.includes("stream")) return "streaming";
+  if (valor.includes("viag")) return "viagens";
+  if (valor.includes("desp") || valor.includes("domest") || valor.includes("custo")) {
+    return "despesas";
+  }
+
+  return "outros";
+};
+
+const formatarBRL = (valor: number) =>
+  new Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  }).format(valor);
 
 export function Historico() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { user } = useAuth();
+
+  const [grupos, setGrupos] = useState<BackendGroup[]>([]);
+  const [carregando, setCarregando] = useState(true);
+  const [erro, setErro] = useState("");
+
+  const [historico, setHistorico] = useState<RegistroHistorico[]>([]);
+  const [historicoCarregando, setHistoricoCarregando] = useState(true);
+  const [historicoErro, setHistoricoErro] = useState("");
+
+  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3344";
+
+  useEffect(() => {
+    let ativo = true;
+
+    async function buscarMinhasDivisoes() {
+      if (!user?.token) {
+        setErro("Você precisa estar autenticado para ver suas divisões.");
+        setCarregando(false);
+        return;
+      }
+
+      setCarregando(true);
+      setErro("");
+
+      try {
+        const resposta = await fetch(`${API_URL}/grupos/minhas-divisoes`, {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        });
+
+        if (!resposta.ok) {
+  const detalhes = await resposta.text();
+
+  console.error("Erro ao buscar divisões:", {
+    status: resposta.status,
+    detalhes,
+  });
+
+  throw new Error(
+    `Erro ${resposta.status}: ${detalhes}`
+  );
+}
+
+        const dados: BackendGroup[] = await resposta.json();
+
+        if (ativo) {
+          setGrupos(Array.isArray(dados) ? dados : []);
+        }
+      } catch (error) {
+        if (ativo) {
+          setErro(error instanceof Error ? error.message : "Erro ao carregar suas divisões.");
+          setGrupos([]);
+        }
+      } finally {
+        if (ativo) setCarregando(false);
+      }
+    }
+
+    void buscarMinhasDivisoes();
+
+    return () => {
+      ativo = false;
+    };
+  }, [API_URL, user?.token]);
+
+  useEffect(() => {
+  let ativo = true;
+
+  async function buscarHistorico() {
+    if (!user?.token) {
+      setHistoricoErro("Você precisa estar autenticado para ver o histórico.");
+      setHistoricoCarregando(false);
+      return;
+    }
+
+    setHistoricoCarregando(true);
+    setHistoricoErro("");
+
+    try {
+      const resposta = await fetch(`${API_URL}/historico`, {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+
+      if (!resposta.ok) {
+        const detalhes = await resposta.text();
+        throw new Error(`Erro ${resposta.status}: ${detalhes}`);
+      }
+
+      const dados: RespostaHistorico = await resposta.json();
+
+      if (ativo) {
+        setHistorico(
+          Array.isArray(dados.historico) ? dados.historico : []
+        );
+      }
+    } catch (error) {
+      if (ativo) {
+        setHistoricoErro(
+          error instanceof Error
+            ? error.message
+            : "Erro ao carregar o histórico financeiro."
+        );
+        setHistorico([]);
+      }
+    } finally {
+      if (ativo) {
+        setHistoricoCarregando(false);
+      }
+    }
+  }
+
+  void buscarHistorico();
+
+  return () => {
+    ativo = false;
+  };
+}, [API_URL, user?.token]);
+
+  const handleCategoryChange = (category: CategoryKey | "all") => {
+    const nextParams = new URLSearchParams(searchParams);
+
+    if (category === "all") {
+      nextParams.delete("categoria");
+    } else {
+      nextParams.set("categoria", category);
+    }
+
+    setSearchParams(nextParams);
+  };
+
+  const categoriaSelecionada = searchParams.get("categoria");
+  const activeCategory: CategoryKey | "all" =
+    categoriaSelecionada &&
+    ["streaming", "viagens", "despesas", "outros"].includes(categoriaSelecionada)
+      ? (categoriaSelecionada as CategoryKey)
+      : "all";
+
+  const gruposFiltrados = grupos.filter((grupo) => {
+    const categoria = getCategoryKey(grupo.categoria?.cat_nome, grupo.gru_icone);
+    return activeCategory === "all" || categoria === activeCategory;
+  });
+
   return (
     <>
       <Nav />
@@ -66,7 +286,7 @@ export function Historico() {
             <div className="container-totaldiv">
               <div className="icon-dividediv"><FiDivideCircle className="icon-divide" /></div>
               <p className="p-totaldiv">Total de Divisões</p>
-              <p className="num-totaldiv">18</p>
+              <p className="num-totaldiv">{grupos.length}</p>
             </div>
             <div className="container-atrasados">
               <div className="icon-alertdiv"><FiAlertTriangle className="icon-alert" /></div>
@@ -78,123 +298,181 @@ export function Historico() {
 
         <div className="div-suasdivisoes">
           <h1 className="h1-suasdivisoes">Suas Divisões</h1>
-          <div className="categorias-lista" role="group" aria-label="Categorias de divisões">
-            <button type="button" className="btn-categoria ativo"><FiMoreHorizontal />Todos</button>
-            <button type="button" className="btn-categoria"><FaCar />Viagens</button>
-            <button type="button" className="btn-categoria"><FiMonitor />Streamer</button>
-            <button type="button" className="btn-categoria"><FaHome />Custos Domésticos</button>
-            <button type="button" className="btn-categoria"><FiMoreHorizontal />Outros</button>
+          <div className="DivServicos">
+            {categoryButtons.map(({ key, label, icon }) => (
+              <button
+                key={key}
+                type="button"
+                onClick={() => handleCategoryChange(key)}
+                aria-pressed={activeCategory === key}
+                className={activeCategory === key ? "is-active" : ""}
+              >
+                {icon} {label}
+              </button>
+            ))}
           </div>
         </div>
 
-        <section className="Sct-suasdivisoes" aria-label="Cartões das suas divisões">
-          {/* PRIME VIDEO */}
-          <div className="card-divisao">
-            <div className="card-icone icone-prime">
-              <img src={PrimeVideoIcon} alt="Prime Video" className="img-icone-servico" />
-            </div>
-            <FiLock className="card-cadeado" aria-label="Divisão privada" />
-            <div className="card-participantes" aria-label="4 participantes">
-              <span>👨🏻</span><span>👩🏽</span><span>👨🏽</span><span>👩🏻</span>
-            </div>
-            <div className="card-conteudo">
-              <div className="card-informacoes"><h3>Prime Vídeo</h3><strong className="preco-azul">R$13,90</strong></div>
-              <p>Vagas disponíveis: 1</p>
-            </div>
-            <span className="card-opcoes opcoes-azul" aria-hidden="true"><FiMoreHorizontal /></span>
-          </div>
+        <section className=
+        {`Sct-suasdivisoes ${gruposFiltrados.length === 0 ? 
+        "sem-grupos" : ""}`}aria-label="Cartões das suas divisões">
+          {carregando ? (
+            <p>Carregando suas divisões...</p>
+          ) : erro ? (
+            <p role="alert">{erro}</p>
+          ) : gruposFiltrados.length === 0 ? (
+            <p>
+              {grupos.length === 0
+                ? "Você ainda não participa de nenhuma divisão."
+                : "Nenhuma divisão encontrada nesta categoria."}
+            </p>
+          ) : (
+            gruposFiltrados.map((grupo) => {
+              const categoria = getCategoryKey(grupo.categoria?.cat_nome, grupo.gru_icone);
+              const participantes = grupo.participacoes ?? [];
+              const quantidadeParticipantes = grupo._count?.participacoes ?? participantes.length;
 
-          {/* SPOTIFY */}
-          <div className="card-divisao">
-            <div className="card-icone icone-spotify">
-              <img src={SpotifyIcon} alt="Spotify" className="img-icone-servico" />
-            </div>
-            <div className="card-participantes" aria-label="4 participantes">
-              <span>👨🏻</span><span>👩🏽</span><span>👨🏽</span><span>👩🏻</span>
-            </div>
-            <div className="card-conteudo">
-              <div className="card-informacoes"><h3>Spotify</h3><strong className="preco-azul">R$8,50</strong></div>
-              <p>Vagas disponíveis: 1</p>
-            </div>
-            <span className="card-opcoes opcoes-azul" aria-hidden="true"><FiMoreHorizontal /></span>
-          </div>
+              const capacidade = grupo.stream?.str_telas ?? grupo.gru_num_vagas ?? grupo.gru_num_part ?? quantidadeParticipantes;
+              const vagasDisponiveis = Math.max(0, capacidade - quantidadeParticipantes);
 
-          {/* ALUGUEL */}
-          <div className="card-divisao">
-            <div className="card-icone icone-verde"><FaHome /></div>
-            <FiLock className="card-cadeado" aria-label="Divisão privada" />
-            <div className="card-participantes" aria-label="4 participantes">
-              <span>👨🏻</span><span>👩🏽</span><span>👨🏽</span><span>👩🏻</span>
-            </div>
-            <div className="card-conteudo">
-              <div className="card-informacoes"><h3>Aluguel</h3><strong className="preco-verde">R$13,90</strong></div>
-              <p>Vagas disponíveis: 1</p>
-            </div>
-            <span className="card-opcoes opcoes-verde" aria-hidden="true"><FiMoreHorizontal /></span>
-          </div>
+              const valorItens = (grupo.item ?? []).reduce(
+                (total, item) => total + Number(item.ite_valor || 0),
+                0
+              );
 
-          {/* BARRA MANSA RECIFE */}
-          <div className="card-divisao card-alto">
-            <div className="card-icone icone-verde"><FiMapPin /></div>
-            <FiLock className="card-cadeado" aria-label="Divisão privada" />
-            <div className="card-participantes" aria-label="4 participantes">
-              <span>👨🏻</span><span>👩🏽</span><span>👨🏽</span><span>👩🏻</span>
-            </div>
-            <div className="card-conteudo">
-              <div className="card-informacoes"><h3 className="titulo-local">Barra Mansa<br />Recife</h3><strong className="preco-verde">R$13,90</strong></div>
-              <p>Vagas disponíveis: 1</p>
-            </div>
-            <span className="card-opcoes opcoes-verde" aria-hidden="true"><FiMoreHorizontal /></span>
-          </div>
+              const valorStreaming = grupo.stream?.str_valor != null
+                ? Number(grupo.stream.str_valor)
+                : null;
 
-          {/* REPÚBLICA */}
-          <div className="card-divisao card-alto">
-            <div className="card-icone icone-verde"><FaHome /></div>
-            <div className="card-participantes" aria-label="4 participantes">
-              <span>👨🏻</span><span>👩🏽</span><span>👨🏽</span><span>👩🏻</span>
-            </div>
-            <div className="card-conteudo">
-              <div className="card-informacoes"><h3>República</h3><strong className="preco-verde">R$8,50</strong></div>
-              <p>Vagas disponíveis: 1</p>
-            </div>
-            <span className="card-opcoes opcoes-verde" aria-hidden="true"><FiMoreHorizontal /></span>
-          </div>
+              const valorMensalidade = grupo.mensalidade?.men_valor != null
+                ? Number(grupo.mensalidade.men_valor)
+                : null;
 
-          {/* INTERNET */}
-          <div className="card-divisao card-alto">
-            <div className="card-icone icone-verde"><FiWifi /></div>
-            <FiLock className="card-cadeado" aria-label="Divisão privada" />
-            <div className="card-participantes" aria-label="4 participantes">
-              <span>👨🏻</span><span>👩🏽</span><span>👨🏽</span><span>👩🏻</span>
-            </div>
-            <div className="card-conteudo">
-              <div className="card-informacoes"><h3>Internet</h3><strong className="preco-verde">R$13,90</strong></div>
-              <p>Vagas disponíveis: 1</p>
-            </div>
-            <span className="card-opcoes opcoes-verde" aria-hidden="true"><FiMoreHorizontal /></span>
-          </div>
+              const valorTotal = valorStreaming ?? valorMensalidade ?? valorItens;
+              const valorPorPessoa = categoria === "streaming" && quantidadeParticipantes > 0
+                ? valorTotal / quantidadeParticipantes
+                : valorTotal;
+
+              const corAzul = categoria === "streaming";
+
+              const icone = categoria === "streaming" ? (
+                <FaTv />
+              ) : categoria === "viagens" ? (
+                <FaCar />
+              ) : categoria === "despesas" ? (
+                <FaHome />
+              ) : (
+                <FaEllipsisH />
+              );
+
+              return (
+                <div className="card-divisao" key={grupo.gru_id}>
+                  <div className={`card-icone ${corAzul ? "icone-prime" : "icone-verde"}`}>
+                    {icone}
+                  </div>
+
+                  {grupo.gru_visibilidade === false && (
+                    <FiLock className="card-cadeado" aria-label="Divisão privada" />
+                  )}
+
+                  <div className="card-participantes" aria-label={`${quantidadeParticipantes} participantes`}>
+                    {participantes.slice(0, 4).map((participacao, index) => (
+                      <span key={`${grupo.gru_id}-${participacao.usu_id}-${index}`}>
+                        👤
+                      </span>
+                    ))}
+                  </div>
+
+                  <div className="card-conteudo">
+                    <div className="card-informacoes">
+                      <h3>{grupo.gru_nome || `${grupo.categoria?.cat_nome || "Divisão"} ${grupo.gru_id}`}</h3>
+                      <strong className={corAzul ? "preco-azul" : "preco-verde"}>
+                        {formatarBRL(valorPorPessoa)}
+                      </strong>
+                    </div>
+                    <p>Vagas disponíveis: {vagasDisponiveis}</p>
+                  </div>
+
+                  <span className={`card-opcoes ${corAzul ? "opcoes-azul" : "opcoes-verde"}`} aria-hidden="true">
+                    <FiMoreHorizontal />
+                  </span>
+                </div>
+              );
+            })
+          )}
         </section>
 
         <section className="section-tabela-historico" aria-labelledby="titulo-resumo-financeiro">
           <h2 className="resumo-financeiro" id="titulo-resumo-financeiro">Resumo Financeiro</h2>
           <div className="container-tabela-historico" role="region" aria-label="Tabela de resumo financeiro" tabIndex={0}>
             <table className="tabela-historico">
-              <thead><tr>
-                <th scope="col">Grupo</th><th scope="col">Total Gasto</th>
-                <th scope="col">Total Economizado</th><th scope="col">Pagamento</th>
-                <th scope="col">Vencimento</th><th scope="col">Status</th>
-              </tr></thead>
-              <tbody>
-                <tr><td>NomeGrupo</td><td><span className="valor-destaque">R$20,00</span></td><td>R$20,00</td><td>00/00/0000</td><td>00/00/0000</td><td className="status-atrasado">Atrasado</td></tr>
-                <tr><td>NomeGrupo</td><td>R$20,00</td><td>R$20,00</td><td>00/00/0000</td><td>00/00/0000</td><td className="status-pendente">Pendente</td></tr>
-                <tr><td>NomeGrupo</td><td>R$20,00</td><td>R$20,00</td><td>00/00/0000</td><td>00/00/0000</td><td className="status-pendente">Pendente</td></tr>
-                <tr><td>NomeGrupo</td><td>R$20,00</td><td>R$20,00</td><td>00/00/0000</td><td>00/00/0000</td><td className="status-pago">Pago</td></tr>
-                <tr><td>NomeGrupo</td><td>R$20,00</td><td>R$20,00</td><td>00/00/0000</td><td>00/00/0000</td><td className="status-pago">Pago</td></tr>
-              </tbody>
-            </table>
+  <thead>
+    <tr>
+      <th scope="col">Grupo</th>
+      <th scope="col">Pagamento</th>
+      <th scope="col">Data do pagamento</th>
+      <th scope="col">Vencimento</th>
+      <th scope="col">Status</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {historicoCarregando ? (
+      <tr>
+        <td colSpan={5}>Carregando histórico financeiro...</td>
+      </tr>
+    ) : historicoErro ? (
+      <tr>
+        <td colSpan={5}>{historicoErro}</td>
+      </tr>
+    ) : historico.length === 0 ? (
+      <tr>
+        <td colSpan={5} className="sem-movimentacoes">
+          Você ainda não possui movimentações financeiras.
+        </td>
+      </tr>
+    ) : (
+      historico.map((registro, index) => (
+        <tr key={`${registro.grupo}-${index}`}>
+          <td>{registro.grupo}</td>
+
+          <td>
+            <span className="valor-destaque">
+              {registro.pagamento}
+            </span>
+          </td>
+
+          <td>{registro.dataPagamento}</td>
+
+          <td>{registro.vencimento}</td>
+
+          <td
+            className={
+              registro.status === "Atrasado"
+                ? "status-atrasado"
+                : registro.status === "Pago"
+                  ? "status-pago"
+                  : "status-pendente"
+            }
+          >
+            {registro.status}
+          </td>
+        </tr>
+      ))
+    )}
+  </tbody>
+</table>
+            {!historicoCarregando && !historicoErro && historico.length > 0 && (
             <div className="container-seta-tabela">
-              <button type="button" className="btn-seta-tabela" aria-label="Mostrar mais registros"><FiArrowDown /></button>
+              <button
+                type="button"
+                className="btn-seta-tabela"
+                aria-label="Mostrar mais registros"
+              >
+                <FiArrowDown />
+              </button>
             </div>
+          )}
           </div>
         </section>
       </main>

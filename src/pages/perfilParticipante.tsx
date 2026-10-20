@@ -12,6 +12,7 @@ import { IoMdStar } from "react-icons/io";
 import { FaCircleCheck,FaChevronLeft,FaChevronRight,FaPlay,FaCar,FaHouseUser,FaLock } from "react-icons/fa6";
 import { FaEllipsisH } from "react-icons/fa";
 import { IoCloseSharp } from "react-icons/io5";
+import BtnClose from "../components/btnClose";
 
 interface Feedback {
   id: number;
@@ -667,9 +668,7 @@ return (
   <section className="perfil-participante-container">
 
   <section className="perfil-participante-fundo">
-  <button type="button" className="IconCancelar-perfilParticipante" onClick={() => navigate("/home")}>
-  <IoCloseSharp size={25} />
-  </button>
+    <BtnClose onClick={() => navigate("/home")} />
   </section>
 
       <div className="cabecalho-participante">

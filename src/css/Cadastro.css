@@ -30,16 +30,6 @@ body{
 }
 
 
-.IconCancelar {
-  position: absolute;
-  top: 2rem;
-  right: 2rem;
-  cursor: pointer;
-  outline: none;
-  color: var(--preto);
-}
-
-
 .linha {
   background-color: black;
   color: black;

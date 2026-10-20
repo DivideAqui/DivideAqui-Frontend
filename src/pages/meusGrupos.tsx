@@ -1,5 +1,6 @@
 import { IoCloseSharp } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
+import BtnClose from "../components/btnClose";
 
 export function MeusGrupos() {
 
@@ -18,12 +19,7 @@ export function MeusGrupos() {
         }}
       >
         <section style={{ maxWidth: "760px", textAlign: "center" }}>
-        <button
-          type="button"
-          className="IconCancelar"
-          onClick={() => navigate(-1)}>
-          <IoCloseSharp size={25} />
-        </button>
+        <BtnClose onClick={() => navigate(-1)} />
 
           <h1 style={{ fontSize: "2.5rem", color: "#123" }}>Meus Grupos</h1>
           <p style={{ fontSize: "1.1rem", color: "#4b5563", marginTop: "16px" }}>

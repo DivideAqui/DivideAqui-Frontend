@@ -1,585 +1,340 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
-
-/* =========================================================
-
-   DIVIDEAQUI / HISTÓRICO
-
-   1. ESTILOS BASE (DESKTOP FIRST)
-
-   2. RESPONSIVIDADE: TODAS AS MEDIA QUERIES AO FINAL
-
-   ========================================================= */
-
 .historico-main,
-
 .historico-main * {
-
     box-sizing: border-box;
-
 }
 
 .historico-main {
-
-    --historico-azul: var(--azul-escuro, #080a60);
-
-    --historico-azul-claro: var(--azul-claro, #0346d8);
-
-    --historico-verde: var(--verde-claro, #adff35);
-
     display: flex;
-
     flex-direction: column;
-
     align-items: center;
-
     gap: 46px;
-
     width: 100%;
-
     min-width: 0;
-
     min-height: 100vh;
-
-    padding: clamp(90px, 8vw, 125px) clamp(16px, 3vw, 48px) 76px;
-
-    background: #f5f5f0;
-
-    font-family: 'Montserrat', sans-serif;
-
+    padding: clamp(110px, 9vw, 145px) clamp(16px, 3vw, 48px) 76px;
+    background: var(--branco);
+    font-family: var(--font-texto);
 }
 
 /* ================== 1. PAINEL SUPERIOR ================== */
 
 .historico-topo {
-
     display: grid;
-
     grid-template-columns: minmax(0, 2.08fr) minmax(0, 1fr);
-
     align-items: stretch;
-
     gap: 20px;
-
     width: min(100%, 1200px);
-
     min-width: 0;
-
 }
 
 .container-graficos {
-
     position: relative;
-
     isolation: isolate;
-
     display: grid;
-
     grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
-
     align-items: center;
-
     column-gap: clamp(12px, 2vw, 24px);
-
     width: 100%;
-
     min-width: 0;
-
     min-height: 305px;
-
     padding: 38px clamp(30px, 4vw, 54px) 40px clamp(38px, 5.7vw, 78px);
-
     border-radius: 38px;
-
     overflow: hidden;
-
-    background: var(--historico-azul);
-
+    background: var(--azul-escuro);
     box-shadow: 3px 5px 8px rgba(0, 0, 0, .3);
-
 }
 
 .container-graficos::before {
-
     content: '';
-
     position: absolute;
-
     inset: 0;
-
     z-index: 0;
-
     pointer-events: none;
-
     border-radius: inherit;
-
-    background: linear-gradient(to top, rgba(123, 255, 0, .63), transparent 60px);
-
+    background: linear-gradient(to top, var(--verde-claro), transparent 50px);
     animation: pulsar 3s ease-in-out infinite;
-
 }
 
 .container-graficos::after {
-
     content: '';
-
     position: absolute;
-
     z-index: 0;
-
     inset: -110px -15% -95px -35%;
-
     transform: rotate(-20deg);
-
     border: 70px solid rgba(68, 77, 173, .12);
-
     border-radius: 48%;
-
     pointer-events: none;
-
 }
 
 @keyframes pulsar {
-
     0%, 100% { opacity: .25; }
-
     50% { opacity: 1; }
-
 }
 
 .gra-bolinhasbr,
-
 .gra-bolinhasbr2 {
-
     position: absolute;
-
     z-index: 1;
-
     width: clamp(85px, 10vw, 145px);
-
     height: auto;
-
     transform: rotate(90deg);
-
     filter: blur(3px);
-
     opacity: .5;
-
     pointer-events: none;
-
 }
 
 .gra-bolinhasbr { left: -8%; bottom: 12%; }
-
 .gra-bolinhasbr2 { right: -8%; top: 7%; }
-
 .container-infograf {
-
     position: relative;
-
     z-index: 2;
-
     width: 100%;
-
     min-width: 0;
-
 }
 
 .p-infograf {
-
     margin: 0;
-
-    color: #fff;
-
+    color: var(--branco);
     line-height: 1.21;
-
 }
 
 .txt-infograf {
-
     font-size: clamp(17px, 1.8vw, 26px);
-
     font-weight: 700;
-
 }
 
 .txt-verde {
-
-    color: var(--historico-verde);
-
+    color: var(--verde-claro);
     font-size: clamp(29px, 2.8vw, 40px);
-
     font-weight: 800;
-
 }
 
 .txt-infograf2 {
-
-    color: #fff;
-
+    color: var(--branco);
     font-size: clamp(18px, 1.9vw, 29px);
-
     font-weight: 700;
-
 }
 
 .txt-infograf3 {
-
     display: inline-block;
-
     margin-top: 17px;
-
-    color: #fff;
-
+    color: var(--branco);
     font-size: clamp(12px, 1.12vw, 17px);
-
     font-weight: 400;
-
     line-height: 1.3;
-
 }
 
 .grafico-comparativo {
-
     position: relative;
-
     z-index: 2;
-    
     width: 100%;
-
     min-width: 0;
-
     max-width: 320px;
-
     justify-self: center;
-
 }
 
 .grafico-area {
-
     display: flex;
-
     align-items: flex-end;
-
     justify-content: space-around;
-
     height: 204px;
-
-    border-bottom: 1px solid #fff;
-
+    border-bottom: 1px solid var(--branco);
 }
 
 .grafico-item {
-
     display: flex;
-
     flex-direction: column;
-
     align-items: center;
-
     justify-content: flex-end;
-
     width: 48%;
-
     min-width: 0;
-
     height: 100%;
-
 }
 
 .grafico-valor {
-
     margin-bottom: 8px;
-
-    color: #fff;
-
+    color: var(--branco);
     font-size: clamp(11px, 1.1vw, 17px);
-
 }
 
 .grafico-barra {
-
     width: 70%;
-
     max-width: 100px;
-
     flex-shrink: 0;
-
 }
 
 .barra-azul { height: 78%; background-color: #1042c9; }
-
 .barra-verde { height: 52%; background-color: #adff35; }
 
 .grafico-legendas {
-
     display: grid;
-
     grid-template-columns: repeat(2, minmax(0, 1fr));
-
     gap: 5px;
-
     margin-top: 8px;
-
-    color: #fff;
-
+    color: var(--branco);
     font-size: clamp(9px, .92vw, 13px);
-
     text-align: center;
-
     line-height: 1.3;
-
 }
 
 .grafico-legendas span { min-width: 0; overflow-wrap: normal; }
 
 .btn-upload {
-
     position: absolute;
-
     z-index: 5;
-
     right: 3.5%;
-
     bottom: 7%;
-
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
     width: 36px;
-
     height: 36px;
-
     padding: 0;
-
     border: 0;
-
     border-radius: 50%;
-
-    color: #fff;
-
-    background: var(--historico-azul-claro);
-
+    color: var(--branco);
+    background: var(--azul-claro);
     cursor: pointer;
-
     transition: transform .25s ease, box-shadow .25s ease;
-
 }
 
-.icon-upload { font-size: 20px; }
+.icon-upload {
+    font-size: 20px; 
+}
 
-.btn-upload:hover { transform: scale(1.09); box-shadow: 0 0 12px rgba(33, 101, 255, .45); }
+.btn-upload:hover { 
+    transform: scale(1.09); 
+    box-shadow: 0 0 12px rgba(33, 101, 255, .45); 
+}
 
-.btn-upload:active { transform: scale(.95); }
+.btn-upload:active { 
+    transform: scale(.95); 
+}
 
-.btn-upload:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+.btn-upload:focus-visible {
+    outline: 2px solid var(--azul-claro);
+    outline-offset: 3px; 
+}
 
 /* Status à direita */
 
 .container-status {
-
     display: grid;
-
     grid-template-rows: repeat(2, minmax(0, 1fr));
-
     gap: 14px;
-
     min-width: 0;
-
     width: 100%;
-
 }
 
 .container-totaldiv,
-
 .container-atrasados {
-
     display: grid;
-
     grid-template-columns: clamp(75px, 7vw, 104px) minmax(0, 1fr);
-
     grid-template-rows: 1fr 1fr;
-
     align-items: center;
-
     column-gap: 13px;
-
     min-width: 0;
-
     min-height: 0;
-
     padding: 16px;
-
     border-radius: 14px;
-
-    background: #fff;
-
+    background: var(--branco);
     box-shadow: 0 6px 9px -5px rgba(0, 0, 0, .3);
-
 }
 
 .icon-dividediv,
-
 .icon-alertdiv {
-
     display: flex;
-
     grid-column: 1;
-
     grid-row: 1 / 3;
-
     align-items: center;
-
     justify-content: center;
-
     width: 100%;
-
     aspect-ratio: 1;
-
     border-radius: 12px;
-
 }
 
-.icon-dividediv { background: var(--historico-azul-claro); }
+.icon-dividediv {
+    background: var(--azul-claro); 
+}
 
-.icon-alertdiv { background: #343434; }
+.icon-alertdiv {
+    background: #343434; 
+}
 
 .icon-divide,
-
 .icon-alert {
-
-    color: #fff;
-
+    color: var(--branco);
     font-size: clamp(36px, 3.6vw, 58px);
-
 }
 
 .p-totaldiv,
-
 .p-atrasados {
-
     grid-column: 2;
-
     grid-row: 1;
-
     align-self: end;
-
     min-width: 0;
-
     margin: 0 0 3px;
-
     color: #151515;
-
     font-size: clamp(14px, 1.28vw, 20px);
-
     font-weight: 500;
-
     line-height: 1.2;
-
 }
 
 .num-totaldiv,
-
 .num-atrasados {
-
     grid-column: 2;
-
     grid-row: 2;
-
     align-self: start;
-
     margin: 0;
-
     color: #151515;
-
     font-size: clamp(26px, 2.1vw, 35px);
-
     font-weight: 700;
-
     line-height: 1.1;
-
 }
 
 /* ================== 2. FILTROS DE CATEGORIA ================== */
 
 .div-suasdivisoes {
-
-    width: min(100%, 1200px);
-
+    width: min(100%, 1210px);
     min-width: 0;
-
 }
 
 .h1-suasdivisoes,
-
 .resumo-financeiro {
-
-    margin: 0 0 22px;
-
+    margin: 0 15px 50px;
     color: var(--preto, #111);
-
     font-size: clamp(20px, 1.65vw, 27px);
-
     font-weight: 700;
-
     line-height: 1.3;
-
 }
 
 .categorias-lista {
-
     display: grid;
-
     grid-template-columns: repeat(5, minmax(0, 1fr));
-
     align-items: center;
-
     gap: 13px;
-
     min-width: 0;
-
 }
 
 .btn-categoria {
-
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
     gap: 8px;
-
     min-width: 0;
-
     width: 100%;
-
     min-height: 54px;
-
     padding: 8px;
-
     border: 1px solid transparent;
-
     border-radius: 15px;
-
-    color: #080852;
-
-    background: #f5f5f0;
-
+    color: var(--azul-escuro);
+    background: var(--branco);
     box-shadow: 0 4px 7px rgba(0, 0, 0, .21);
-
     font: 700 clamp(11px, 1.02vw, 16px) 'Montserrat', sans-serif;
-
     text-align: center;
-
     line-height: 1.2;
-
     cursor: pointer;
-
     transition: transform .25s ease, box-shadow .25s ease;
-
 }
 
 .btn-categoria svg { flex-shrink: 0; font-size: 1.25em; }
@@ -593,69 +348,55 @@
 /* ================== 3. CARTÕES ================== */
 
 .Sct-suasdivisoes {
-
     display: grid;
-
     grid-template-columns: repeat(3, minmax(0, 1fr));
-
     gap: 53px 18px;
-
     width: min(100%, 1200px);
-
     min-width: 0;
-
     padding: 22px 2px 0;
+    margin-bottom: -5rem;
+    align-content: start;
+    height: fit-content;
+    box-sizing: border-box;
+}
 
+.Sct-suasdivisoes.sem-grupos {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    color: #888;
+    font-size: 0.95rem;
+    text-align: center;
+    padding: 20px 0;
+    box-sizing: border-box;
 }
 
 .card-divisao,
-
 .card-alto {
-
     position: relative;
-
     min-width: 0;
-
     min-height: 245px;
-
     padding: 94px clamp(13px, 1.4vw, 21px) 55px;
-
     border: 1px solid #dedede;
-
     border-radius: 6px;
-
     background: #fdfdfa;
-
     box-shadow: 0 4px 6px rgba(0, 0, 0, .25);
-
 }
 
 .card-icone {
-
     position: absolute;
-
     z-index: 2;
-
     top: -21px;
-
     left: clamp(14px, 1.5vw, 23px);
-
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
     width: clamp(71px, 6.8vw, 90px);
-
     height: clamp(71px, 6.8vw, 90px);
-
     color: #fff;
-
     border-radius: 20px;
-
     overflow: hidden;
-
 }
 
 .card-icone svg { font-size: clamp(36px, 3.2vw, 48px); stroke-width: 1.8; }
@@ -667,72 +408,41 @@
 .img-icone-servico { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }
 
 .card-cadeado {
-
     position: absolute;
-
     top: -30px;
-
     left: clamp(75px, 7vw, 96px);
-
     z-index: 3;
-
     width: 30px;
-
     height: 30px;
-
     padding: 7px;
-
     border-radius: 50%;
-
     color: #fff;
-
     background: #080808;
-
     stroke-width: 2.5;
-
 }
 
 .card-participantes {
-
     position: absolute;
-
     z-index: 1;
-
     top: 23px;
-
     right: 16px;
-
     display: flex;
-
     align-items: center;
-
     white-space: nowrap;
-
 }
 
 .card-participantes span {
-
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
     width: clamp(25px, 2.3vw, 35px);
-
     height: clamp(25px, 2.3vw, 35px);
-
     margin-left: -7px;
-
     border: 2px solid #fdfdfa;
-
     border-radius: 50%;
-
     font-size: clamp(13px, 1.35vw, 19px);
-
     background: #b8ddf3;
-
-    overflow: hidden;
+   overflow: hidden;
 
 }
 
@@ -748,21 +458,14 @@
 }
 
 .card-informacoes h3 {
-
     min-width: 0;
-
     margin: 0;
-
-    color: #080852;
-
+    color: var(--azul-escuro);
     font-size: clamp(17px, 1.42vw, 24px);
-
     font-weight: 800;
-
     line-height: 1.14;
     min-height: 2.28em; /* Reserva duas linhas para TODOS os títulos */
     overflow-wrap: anywhere;
-
 }
 
 .card-informacoes strong {
@@ -819,95 +522,66 @@
 /* ================== 4. RESUMO FINANCEIRO ================== */
 
 .resumo-financeiro {
-
     position: static;
-
     display: block;
-
     width: 100%;
-
     margin: 0 0 45px;
-
     padding-left: 4px;
-
     font-family: 'Montserrat', sans-serif;
-
     font-size: 27px;
-
     font-weight: 700;
-
     line-height: 1.2;
-
     color: #000;
-
     text-align: left;
-
 }
 
 .section-tabela-historico {
-
     position: relative;
-
     width: min(100%, 1200px);
-
     min-width: 0;
-
     top: -14vh;
-
 }
 
 .container-tabela-historico {
-
     width: 100%;
-
     min-width: 0;
-
     max-width: 100%;
-
     overflow-x: auto;
-
     border: 1px solid #d3d3d3;
-
     border-radius: 6px;
-
     background: #fff;
-
     overscroll-behavior-x: contain;
-
 }
 
 .tabela-historico {
-
     width: 100%;
-
     min-width: 750px;
-
     border-collapse: separate;
-
     border-spacing: 0;
-
     text-align: center;
-
     color: #000;
+    padding-bottom: 20px;
+}
+
+.tabela-historico .sem-movimentacoes {
+    width: 100%;
+    color: #888;
+    font-size: 0.95rem;
+    padding: 20px 0;
+    box-sizing: border-box;
+    font-weight: 300;
 
 }
 
 .tabela-historico thead { background: #f5f5f0; }
 
 .tabela-historico th {
-
     height: 55px;
-
     padding: 0 10px;
-
     border-bottom: 1px solid #d3d3d3;
-
     white-space: nowrap;
-
     font-size: clamp(12px, 1.03vw, 16px);
-
     font-weight: 700;
-
 }
 
 .tabela-historico td {
@@ -1225,29 +899,20 @@
     }
 
     .tabela-historico {
-
         min-width: 790px;
-
     }
 
     .tabela-historico th {
-
         height: 55px;
-
     }
 
     .tabela-historico td {
-
         height: 40px;
-
         font-size: 13px;
-
     }
 
     .container-seta-tabela {
-
         padding: 20px 0;
-
     }
 
 }

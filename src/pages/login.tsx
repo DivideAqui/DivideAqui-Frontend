@@ -1,7 +1,7 @@
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import { ShaderGradientCanvas, ShaderGradient } from "@shadergradient/react";
 import { HiEye, HiMiniEyeSlash } from "react-icons/hi2";
-import { IoCloseSharp } from "react-icons/io5";
+import BtnClose from "../components/btnClose";
 import { useGoogleLogin } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -200,13 +200,7 @@ export function Login() {
       <section className="login-side login-side-right">
   <form onSubmit={enviar}>
 
-    <button
-      type="button"
-      className="IconCancelar-login"
-      onClick={() => navigate("/home")}
-    >
-      <IoCloseSharp size={25} />
-    </button>
+    <BtnClose onClick={() => navigate("/home")} cor="preto"/>
 
     <div className="conteudo-login">
 

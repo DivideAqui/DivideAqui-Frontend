@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { MdAddCircleOutline } from "react-icons/md";
 import { FaUnlock } from "react-icons/fa";
 import { FaLock } from "react-icons/fa";
-import { FaTimes } from "react-icons/fa";
+import BtnClose from "../components/btnClose";
 import {
   FaArrowCircleLeft,
   FaArrowCircleRight,
@@ -542,9 +542,7 @@ export function CriarDivisão() {
   return (
     <>
       <section className="CriarDivisao">
-        <button className="BtnFechar" onClick={() => navigate("/divisoes")} aria-label="Fechar">
-          <FaTimes />
-        </button>
+        <BtnClose onClick={() => navigate("/divisoes")} />
         <section className="SctTop">
           <h2>Crie a sua <b className="Bdestaque">Divisão!</b></h2>
           <div className="IndicadorEtapas" aria-label={`Etapa ${etapaAtual + 1} de ${etapas.length}`}>
