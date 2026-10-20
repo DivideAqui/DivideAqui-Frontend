@@ -1,4 +1,3 @@
-import { IoCloseSharp } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import BtnClose from "../components/btnClose";
 
