@@ -124,8 +124,9 @@ function loadUserFromCookie(): AuthUser | null {
       return null;
     }
 
-    // Restaurar o token do localStorage se não estiver no cookie
+    // Restaurar o token do localStorage se não estiver no cookie.
     const storedToken = localStorage.getItem("token");
+
     if (storedToken && !user.token) {
       user.token = storedToken;
     }
@@ -171,7 +172,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       setCookie(COOKIE_NAME, JSON.stringify(cookieUser), user.expiresAt);
 
-      // Also persist token to localStorage for components that need it (like DivideAI)
+      // Also persist token to localStorage for components that need it (like DivideAI).
       if (user.token) {
         localStorage.setItem("token", user.token);
       }
@@ -235,128 +236,140 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [user?.id, user?.dbId]);
 
   const loginWithGoogle = async (credentialResponse: GoogleCredentialResponse) => {
-  const profileObj = credentialResponse?.profileObj ?? credentialResponse?.user;
-  const profilePicture = profileObj?.picture;
-  const idToken = credentialResponse?.credential as string | undefined;
+    const profileObj = credentialResponse?.profileObj ?? credentialResponse?.user;
+    const profilePicture = profileObj?.picture;
+    const idToken = credentialResponse?.credential as string | undefined;
 
-  if (idToken) {
-    try {
+    if (idToken) {
+      try {
+        const res = await fetch(`${API_URL}/auth/google`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ idToken }),
+        });
+
+        if (!res.ok) throw new Error("Falha ao autenticar no servidor");
+
+        const db = await res.json();
+        const parsed = parseJwtToken(idToken);
+
+        setUser({
+          id: String(db.id),
+          dbId: String(db.id),
+          cadastroCompleto: db.cadastroCompleto,
+          email: db.email,
+          name: db.nome,
+          picture: db.foto || profilePicture,
+          token: db.token ?? "",
+          expiresAt: parsed?.expiresAt ?? Date.now() + 3600 * 1000,
+        });
+
+        return;
+      } catch (e) {
+        console.error("Erro ao salvar usuário no banco:", e);
+      }
+
+      // Fallback: tokeninfo do Google.
+      try {
+        const tokenInfoRes = await fetch(
+          `https://oauth2.googleapis.com/tokeninfo?id_token=${encodeURIComponent(idToken)}`
+        );
+
+        if (tokenInfoRes.ok) {
+          const info = await tokenInfoRes.json();
+
+          if (GOOGLE_CLIENT_ID && info.aud && info.aud !== GOOGLE_CLIENT_ID) {
+            console.warn("ID token audience mismatch", info.aud);
+          } else {
+            const expiresAt =
+              typeof info.exp === "string" || typeof info.exp === "number"
+                ? Number(info.exp) * 1000
+                : Date.now() + 3600 * 1000;
+
+            const safePicture =
+              typeof info.picture === "string" &&
+              (info.picture.startsWith("http://") || info.picture.startsWith("https://"))
+                ? info.picture
+                : profilePicture;
+
+            setUser({
+              id: String(info.sub || ""),
+              email: String(info.email || ""),
+              name: String(info.name || profileObj?.name || "Usuário"),
+              picture: safePicture,
+              token: "",
+              expiresAt,
+            });
+
+            return;
+          }
+        }
+      } catch (e) {
+        console.error("Failed to validate ID token:", e);
+      }
+
+      // Fallback: decodifica o JWT localmente.
+      const parsedUser = parseJwtToken(idToken);
+
+      if (parsedUser) {
+        setUser({
+          ...parsedUser,
+          picture: parsedUser.picture || profilePicture,
+          token: "",
+        });
+
+        return;
+      }
+    }
+
+    const accessToken = credentialResponse?.access_token ?? credentialResponse?.accessToken;
+
+    if (accessToken) {
       const res = await fetch(`${API_URL}/auth/google`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ idToken }),
+        body: JSON.stringify({ accessToken }),
       });
 
       if (!res.ok) throw new Error("Falha ao autenticar no servidor");
 
       const db = await res.json();
-      const parsed = parseJwtToken(idToken);
+      const expiresIn = credentialResponse?.expires_in;
 
       setUser({
-        id: db.id,
-        dbId: db.id,
+        id: String(db.id),
+        dbId: String(db.id),
         cadastroCompleto: db.cadastroCompleto,
         email: db.email,
         name: db.nome,
         picture: db.foto || profilePicture,
         token: db.token ?? "",
-        expiresAt: parsed?.expiresAt ?? Date.now() + 3600 * 1000,
+        expiresAt:
+          typeof expiresIn === "number"
+            ? Date.now() + expiresIn * 1000
+            : Date.now() + 3600 * 1000,
       });
-      return;
-    } catch (e) {
-      console.error("Erro ao salvar usuário no banco:", e);
-    }
 
-    // Fallback: tokeninfo do Google
-    try {
-      const tokenInfoRes = await fetch(
-        `https://oauth2.googleapis.com/tokeninfo?id_token=${encodeURIComponent(idToken)}`
-      );
-      if (tokenInfoRes.ok) {
-        const info = await tokenInfoRes.json();
-        if (GOOGLE_CLIENT_ID && info.aud && info.aud !== GOOGLE_CLIENT_ID) {
-          console.warn("ID token audience mismatch", info.aud);
-        } else {
-          const expiresAt =
-            typeof info.exp === "string" || typeof info.exp === "number"
-              ? Number(info.exp) * 1000
-              : Date.now() + 3600 * 1000;
-          const safePicture =
-            typeof info.picture === "string" &&
-            (info.picture.startsWith("http://") || info.picture.startsWith("https://"))
-              ? info.picture
-              : profilePicture;
-
-          setUser({
-            id: String(info.sub || ""),
-            email: String(info.email || ""),
-            name: String(info.name || profileObj?.name || "Usuário"),
-            picture: safePicture,
-            token: "",
-            expiresAt,
-          });
-          return;
-        }
-      }
-    } catch (e) {
-      console.error("Failed to validate ID token:", e);
-    }
-
-    // Fallback: decodifica o JWT localmente
-    const parsedUser = parseJwtToken(idToken);
-    if (parsedUser) {
-      setUser({ ...parsedUser, picture: parsedUser.picture || profilePicture, token: "" });
       return;
     }
-  }
 
-  const accessToken = credentialResponse?.access_token ?? credentialResponse?.accessToken;
+    if (profileObj) {
+      const safePicture =
+        typeof profilePicture === "string" &&
+        (profilePicture.startsWith("http://") || profilePicture.startsWith("https://"))
+          ? profilePicture
+          : undefined;
 
-  if (accessToken) {
-    const res = await fetch(`${API_URL}/auth/google`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ accessToken }),
-    });
-
-    if (!res.ok) throw new Error("Falha ao autenticar no servidor");
-
-    const db = await res.json();
-    const expiresIn = credentialResponse?.expires_in;
-
-    setUser({
-      id: db.id,
-      dbId: db.id,
-      cadastroCompleto: db.cadastroCompleto,
-      email: db.email,
-      name: db.nome,
-      picture: db.foto || profilePicture,
-      token: db.token ?? "",
-      expiresAt:
-        typeof expiresIn === "number"
-          ? Date.now() + expiresIn * 1000
-          : Date.now() + 3600 * 1000,
-    });
-    return;
-  }
-
-  if (profileObj) {
-    const safePicture =
-      typeof profilePicture === "string" &&
-      (profilePicture.startsWith("http://") || profilePicture.startsWith("https://"))
-        ? profilePicture
-        : undefined;
-
-    setUser({
-      id: "google-profile",
-      email: profileObj.email || "",
-      name: profileObj.name || "Usuário",
-      picture: safePicture,
-      token: "",
-      expiresAt: Date.now() + 3600 * 1000,
-    });
-  }
-};
+      setUser({
+        id: "google-profile",
+        email: profileObj.email || "",
+        name: profileObj.name || "Usuário",
+        picture: safePicture,
+        token: "",
+        expiresAt: Date.now() + 3600 * 1000,
+      });
+    }
+  };
 
   const loginWithToken = async (token: string) => {
     const parsedUser = parseJwtToken(token);
@@ -379,7 +392,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       loginWithGoogle,
       loginWithToken,
       updateUserPicture,
-      logout
+      logout,
     }),
     [user]
   );
