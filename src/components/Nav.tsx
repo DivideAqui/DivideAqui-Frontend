@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import "./../css/Nav.css";
 import { useAuth } from "../hooks/useAuth";
+import { useNotifications } from "../hooks/useNotifications";
+import { NotificationsPanel } from "./NotificationsPanel";
 import Logo from "../assets/Icons/logo1Branca.png";
 import { IoIosArrowDown } from "react-icons/io";
 import { IoMdNotifications } from "react-icons/io";
@@ -37,6 +39,21 @@ export function Nav() {
   const [activeSection, setActiveSection] = useState(homeSections[0].id);
   const { user, logout } = useAuth();
   const displayName = formatDisplayName(user?.name);
+
+  const {
+    notificacoes,
+    paginacao,
+    naoLidas,
+    carregando,
+    carregandoMais,
+    erro,
+    painelAberto,
+    abrirPainel,
+    fecharPainel,
+    carregarMais,
+    marcarLida,
+    recarregar,
+  } = useNotifications();
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "auto";
@@ -187,12 +204,30 @@ export function Nav() {
   }
 
   return (
-    <header className="NavHeader">
+    <header className={`NavHeader ${painelAberto ? "nav-notif-aberto" : ""}`}>
       <div className="NavActions nav-actions-left">
-        <div className="nav-notification">
+        <button
+          type="button"
+          className="nav-notification"
+          onClick={abrirPainel}
+          aria-label={
+            naoLidas > 0
+              ? `Abrir notificações (${naoLidas} não lidas)`
+              : "Abrir notificações"
+          }
+          aria-expanded={painelAberto}
+        >
           <IoMdNotifications className="nav-bell" />
-          <span className="nav-bell-dot" aria-hidden="true" />
-        </div>
+          <span
+            className={`nav-bell-dot ${naoLidas > 0 ? "tem-nao-lidas" : ""}`}
+            aria-hidden="true"
+          />
+          {naoLidas > 0 && (
+            <span className="nav-bell-badge" aria-hidden="true">
+              {naoLidas > 99 ? "99+" : naoLidas}
+            </span>
+          )}
+        </button>
       </div>
 
       <div className="Navegacao">
@@ -245,6 +280,25 @@ export function Nav() {
           {renderUserDropdown()}
         </div>
       </div>
+
+      {painelAberto && (
+        <NotificationsPanel
+          notificacoes={notificacoes}
+          naoLidas={naoLidas}
+          carregando={carregando}
+          carregandoMais={carregandoMais}
+          erro={erro}
+          temMais={Boolean(paginacao?.temMais)}
+          onFechar={fecharPainel}
+          onCarregarMais={carregarMais}
+          onClicarItem={(n) => {
+            // A página de detalhe ainda não lê id da rota (id fixo no componente),
+            // então apenas marcamos como lida e seguimos para a lista de divisões.
+            void marcarLida(n.not_notificacao_id, "/divisoes");
+          }}
+          onRecarregar={recarregar}
+        />
+      )}
     </header>
   );
 }

@@ -11,6 +11,8 @@ import moeda from "../assets/Imgs/moeda.png";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+import Swal from "sweetalert2";
+import { useAuth } from "../hooks/useAuth";
 
 import {
   FaArrowCircleLeft,
@@ -37,6 +39,14 @@ type StreamingDetalhes = {
   str_telas?: number | null;
 };
 
+type StreamingData = StreamingDetalhes | StreamingDetalhes[] | null | undefined;
+
+const getStream = (stream: StreamingData): StreamingDetalhes | null => {
+  if (!stream) return null;
+  if (Array.isArray(stream)) return stream[0] || null;
+  return stream;
+};
+
 type ItemDetalhe = {
   ite_valor: string | number;
 };
@@ -56,6 +66,7 @@ type BackendGroup = {
   criador?: {
     usu_id: number;
     usu_nome: string;
+    usu_foto?: string | null;
   } | null;
   categoria?: {
     cat_id: number;
@@ -97,6 +108,7 @@ type CardItem = {
   icon: ReactNode;
   leaderName: string;
   leaderAvatar: string;
+  leaderFoto?: string | null;
   leaderRating: number | null;
   description: string;
   category: CategoryKey;
@@ -107,13 +119,35 @@ type CardItem = {
     id: string;
     nome: string;
     avatar: string;
+    foto?: string | null;
   }>;
+  userParticipates: boolean;
 };
 
 const API_BASE_URL = import.meta.env.VITE_API_URL;
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 const formatarBRL = (valor: number) =>
   new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(valor);
+
+// Componente para exibir avatar com foto de perfil
+const AvatarComFoto = ({
+  fotoBase64,
+  seed,
+  className,
+  alt,
+}: {
+  fotoBase64?: string | null;
+  seed: string;
+  className: string;
+  alt: string;
+}) => {
+  // Se tem foto base64/data URL, usa direto; caso contrário usa DiceBear (png para preencher a bolinha)
+  const avatarUrl = fotoBase64 && !fotoBase64.startsWith("http")
+    ? fotoBase64
+    : `https://api.dicebear.com/7.x/avataaars/png?seed=${encodeURIComponent(seed)}&backgroundColor=b6e3f4,c0aede,d1d4f9`;
+
+  return <img src={avatarUrl} alt={alt} className={className} />;
+};
 
 const getCategoryKey = (value?: string | null, icon?: string | null): CategoryKey => {
   const iconKey = (icon ?? "").trim().toLowerCase();
@@ -174,20 +208,21 @@ const getGroupDescription = (leaderName: string, category: CategoryKey) => {
   return `Grupo organizado por ${leaderName}, com divisão de custos e organização compartilhada entre os participantes.`;
 };
 
-const buildCardItemFromGroup = (group: BackendGroup): CardItem => {
+const buildCardItemFromGroup = (group: BackendGroup, currentUserId?: string | null): CardItem => {
   const category = getCategoryKey(group.categoria?.cat_nome, group.gru_icone);
+  const streamData = getStream(group.stream);
   const viagem = group.viagem ?? (category === "viagens" ? group.detalhes : null);
   const leaderName = group.criador?.usu_nome?.trim() || group.gru_criador_nome?.trim() || "Criador da divisão";
   const participationCount = group._count?.participacoes ?? 0;
   const creatorIsParticipant = group.gru_criador_id != null;
   const memberCount = Math.max(1, participationCount + (creatorIsParticipant ? 0 : 1));
   const configuredCapacity = Math.max(memberCount, group.gru_num_part ?? group.gru_num_vagas ?? memberCount);
-  const maxParticipants = group.stream?.str_telas == null
+  const maxParticipants = streamData?.str_telas == null
     ? configuredCapacity
-    : Math.min(configuredCapacity, group.stream.str_telas);
+    : Math.min(configuredCapacity, streamData.str_telas);
   const slots = Math.max(0, maxParticipants - memberCount);
   const divisionCount = Math.min(maxParticipants, memberCount + (slots > 0 ? 1 : 0));
-  const streamTotal = group.stream?.str_valor == null ? null : Number(group.stream.str_valor);
+  const streamTotal = streamData?.str_valor == null ? null : Number(streamData.str_valor);
   const totalPlanPrice = streamTotal === null || !Number.isFinite(streamTotal)
     ? null
     : formatarBRL(streamTotal);
@@ -207,14 +242,20 @@ const buildCardItemFromGroup = (group: BackendGroup): CardItem => {
     id: String(participacao.usuario?.usu_id ?? participacao.usu_id),
     nome: participacao.usuario?.usu_nome || `Usuário ${participacao.usu_id}`,
     avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(String(participacao.usuario?.usu_id ?? participacao.usu_id))}`,
+    foto: participacao.usuario?.usu_foto,
   }));
+
+  // Verificar se o usuário atual já participa do grupo
+  const userParticipates = currentUserId
+    ? participantes.some((p) => p.id === currentUserId)
+    : false;
 
   return {
     id: String(group.gru_id),
     name: group.gru_nome?.trim() || `${getCategoryTitle(category)} ${group.gru_id}`,
     price: perParticipantPrice,
     totalPlanPrice,
-    planName: group.stream?.str_plano ?? null,
+    planName: streamData?.str_plano ?? null,
     memberCount,
     divisionCount,
     maxParticipants,
@@ -223,6 +264,7 @@ const buildCardItemFromGroup = (group: BackendGroup): CardItem => {
     icon: getCategoryIcon(category),
     leaderName,
     leaderAvatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(String(group.criador?.usu_id ?? group.gru_criador_id ?? leaderName))}`,
+    leaderFoto: group.criador?.usu_foto,
     leaderRating: null,
     description: group.gru_descricao?.trim() || getGroupDescription(leaderName, category),
     category,
@@ -230,10 +272,11 @@ const buildCardItemFromGroup = (group: BackendGroup): CardItem => {
     destino: viagem?.via_destino?.trim() || undefined,
     privado: group.gru_visibilidade === false,
     participantes,
+    userParticipates,
   };
 };
 
-const buildRowsFromGroups = (groups: BackendGroup[]) => {
+const buildRowsFromGroups = (groups: BackendGroup[], currentUserId?: string | null) => {
   const groupedByCategory = groups.reduce<Record<CategoryKey, BackendGroup[]>>(
     (accumulator, group) => {
       const categoryKey = getCategoryKey(group.categoria?.cat_nome, group.gru_icone);
@@ -245,10 +288,10 @@ const buildRowsFromGroups = (groups: BackendGroup[]) => {
   );
 
   return [
-    { title: "Streaming", items: (groupedByCategory.streaming ?? []).map(buildCardItemFromGroup) },
-    { title: "Viagens", items: (groupedByCategory.viagens ?? []).map(buildCardItemFromGroup) },
-    { title: "Despesas Domésticas", items: (groupedByCategory.despesas ?? []).map(buildCardItemFromGroup) },
-    { title: "Outros", items: (groupedByCategory.outros ?? []).map(buildCardItemFromGroup) },
+    { title: "Streaming", items: (groupedByCategory.streaming ?? []).map((g) => buildCardItemFromGroup(g, currentUserId)) },
+    { title: "Viagens", items: (groupedByCategory.viagens ?? []).map((g) => buildCardItemFromGroup(g, currentUserId)) },
+    { title: "Despesas Domésticas", items: (groupedByCategory.despesas ?? []).map((g) => buildCardItemFromGroup(g, currentUserId)) },
+    { title: "Outros", items: (groupedByCategory.outros ?? []).map((g) => buildCardItemFromGroup(g, currentUserId)) },
   ].filter((row) => row.items.length > 0);
 };
 
@@ -537,10 +580,11 @@ function VagasLinha({
                         aria-label={`Ver perfil de ${participante.nome}`}
                         title={`${participante.nome} - Clique para ver o perfil`}
                       >
-                        <img
-                          src={participante.avatar}
-                          alt={participante.nome}
+                        <AvatarComFoto
+                          fotoBase64={participante.foto}
+                          seed={participante.id}
                           className="vagas-card__avatar-image"
+                          alt={participante.nome}
                         />
                         <span className="vagas-card__avatar-tooltip">{participante.nome}</span>
                       </button>
@@ -606,8 +650,10 @@ export function Divisoes() {
   const [allGroups, setAllGroups] = useState<BackendGroup[]>([]);
   const [loading, setLoading] = useState(true);
   const [heroPointer, setHeroPointer] = useState({ x: 0, y: 0 });
+  const [isParticipating, setIsParticipating] = useState(false);
   const heroRef = useRef<HTMLElement | null>(null);
   const [searchParams, setSearchParams] = useSearchParams();
+  const { user, isAuthenticated } = useAuth();
 
   const activeCategory = (searchParams.get("categoria") as CategoryKey | "all") ?? "all";
   const searchTerm = searchParams.get("q") ?? "";
@@ -620,25 +666,33 @@ export function Divisoes() {
 
     return allGroups
       .filter((group) => matchesSearchGroup(group, normalizedSearch))
-      .slice(0, 5)
+      .slice(0, 6)
       .map((group) => {
+        const streamDataSearch = getStream(group.stream);
         const category = getCategoryKey(group.categoria?.cat_nome, group.gru_icone);
         const leaderName = group.criador?.usu_nome?.trim() || group.gru_criador_nome?.trim() || "Criador da divisão";
         const participationCount = group._count?.participacoes ?? 0;
         const creatorIsParticipant = group.gru_criador_id != null;
         const memberCount = Math.max(1, participationCount + (creatorIsParticipant ? 0 : 1));
         const configuredCapacity = Math.max(memberCount, group.gru_num_part ?? group.gru_num_vagas ?? memberCount);
-        const maxParticipants = group.stream?.str_telas == null
+        const maxParticipants = streamDataSearch?.str_telas == null
           ? configuredCapacity
-          : Math.min(configuredCapacity, group.stream.str_telas);
+          : Math.min(configuredCapacity, streamDataSearch.str_telas);
         const slots = Math.max(0, maxParticipants - memberCount);
+
+        const participantes = (group.participacoes ?? []).map((p) => ({
+          id: String(p.usuario?.usu_id ?? p.usu_id),
+          nome: p.usuario?.usu_nome || "Membro",
+          foto: p.usuario?.usu_foto,
+        }));
 
         return {
           id: String(group.gru_id),
-          label: group.gru_nome?.trim() || `${getCategoryTitle(category)} ${group.gru_id}`,
-          subtitle: leaderName,
-          meta: `${slots} vagas`,
+          label: group.gru_nome?.trim() || `${getCategoryTitle(category)}`,
+          subtitle: `Liderado por ${leaderName}`,
+          meta: slots > 0 ? `${slots} vaga${slots > 1 ? 's' : ''}` : 'Lotado',
           category,
+          participantes,
         };
       });
   }, [allGroups, normalizedSearch]);
@@ -652,7 +706,7 @@ export function Divisoes() {
     });
   }, [activeCategory, allGroups, normalizedSearch]);
 
-  const rows = useMemo(() => buildRowsFromGroups(filteredGroups), [filteredGroups]);
+  const rows = useMemo(() => buildRowsFromGroups(filteredGroups, user?.id), [filteredGroups, user?.id]);
 
   useEffect(() => {
     const hero = heroRef.current;
@@ -712,6 +766,22 @@ export function Divisoes() {
       isMounted = false;
     };
   }, []);
+
+  // Abre o diálogo quando há um ID na URL (vindo da pesquisa da Home)
+  useEffect(() => {
+    const groupId = searchParams.get("id");
+    if (groupId && allGroups.length > 0) {
+      const group = allGroups.find((g) => String(g.gru_id) === groupId);
+      if (group) {
+        const cardItem = buildCardItemFromGroup(group, user?.id);
+        setSelectedItem(cardItem);
+        // Limpa o parâmetro da URL sem recarregar
+        const newParams = new URLSearchParams(searchParams);
+        newParams.delete("id");
+        setSearchParams(newParams, { replace: true });
+      }
+    }
+  }, [searchParams, allGroups, user?.id]);
 
   useEffect(() => {
     const lenis = new Lenis({
@@ -776,6 +846,100 @@ export function Divisoes() {
     }
 
     setSearchParams(nextParams);
+  };
+
+  const handleParticipate = async (item: CardItem) => {
+    if (!isAuthenticated) {
+      Swal.fire({
+        title: "Atenção",
+        text: "Você precisa estar logado para participar de uma divisão.",
+        icon: "warning",
+        confirmButtonText: "Entendi",
+      });
+      return;
+    }
+
+    if (item.userParticipates) {
+      Swal.fire({
+        title: "Você já participa",
+        text: "Você já é membro deste grupo.",
+        icon: "info",
+        confirmButtonText: "Entendi",
+      });
+      return;
+    }
+
+    if (item.privado) {
+      Swal.fire({
+        title: "Grupo privado",
+        text: "Este grupo é privado. Solicite participação ao líder.",
+        icon: "info",
+        confirmButtonText: "Entendi",
+      });
+      return;
+    }
+
+    if (item.slots <= 0) {
+      Swal.fire({
+        title: "Grupo cheio",
+        text: "Este grupo não possui mais vagas disponíveis.",
+        icon: "info",
+        confirmButtonText: "Entendi",
+      });
+      return;
+    }
+
+    setIsParticipating(true);
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/grupos/${item.id}/participar`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(user?.token ? { Authorization: `Bearer ${user.token}` } : {}),
+        },
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.erro || data.message || "Erro ao participar do grupo");
+      }
+
+      await Swal.fire({
+        title: "Parabéns!",
+        text: data.mensagem || "Você entrou no grupo com sucesso!",
+        icon: "success",
+        confirmButtonText: "Ótimo",
+      });
+
+      // Recarregar os grupos para atualizar a UI
+      const groupsResponse = await fetch(`${API_BASE_URL}/grupos`);
+      if (groupsResponse.ok) {
+        const groupsData: BackendGroup[] = await groupsResponse.json();
+        setAllGroups(groupsData);
+      }
+
+      // Atualizar o item selecionado
+      if (selectedItem) {
+        const updatedGroups = allGroups.length > 0 ? allGroups : [];
+        const updatedGroup = updatedGroups.find((g) => String(g.gru_id) === item.id);
+        if (updatedGroup) {
+          const updatedCard = buildCardItemFromGroup(updatedGroup, user?.id);
+          setSelectedItem(updatedCard);
+        }
+      }
+    } catch (error) {
+      console.error("Erro ao participar:", error);
+      Swal.fire({
+        title: "Erro",
+        text: error instanceof Error ? error.message : "Não foi possível participar do grupo. Tente novamente.",
+        icon: "error",
+        confirmButtonText: "Entendi",
+      });
+    } finally {
+      setIsParticipating(false);
+    }
   };
 
   const heroStyle = {
@@ -850,7 +1014,12 @@ export function Divisoes() {
 
                   <div className="division-dialog__leader-block">
                     <div className="division-dialog__leader-avatar">
-                      <img src={selectedItem.leaderAvatar} alt={selectedItem.leaderName} className="division-dialog__leader-avatar-image" />
+                      <AvatarComFoto
+                        fotoBase64={selectedItem.leaderFoto}
+                        seed={selectedItem.id}
+                        className="division-dialog__leader-avatar-image"
+                        alt={selectedItem.leaderName}
+                      />
                     </div>
                     <div className="division-dialog__leader-info">
                       <strong>Líder: {selectedItem.leaderName}</strong>
@@ -902,8 +1071,26 @@ export function Divisoes() {
                   {selectedItem.description}
                 </DialogDescription>
 
-                <button type="button" className="division-dialog__action">
-                  Participar da Divisão
+                <button
+                  type="button"
+                  className="division-dialog__action"
+                  onClick={() => handleParticipate(selectedItem)}
+                  disabled={
+                    isParticipating ||
+                    selectedItem.userParticipates ||
+                    selectedItem.slots <= 0 ||
+                    selectedItem.privado
+                  }
+                >
+                  {isParticipating
+                    ? "Participando..."
+                    : selectedItem.userParticipates
+                      ? "Você já participa"
+                      : selectedItem.privado
+                        ? "Solicitar participação"
+                        : selectedItem.slots <= 0
+                          ? "Grupo cheio"
+                          : "Participar da Divisão"}
                 </button>
               </div>
             </DialogContent>

@@ -251,7 +251,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (!res.ok) throw new Error("Falha ao autenticar no servidor");
 
         const db = await res.json();
-        const parsed = parseJwtToken(idToken);
+
+        if (!db.token) throw new Error("Servidor não retornou token");
 
         setUser({
           id: String(db.id),
@@ -260,8 +261,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           email: db.email,
           name: db.nome,
           picture: db.foto || profilePicture,
-          token: db.token ?? "",
-          expiresAt: parsed?.expiresAt ?? Date.now() + 3600 * 1000,
+          token: db.token,
+          expiresAt: Date.now() + 7 * 24 * 3600 * 1000,
         });
 
         return;
@@ -269,7 +270,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         console.error("Erro ao salvar usuário no banco:", e);
       }
 
-      // Fallback: tokeninfo do Google.
       try {
         const tokenInfoRes = await fetch(
           `https://oauth2.googleapis.com/tokeninfo?id_token=${encodeURIComponent(idToken)}`
@@ -281,11 +281,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           if (GOOGLE_CLIENT_ID && info.aud && info.aud !== GOOGLE_CLIENT_ID) {
             console.warn("ID token audience mismatch", info.aud);
           } else {
-            const expiresAt =
-              typeof info.exp === "string" || typeof info.exp === "number"
-                ? Number(info.exp) * 1000
-                : Date.now() + 3600 * 1000;
-
             const safePicture =
               typeof info.picture === "string" &&
               (info.picture.startsWith("http://") || info.picture.startsWith("https://"))
@@ -298,7 +293,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               name: String(info.name || profileObj?.name || "Usuário"),
               picture: safePicture,
               token: "",
-              expiresAt,
+              expiresAt: Date.now() + 3600 * 1000,
             });
 
             return;
@@ -308,18 +303,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         console.error("Failed to validate ID token:", e);
       }
 
-      // Fallback: decodifica o JWT localmente.
-      const parsedUser = parseJwtToken(idToken);
-
-      if (parsedUser) {
-        setUser({
-          ...parsedUser,
-          picture: parsedUser.picture || profilePicture,
-          token: "",
-        });
-
-        return;
-      }
+      return;
     }
 
     const accessToken = credentialResponse?.access_token ?? credentialResponse?.accessToken;
@@ -334,6 +318,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (!res.ok) throw new Error("Falha ao autenticar no servidor");
 
       const db = await res.json();
+
+      if (!db.token) throw new Error("Servidor não retornou token");
+
       const expiresIn = credentialResponse?.expires_in;
 
       setUser({
@@ -343,11 +330,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         email: db.email,
         name: db.nome,
         picture: db.foto || profilePicture,
-        token: db.token ?? "",
+        token: db.token,
         expiresAt:
           typeof expiresIn === "number"
             ? Date.now() + expiresIn * 1000
-            : Date.now() + 3600 * 1000,
+            : Date.now() + 7 * 24 * 3600 * 1000,
       });
 
       return;

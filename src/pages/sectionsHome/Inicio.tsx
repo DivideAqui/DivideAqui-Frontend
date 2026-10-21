@@ -15,16 +15,36 @@ import "./../../css/MinCss/HomeInicioMin.css"
 type BackendGroup = {
   gru_id: number;
   gru_num_part: number;
+  gru_nome?: string | null;
+  gru_criador_id?: number | null;
+  gru_criador_nome?: string | null;
+  gru_num_vagas?: number | null;
   categoria?: {
     cat_nome?: string | null;
+  };
+  criador?: {
+    usu_id: number;
+    usu_nome: string;
+    usu_foto?: string | null;
   };
   lider?: {
     usuario?: {
       usu_nome?: string | null;
     };
   };
+  stream?: {
+    str_telas?: number | null;
+  };
+  participacoes?: Array<{
+    usu_id: number;
+    usuario?: {
+      usu_id: number;
+      usu_nome: string;
+      usu_foto?: string | null;
+    };
+  }>;
   _count?: {
-    participantes: number;
+    participacoes: number;
   };
 };
 
@@ -51,6 +71,16 @@ const getCategoryTitle = (value?: string | null) => {
     default:
       return "Outros";
   }
+};
+
+type StreamData = {
+  str_telas?: number | null;
+} | Array<{ str_telas?: number | null }> | null | undefined;
+
+const getStream = (stream: StreamData): { str_telas?: number | null } | null => {
+  if (!stream) return null;
+  if (Array.isArray(stream)) return stream[0] || null;
+  return stream;
 };
 
 export function Inicio(){
@@ -86,47 +116,52 @@ export function Inicio(){
     return groups
       .filter((group) => {
         const categoryName = group.categoria?.cat_nome ?? '';
-        const leaderName = group.lider?.usuario?.usu_nome ?? '';
+        const groupName = group.gru_nome ?? '';
+        const leaderName = group.criador?.usu_nome ?? group.lider?.usuario?.usu_nome ?? '';
         const haystack = [
           categoryName,
+          groupName,
           leaderName,
           getCategoryTitle(categoryName),
-          String(group.gru_id),
         ]
           .join(' ')
           .toLowerCase();
 
         return haystack.includes(normalized);
       })
-      .slice(0, 5)
+      .slice(0, 6)
       .map((group) => {
+        const streamData = getStream(group.stream);
         const category = getCategoryKey(group.categoria?.cat_nome);
-        const leaderName = group.lider?.usuario?.usu_nome ?? 'Líder do grupo';
-        const slots = Math.max(0, (group.gru_num_part || 1) - (group._count?.participantes ?? 0));
+        const leaderName = group.criador?.usu_nome ?? group.lider?.usuario?.usu_nome ?? 'Líder do grupo';
+        const participationCount = group._count?.participacoes ?? 0;
+        const creatorIsParticipant = group.gru_criador_id != null;
+        const memberCount = Math.max(1, participationCount + (creatorIsParticipant ? 0 : 1));
+        const configuredCapacity = Math.max(memberCount, group.gru_num_part ?? group.gru_num_vagas ?? memberCount);
+        const maxParticipants = streamData?.str_telas == null
+          ? configuredCapacity
+          : Math.min(configuredCapacity, streamData.str_telas);
+        const slots = Math.max(0, maxParticipants - memberCount);
+
+        const participantes = (group.participacoes ?? []).map((p) => ({
+          id: String(p.usuario?.usu_id ?? p.usu_id),
+          nome: p.usuario?.usu_nome || "Membro",
+          foto: p.usuario?.usu_foto,
+        }));
 
         return {
           id: String(group.gru_id),
-          label: `${getCategoryTitle(group.categoria?.cat_nome)} ${group.gru_id}`,
-          subtitle: `Líder: ${leaderName}`,
-          meta: `${slots} vagas`,
+          label: group.gru_nome?.trim() || getCategoryTitle(group.categoria?.cat_nome),
+          subtitle: `Liderado por ${leaderName}`,
+          meta: slots > 0 ? `${slots} vaga${slots > 1 ? 's' : ''}` : 'Lotado',
           category,
+          participantes,
         };
       });
   }, [groups, searchTerm]);
 
-  const handleSelectResult = (result: { label: string; category?: string }) => {
-    const params = new URLSearchParams();
-    const queryValue = result.label.trim();
-
-    if (queryValue) {
-      params.set('q', queryValue);
-    }
-
-    if (result.category && result.category !== 'outros') {
-      params.set('categoria', result.category);
-    }
-
-    navigate(`/divisoes?${params.toString()}`);
+  const handleSelectResult = (result: { id: string; category?: string }) => {
+    navigate(`/divisoes?id=${result.id}`);
   };
 
   return (

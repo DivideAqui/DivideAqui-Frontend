@@ -22,6 +22,8 @@ import { FaDivide } from "react-icons/fa6";
 import { CiCircleInfo } from "react-icons/ci";
 import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+import "../css/sweetAlert/sweetAlert.css";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -444,7 +446,18 @@ export function CriarDivisão() {
         throw new Error(dados.erro || "Não foi possível criar a divisão.");
       }
 
-      alert("Divisão criada com sucesso!");
+      await Swal.fire({
+        icon: "success",
+        title: "Divisão criada!",
+        text: "Sua divisão foi criada com sucesso.",
+        confirmButtonText: "Ver divisões",
+        customClass: {
+          icon: "meu-icone-verde",
+          confirmButton: "meu-botao-verde",
+        },
+        allowOutsideClick: false,
+      });
+      navigate("/divisoes", { replace: true });
     } catch (error) {
       setErroValidacao(error instanceof Error ? error.message : "Não foi possível criar a divisão.");
     } finally {

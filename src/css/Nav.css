@@ -1,3 +1,7 @@
+.nav-notif-aberto.NavHeader {
+  z-index: 10000;
+}
+
 .NavHeader {
   font-family: var(--fonte-texto);
   width: 100vw;
@@ -7,7 +11,7 @@
   position: fixed;
   top: -5vh;
   left: 0;
-  z-index: 1200;
+  z-index: 1600;
   min-height: 220px;
   height: 220px;
   box-sizing: border-box;
@@ -33,12 +37,36 @@
   justify-content: center;
   width: 4vw;
   height: 6vh;
-   backdrop-filter: blur(15px);
+  backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.2);
   background: #053cc869;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  padding: 0;
+  font-family: inherit;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.nav-notif-aberto .nav-notification {
+  background: #053cc8;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+.nav-notif-aberto .Navegacao,
+.nav-notif-aberto .nav-user {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  background: #053CC8;
+}
+.nav-notification:hover {
+  background: #053cc8a8;
+  border-color: rgba(255, 255, 255, 0.35);
+}
+.nav-notification:focus-visible {
+  outline: 2px solid var(--verde-claro);
+  outline-offset: 3px;
 }
 
 .nav-bell-dot {
@@ -50,6 +78,56 @@
   border-radius: 50%;
   background: #bdbdbd;
   border: 2px solid #053cc8;
+  transition: background 0.25s ease, transform 0.25s ease;
+}
+
+/* Com não lidas: bolinha fica viva (verde-limão) e pulsa suavemente. */
+.nav-bell-dot.tem-nao-lidas {
+  background: var(--verde-claro);
+  animation: navBellPulse 2s ease-in-out infinite;
+}
+
+@keyframes navBellPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(184, 251, 60, 0.55);
+  }
+  50% {
+    transform: scale(1.12);
+    box-shadow: 0 0 0 5px rgba(184, 251, 60, 0);
+  }
+}
+
+/* Contador numérico sobre o sino. */
+.nav-bell-badge {
+  position: absolute;
+  top: -6px;
+  right: -10px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--verde-claro);
+  color: var(--preto);
+  font-size: 0.62rem;
+  font-weight: 700;
+  line-height: 1;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  animation: navBadgePop 0.24s ease both;
+}
+
+@keyframes navBadgePop {
+  from { transform: scale(0); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-bell-dot.tem-nao-lidas,
+  .nav-bell-badge {
+    animation: none;
+  }
 }
 
 .nav-user-avatar {
