@@ -8,14 +8,21 @@ import {
   FiLock,
   FiArrowDown,
 } from "react-icons/fi";
-import { FaTv, FaHouseUser, FaEllipsisH } from "react-icons/fa";
-import { FaCar, FaHome } from "react-icons/fa";
 import BolinhasBr from "../assets/Imgs/bolinhasBrancas.png";
 import "../css/historico.css";
 import { useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAuth } from "../hooks/useAuth";
 import type { ReactNode } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "../components/ui/dialog";
+import { FaTv, FaHouseUser, FaEllipsisH, FaCar, FaHome } from "react-icons/fa";
 
 type CategoryKey = "streaming" | "viagens" | "despesas" | "outros";
 
@@ -30,30 +37,55 @@ const categoryButtons: Array<{ key: CategoryKey | "all"; label: string; icon: Re
 type BackendGroup = {
   gru_id: number;
   gru_nome?: string | null;
+  gru_descricao?: string | null;
   gru_num_part?: number | null;
   gru_num_vagas?: number | null;
   gru_icone?: string | null;
+  gru_cor?: string | null;
   gru_visibilidade?: boolean | null;
+  gru_criador_id?: number | null;
+  gru_criador_nome?: string | null;
+
+  criador?: {
+    usu_id: number;
+    usu_nome: string;
+    usu_foto?: string | null;
+  } | null;
+
   categoria?: {
+    cat_id?: number;
     cat_nome: string;
   } | null;
+
   mensalidade?: {
     men_valor?: string | number | null;
   } | null;
+
   stream?: {
     str_valor?: string | number | null;
+    str_plano?: string | null;
     str_telas?: number | null;
   } | null;
+
+  viagem?: {
+    via_partida?: string | null;
+    via_destino?: string | null;
+  } | null;
+
   item?: Array<{
     ite_valor: string | number;
   }>;
+
   participacoes?: Array<{
+    par_id?: number;
     usu_id: number | string;
     usuario?: {
       usu_id: number | string;
       usu_nome: string;
+      usu_foto?: string | null;
     } | null;
   }>;
+
   _count?: {
     participacoes: number;
   };
@@ -101,6 +133,35 @@ export function Historico() {
   const [historico, setHistorico] = useState<RegistroHistorico[]>([]);
   const [historicoCarregando, setHistoricoCarregando] = useState(true);
   const [historicoErro, setHistoricoErro] = useState("");
+
+  const navigate = useNavigate();
+
+const [grupoSelecionado, setGrupoSelecionado] =
+  useState<BackendGroup | null>(null);
+
+const usuarioAtualId = String(
+  (user as unknown as {
+    usu_id?: number | string;
+    id?: number | string;
+  })?.usu_id ??
+  (user as unknown as {
+    id?: number | string;
+  })?.id ??
+  ""
+);
+
+const obterFoto = (id: number | string, foto?: string | null) =>
+  foto ||
+  `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(String(id))}`;
+
+const obterNomeGrupo = (grupo: BackendGroup) =>
+  grupo.gru_nome?.trim() ||
+  `${grupo.categoria?.cat_nome || "Divisão"} ${grupo.gru_id}`;
+
+const obterNomeLider = (grupo: BackendGroup) =>
+  grupo.criador?.usu_nome ||
+  grupo.gru_criador_nome ||
+  "Criador da divisão";
 
   const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3344";
 
@@ -366,41 +427,282 @@ export function Historico() {
               );
 
               return (
-                <div className="card-divisao" key={grupo.gru_id}>
-                  <div className={`card-icone ${corAzul ? "icone-prime" : "icone-verde"}`}>
-                    {icone}
-                  </div>
+  <article
+    className="card-divisao"
+    key={grupo.gru_id}
+    role="button"
+    tabIndex={0}
+    onClick={() => setGrupoSelecionado(grupo)}
+    onKeyDown={(event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        setGrupoSelecionado(grupo);
+      }
+    }}
+  >
+    <div
+      className={`card-icone ${corAzul ? "icone-prime" : "icone-verde"}`}
+      style={{
+        backgroundColor: grupo.gru_cor || undefined,
+      }}
+    >
+      {icone}
+    </div>
 
-                  {grupo.gru_visibilidade === false && (
-                    <FiLock className="card-cadeado" aria-label="Divisão privada" />
-                  )}
+    {grupo.gru_visibilidade === false && (
+      <FiLock
+        className="card-cadeado"
+        aria-label="Divisão privada"
+      />
+    )}
 
-                  <div className="card-participantes" aria-label={`${quantidadeParticipantes} participantes`}>
-                    {participantes.slice(0, 4).map((participacao, index) => (
-                      <span key={`${grupo.gru_id}-${participacao.usu_id}-${index}`}>
-                        👤
-                      </span>
-                    ))}
-                  </div>
+    <div
+      className="card-participantes"
+      aria-label={`${quantidadeParticipantes} participantes`}
+    >
+      {participantes.slice(0, 4).map((participacao, index) => {
+        const idParticipante = String(
+          participacao.usuario?.usu_id ?? participacao.usu_id
+        );
 
-                  <div className="card-conteudo">
-                    <div className="card-informacoes">
-                      <h3>{grupo.gru_nome || `${grupo.categoria?.cat_nome || "Divisão"} ${grupo.gru_id}`}</h3>
-                      <strong className={corAzul ? "preco-azul" : "preco-verde"}>
-                        {formatarBRL(valorPorPessoa)}
-                      </strong>
-                    </div>
-                    <p>Vagas disponíveis: {vagasDisponiveis}</p>
-                  </div>
+        const nomeParticipante =
+          participacao.usuario?.usu_nome || `Usuário ${idParticipante}`;
 
-                  <span className={`card-opcoes ${corAzul ? "opcoes-azul" : "opcoes-verde"}`} aria-hidden="true">
-                    <FiMoreHorizontal />
-                  </span>
-                </div>
-              );
+        const fotoParticipante = obterFoto(
+          idParticipante,
+          participacao.usuario?.usu_foto
+        );
+
+        const ehUsuarioAtual = idParticipante === usuarioAtualId;
+
+        return (
+          <button
+            key={`${grupo.gru_id}-${idParticipante}-${index}`}
+            type="button"
+            className="historico-participante-avatar"
+            title={ehUsuarioAtual ? nomeParticipante : `Ver perfil de ${nomeParticipante}`}
+            aria-label={
+              ehUsuarioAtual
+                ? `Você: ${nomeParticipante}`
+                : `Ver perfil de ${nomeParticipante}`
+            }
+            onClick={(event) => {
+              event.stopPropagation();
+
+              if (!ehUsuarioAtual) {
+                navigate(`/perfilparticipante/${idParticipante}`);
+              }
+            }}
+            disabled={ehUsuarioAtual}
+          >
+            <img
+              src={fotoParticipante}
+              alt={nomeParticipante}
+            />
+          </button>
+        );
+      })}
+    </div>
+
+    <div className="card-conteudo">
+      <div className="card-informacoes">
+        <h3>
+          {obterNomeGrupo(grupo)}
+        </h3>
+
+        <strong className={corAzul ? "preco-azul" : "preco-verde"}>
+          {formatarBRL(valorPorPessoa)}
+        </strong>
+      </div>
+
+      <p>Vagas disponíveis: {vagasDisponiveis}</p>
+    </div>
+
+    <button
+      type="button"
+      className={`card-opcoes ${corAzul ? "opcoes-azul" : "opcoes-verde"}`}
+      aria-label={`Ver detalhes de ${obterNomeGrupo(grupo)}`}
+      onClick={(event) => {
+        event.stopPropagation();
+        setGrupoSelecionado(grupo);
+      }}
+    >
+      <FiMoreHorizontal />
+    </button>
+  </article>
+);
             })
           )}
         </section>
+
+        <Dialog
+  open={Boolean(grupoSelecionado)}
+  onOpenChange={(open) => {
+    if (!open) setGrupoSelecionado(null);
+  }}
+>
+  {grupoSelecionado && (() => {
+    const grupo = grupoSelecionado;
+    const categoria = getCategoryKey(
+      grupo.categoria?.cat_nome,
+      grupo.gru_icone
+    );
+
+    const participantes = grupo.participacoes ?? [];
+    const quantidade = grupo._count?.participacoes ?? participantes.length;
+
+    const valorStreaming =
+      grupo.stream?.str_valor != null
+        ? Number(grupo.stream.str_valor)
+        : null;
+
+    const valorMensalidade =
+      grupo.mensalidade?.men_valor != null
+        ? Number(grupo.mensalidade.men_valor)
+        : null;
+
+    const valorItens = (grupo.item ?? []).reduce(
+      (total, item) => total + Number(item.ite_valor || 0),
+      0
+    );
+
+    const valorTotal =
+      valorStreaming ?? valorMensalidade ?? valorItens;
+
+    const valorPorPessoa =
+      categoria === "streaming" && quantidade > 0
+        ? valorTotal / quantidade
+        : valorTotal;
+
+    const capacidade =
+      grupo.stream?.str_telas ??
+      grupo.gru_num_vagas ??
+      grupo.gru_num_part ??
+      quantidade;
+
+    const vagas = Math.max(0, capacidade - quantidade);
+
+    return (
+      <DialogContent className="historico-grupo-dialog">
+        <DialogHeader>
+          <DialogTitle>
+            {obterNomeGrupo(grupo)}
+          </DialogTitle>
+
+          <DialogDescription>
+            {grupo.gru_descricao?.trim() ||
+              "Confira as informações desta divisão."}
+          </DialogDescription>
+        </DialogHeader>
+
+        <div className="historico-grupo-detalhes">
+          <p>
+            <strong>Categoria:</strong>{" "}
+            {grupo.categoria?.cat_nome || "Outros"}
+          </p>
+
+          <p>
+            <strong>Líder:</strong> {obterNomeLider(grupo)}
+          </p>
+
+          <p>
+            <strong>Valor:</strong>{" "}
+            {formatarBRL(valorPorPessoa)}
+            {categoria === "streaming" ? " por pessoa" : ""}
+          </p>
+
+          {categoria === "streaming" && (
+            <>
+              <p>
+                <strong>Plano:</strong>{" "}
+                {grupo.stream?.str_plano || "Não informado"}
+              </p>
+
+              <p>
+                <strong>Valor total do plano:</strong>{" "}
+                {valorStreaming != null
+                  ? formatarBRL(valorStreaming)
+                  : "Não informado"}
+              </p>
+            </>
+          )}
+
+          {categoria === "viagens" && (
+            <>
+              <p>
+                <strong>Partida:</strong>{" "}
+                {grupo.viagem?.via_partida || "Não informada"}
+              </p>
+
+              <p>
+                <strong>Destino:</strong>{" "}
+                {grupo.viagem?.via_destino || "Não informado"}
+              </p>
+            </>
+          )}
+
+          <p>
+            <strong>Participantes:</strong> {quantidade}
+          </p>
+
+          <p>
+            <strong>Vagas disponíveis:</strong> {vagas}
+          </p>
+
+          <p>
+            <strong>Visibilidade:</strong>{" "}
+            {grupo.gru_visibilidade === false ? "Privado" : "Público"}
+          </p>
+
+          <div className="historico-grupo-membros">
+            <strong>Participantes do grupo</strong>
+
+            <div className="historico-grupo-membros-lista">
+              {participantes.map((participacao, index) => {
+                const id = String(
+                  participacao.usuario?.usu_id ?? participacao.usu_id
+                );
+
+                const nome =
+                  participacao.usuario?.usu_nome || `Usuário ${id}`;
+
+                const ehUsuarioAtual = id === usuarioAtualId;
+
+                return (
+                  <button
+                    key={`${grupo.gru_id}-${id}-${index}`}
+                    type="button"
+                    className="historico-grupo-membro"
+                    disabled={ehUsuarioAtual}
+                    onClick={() => {
+                      if (!ehUsuarioAtual) {
+                        setGrupoSelecionado(null);
+                        navigate(`/perfilparticipante/${id}`);
+                      }
+                    }}
+                  >
+                    <img
+                      src={obterFoto(
+                        id,
+                        participacao.usuario?.usu_foto
+                      )}
+                      alt={nome}
+                    />
+
+                    <span>
+                      {nome}
+                      {ehUsuarioAtual ? " (você)" : ""}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </DialogContent>
+    );
+  })()}
+</Dialog>
 
         <section className="section-tabela-historico" aria-labelledby="titulo-resumo-financeiro">
           <h2 className="resumo-financeiro" id="titulo-resumo-financeiro">Resumo Financeiro</h2>

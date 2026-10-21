@@ -11,7 +11,7 @@
     width: 100%;
     min-width: 0;
     min-height: 100vh;
-    padding: clamp(110px, 9vw, 145px) clamp(16px, 3vw, 48px) 76px;
+    padding: clamp(110px, 9vw, 145px) clamp(20px, 2vw, 32px) 76px;
     background: var(--branco);
     font-family: var(--font-texto);
 }
@@ -368,7 +368,7 @@
     color: #888;
     font-size: 0.95rem;
     text-align: center;
-    padding: 20px 0;
+    margin-bottom: -10rem;
     box-sizing: border-box;
 }
 
@@ -655,6 +655,119 @@
 .btn-seta-tabela:focus-visible { outline: 3px solid #5285ff; outline-offset: 3px; }
 
 .container-tabela-historico:focus-visible { outline: 2px solid #5285ff; outline-offset: 2px; }
+
+/* AVATARES DOS PARTICIPANTES */
+.historico-participante-avatar {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    margin-left: -10px;
+    padding: 0;
+    overflow: hidden;
+    border: 2px solid var(--branco);
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+}
+
+.historico-participante-avatar:first-child {
+    margin-left: 0;
+}
+
+.historico-participante-avatar img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.historico-participante-avatar:disabled {
+    cursor: default;
+}
+
+/* DETALHES DO GRUPO */
+.historico-grupo-dialog {
+    width: min(90vw, 600px);
+    max-width: 600px;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 28px;
+    box-sizing: border-box;
+    background: var(--branco);
+    border-radius: 12px;
+    color: var(--azul-escuro);
+}
+
+.historico-grupo-dialog [data-slot="dialog-title"] {
+    font-size: 1.5rem;
+    font-weight: 800;
+}
+
+.historico-grupo-detalhes {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.historico-grupo-detalhes p {
+    margin: 0;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+.historico-grupo-membros {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.historico-grupo-membros-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.historico-grupo-membro {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px;
+    border: none;
+    border-radius: 8px;
+    background: rgba(5, 60, 200, 0.05);
+    color: var(--azul-escuro);
+    text-align: left;
+    cursor: pointer;
+}
+
+.historico-grupo-membro img {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.historico-grupo-membro:disabled {
+    cursor: default;
+    opacity: 0.8;
+}
+
+@media (max-width: 480px) {
+    .historico-grupo-dialog {
+        padding: 20px;
+    }
+
+    .historico-participante-avatar {
+        width: 30px;
+        height: 30px;
+        margin-left: -8px;
+    }
+}
+
 
 /* =========================================================
 
