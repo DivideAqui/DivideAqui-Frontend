@@ -668,7 +668,7 @@ return (
   <section className="perfil-participante-container">
 
   <section className="perfil-participante-fundo">
-    <BtnClose onClick={() => navigate("/home")} />
+    <BtnClose onClick={() => navigate(-1)} />
   </section>
 
       <div className="cabecalho-participante">

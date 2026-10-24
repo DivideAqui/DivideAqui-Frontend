@@ -23,6 +23,7 @@ import {
   DialogTitle,
 } from "../components/ui/dialog";
 import { FaTv, FaHouseUser, FaEllipsisH, FaCar, FaHome } from "react-icons/fa";
+import { LoadingScreen } from "../components/LoadingScreen";
 
 type CategoryKey = "streaming" | "viagens" | "despesas" | "outros";
 
@@ -298,6 +299,10 @@ const obterNomeLider = (grupo: BackendGroup) =>
     const categoria = getCategoryKey(grupo.categoria?.cat_nome, grupo.gru_icone);
     return activeCategory === "all" || categoria === activeCategory;
   });
+
+   if (carregando) {
+    return <LoadingScreen forcar />;
+  }
 
   return (
     <>
@@ -698,6 +703,14 @@ const obterNomeLider = (grupo: BackendGroup) =>
               })}
             </div>
           </div>
+             <button
+            type="button"
+            className="historico-grupo-btn-detalhe"
+            onClick={() => {
+              setGrupoSelecionado(null);
+              navigate(`/detalhedivisao/${grupo.gru_id}`);
+            }}
+          >Detalhe da Divisão</button>
         </div>
       </DialogContent>
     );

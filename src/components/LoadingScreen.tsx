@@ -8,22 +8,34 @@ const ROTAS_COM_LOADING = [
   "/meuperfil",
   "/meusgrupos",
   "/historico",
-  "/detalhedivisão",
+  "/detalhedivisao",
   "/criarDivisao",
   "/meuperfil",
   "/perfilparticipante",
 ];
 
-export function LoadingScreen() {
+type LoadingScreenProps = {
+  forcar?: boolean;
+};
+
+export function LoadingScreen({ forcar = false }: LoadingScreenProps) {
   const location = useLocation();
   const [visible, setVisible] = useState(false);
   const [minimized, setMinimized] = useState(false);
 
   const deveMostrar = ROTAS_COM_LOADING.some(
-    (rota) => location.pathname === rota || location.pathname.startsWith(rota + "/")
+    (rota) =>
+      location.pathname === rota || location.pathname.startsWith(rota + "/"),
   );
 
   useEffect(() => {
+    // Modo forçado: o controle é de quem usa o componente
+    if (forcar) {
+      setVisible(true);
+      setMinimized(false);
+      return;
+    }
+
     if (!deveMostrar) {
       setVisible(false);
       return;
@@ -39,15 +51,21 @@ export function LoadingScreen() {
       window.clearTimeout(showTimer);
       window.clearTimeout(hideTimer);
     };
-  }, [location.pathname, deveMostrar]);
+  }, [location.pathname, deveMostrar, forcar]);
 
-  if (!visible) return null;
+  if (!visible && !forcar) return null;
 
   return (
-    <div className={`loading-screen ${minimized ? "loading-screen--minimized" : ""}`}>
+    <div
+      className={`loading-screen ${minimized && !forcar ? "loading-screen--minimized" : ""}`}
+    >
       <div className="loading-screen__inner">
         <div className="loading-screen__circle">
-          <img src={iconeBranco} alt="DivideAqui" className="loading-screen__logo" />
+          <img
+            src={iconeBranco}
+            alt="DivideAqui"
+            className="loading-screen__logo"
+          />
         </div>
       </div>
     </div>

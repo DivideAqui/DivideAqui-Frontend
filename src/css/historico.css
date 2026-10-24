@@ -354,7 +354,7 @@
     width: min(100%, 1200px);
     min-width: 0;
     padding: 22px 2px 0;
-    margin-bottom: -5rem;
+    margin-bottom: 0;
     align-content: start;
     height: fit-content;
     box-sizing: border-box;
@@ -368,7 +368,7 @@
     color: #888;
     font-size: 0.95rem;
     text-align: center;
-    margin-bottom: -10rem;
+    margin-bottom: 0;
     box-sizing: border-box;
 }
 
@@ -539,7 +539,8 @@
     position: relative;
     width: min(100%, 1200px);
     min-width: 0;
-    top: -14vh;
+    top: 0;
+    margin-top: 20px;
 }
 
 .container-tabela-historico {
@@ -754,6 +755,25 @@
 .historico-grupo-membro:disabled {
     cursor: default;
     opacity: 0.8;
+}
+
+.historico-grupo-btn-detalhe {
+  display: block;
+  margin: 1.25rem auto 0;
+  border: none;
+  border-radius: 11px;
+  padding: 0.85rem 1.4rem;
+  min-width: 70%;
+  background: #053CC8;
+  color: #F5F5F0;
+  font-family: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 180ms ease;
+}
+
+.historico-grupo-btn-detalhe:hover {
+  background: #03045E;
 }
 
 @media (max-width: 480px) {
