@@ -12,34 +12,11 @@ import GoogleIcon from "../assets/Icons/google-icon.svg";
 import logoCadastro from "../assets/Icons/íconeBranco.png";
 import { HiEye, HiMiniEyeSlash } from "react-icons/hi2";
 import BtnClose from "../components/btnClose";
+import { formatCPF, regexCPF, validarCPF } from "../utils/cpf";
 
 const API_BASE_URL = (
   import.meta.env.VITE_API_URL || "https://divide-aqui-backend.vercel.app"
 ).replace(/\/$/, "");
-
-function validarCPF(cpf: string): boolean {
-  const numeros = cpf.replace(/\D/g, "");
-
-  if (numeros.length !== 11) return false;
-
-  // Rejeita sequências iguais (111.111.111-11, 000.000.000-00, etc.)
-  if (/^(\d)\1{10}$/.test(numeros)) return false;
-
-  const calcularDigito = (base: string, pesoInicial: number) => {
-    let soma = 0;
-    for (let i = 0; i < base.length; i++) {
-      soma += Number(base[i]) * (pesoInicial - i);
-    }
-    const resto = (soma * 10) % 11;
-    return resto === 10 ? 0 : resto;
-  };
-
-  const digito1 = calcularDigito(numeros.slice(0, 9), 10);
-  if (digito1 !== Number(numeros[9])) return false;
-
-  const digito2 = calcularDigito(numeros.slice(0, 10), 11);
-  return digito2 === Number(numeros[10]);
-}
 
 export function Cadastro() {
   const [mostrarSenha, setMostrarSenha] = useState(false);
@@ -95,18 +72,9 @@ export function Cadastro() {
   } as any;
 
   const regexNome = /^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/;
-  const regexCPF = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/;
   const regexTelefone = /^\(\d{2}\)\s\d{5}-\d{4}$/;
   const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const regexSenha = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&_])[A-Za-z\d@$!%*?&_]{8,}$/;
-
-  const formatCPF = (value: string) => {
-    return value
-      .replace(/\D/g, "")
-      .replace(/(\d{3})(\d)/, "$1.$2")
-      .replace(/(\d{3})(\d)/, "$1.$2")
-      .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
-  };
 
   const formatTelefone = (value: string) => {
     return value

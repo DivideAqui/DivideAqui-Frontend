@@ -294,7 +294,12 @@ export function Nav() {
           onClicarItem={(n) => {
             // A página de detalhe ainda não lê id da rota (id fixo no componente),
             // então apenas marcamos como lida e seguimos para a lista de divisões.
-            void marcarLida(n.not_notificacao_id, "/divisoes");
+            const destino =
+              n.not_notificacao_tipo === "PROFILE_SUGGESTION"
+                ? "/meuperfil"
+                : "/divisoes";
+
+            void marcarLida(n.not_notificacao_id, destino);
           }}
           onRecarregar={recarregar}
         />

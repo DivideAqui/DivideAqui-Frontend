@@ -21,6 +21,7 @@ import { MdOutlineAttachMoney } from "react-icons/md";
 import { FaDivide } from "react-icons/fa6";
 import { CiCircleInfo } from "react-icons/ci";
 import { useAuth } from "../hooks/useAuth";
+import { useCpfUsuario } from "../hooks/useCpfUsuario";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import "../css/sweetAlert/sweetAlert.css";
@@ -103,6 +104,7 @@ const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
 export function CriarDivisão() {
   const { user } = useAuth();
+  const { garantirCpf } = useCpfUsuario(user);
   const navigate = useNavigate();
   const [etapaAtual, setEtapaAtual] = useState(0);
   const [divisaoSelecionada, setDivisaoSelecionada] = useState<string | null>(null);
@@ -387,6 +389,9 @@ export function CriarDivisão() {
       return;
     }
 
+    const cpfOk = await garantirCpf();
+    if (!cpfOk) return;
+
     setErroValidacao("");
     setCriandoDivisao(true);
 
@@ -437,7 +442,10 @@ export function CriarDivisão() {
     try {
       const resposta = await fetch(`${API_BASE_URL}/grupos`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          ...(user?.token ? { Authorization: `Bearer ${user.token}` } : {}),
+        },
         body: JSON.stringify(payload),
       });
 

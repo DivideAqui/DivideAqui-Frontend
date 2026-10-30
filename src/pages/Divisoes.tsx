@@ -13,6 +13,7 @@ import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import Swal from "sweetalert2";
 import { useAuth } from "../hooks/useAuth";
+import { useCpfUsuario } from "../hooks/useCpfUsuario";
 
 import {
   FaArrowCircleLeft,
@@ -654,6 +655,7 @@ export function Divisoes() {
   const heroRef = useRef<HTMLElement | null>(null);
   const [searchParams, setSearchParams] = useSearchParams();
   const { user, isAuthenticated } = useAuth();
+  const { garantirCpf } = useCpfUsuario(user);
 
   const activeCategory = (searchParams.get("categoria") as CategoryKey | "all") ?? "all";
   const searchTerm = searchParams.get("q") ?? "";
@@ -868,6 +870,9 @@ export function Divisoes() {
       });
       return;
     }
+
+    const cpfOk = await garantirCpf();
+    if (!cpfOk) return;
 
     if (item.privado) {
       Swal.fire({

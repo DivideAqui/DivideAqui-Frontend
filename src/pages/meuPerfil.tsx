@@ -38,6 +38,7 @@ export function MeuPerfil() {
   };
 
   const [perfilusu, setPerfilusu] = useState<any>([]);
+  const [senhaDefinida, setSenhaDefinida] = useState(false);
   const regexSenha =
     /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&_])[A-Za-z\d@$!%*?&_]{8,}$/;
   const regexNome = /^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/;
@@ -138,8 +139,92 @@ export function MeuPerfil() {
       });
     }
   };
+  const criarPrimeiraSenha = async () => {
+    if (!user?.id) return;
+
+    const result = await Swal.fire({
+      title: "Criar sua senha",
+      text: "Sua conta entrou pelo Google e ainda não tem uma senha.",
+      html: `
+      <input id="novaSenha" type="password" class="swal2-input" placeholder="Nova senha">
+      <input id="confirmaSenha" type="password" class="swal2-input" placeholder="Confirmar a nova senha">
+    `,
+      focusConfirm: false,
+      showCancelButton: true,
+      confirmButtonText: "Criar senha",
+      cancelButtonText: "Cancelar",
+      customClass: {
+        confirmButton: "btn-salvar",
+        cancelButton: "btn-cancelar",
+      },
+      showLoaderOnConfirm: true,
+      allowOutsideClick: () => !Swal.isLoading(),
+      preConfirm: async () => {
+        const novaSenha = (
+          document.getElementById("novaSenha") as HTMLInputElement
+        ).value;
+        const confirmaSenha = (
+          document.getElementById("confirmaSenha") as HTMLInputElement
+        ).value;
+
+        if (!novaSenha || !confirmaSenha) {
+          Swal.showValidationMessage("Você precisa preencher todos os campos.");
+          return;
+        }
+        if (!regexSenha.test(novaSenha)) {
+          Swal.showValidationMessage(
+            "A senha deve ter pelo menos 8 caracteres, uma letra maiúscula, um número e um caractere especial.",
+          );
+          return;
+        }
+        if (novaSenha !== confirmaSenha) {
+          Swal.showValidationMessage("As senhas não são iguais.");
+          return;
+        }
+
+        try {
+          const resposta = await fetch(
+            `${API_BASE_URL}/usuarioatualizar/${user.id}`,
+            {
+              method: "PATCH",
+              headers: authHeaders(),
+              body: JSON.stringify({ password: novaSenha }),
+            },
+          );
+          if (!resposta.ok) {
+            Swal.showValidationMessage(`Erro ${resposta.status} ao salvar`);
+            return;
+          }
+          return true;
+        } catch (erro) {
+          Swal.showValidationMessage(`Erro ao salvar: ${erro}`);
+        }
+      },
+    });
+
+    if (result.isConfirmed) {
+      setSenhaDefinida(true);
+      Swal.fire({
+        icon: "success",
+        title: "Senha criada!",
+        text: "Agora você pode usar e-mail ou CPF com senha para entrar.",
+        timer: 2500,
+        showConfirmButton: false,
+      });
+    }
+  };
+
   const editarSenha = async () => {
     if (!user?.id) return;
+
+    // Contas criadas via Google não têm senha: abre o fluxo de "primeira senha",
+    // que não pede a senha atual (ela não existe ainda).
+    const temSenhaAtual = Boolean(perfilusu?.usu_senha) || senhaDefinida;
+
+    if (!temSenhaAtual) {
+      await criarPrimeiraSenha();
+      return;
+    }
 
     const result = await Swal.fire({
       title: "Trocar senha",
