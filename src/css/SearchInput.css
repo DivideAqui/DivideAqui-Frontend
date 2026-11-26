@@ -256,6 +256,30 @@
   text-align: center;
 }
 
+@media (max-width: 1000px) {
+  #homeInicio .SearchInputWrapper,
+  #homeInicio .SearchInputWrapper.SearchInputWrapper-focused {
+    width: min(80vw, 680px);
+  }
+
+  #homeInicio .InpPesquisa,
+  #homeInicio .InpPesquisa-focused,
+  .SctHero .InpPesquisa,
+  .SctHero .InpPesquisa-focused {
+    width: 100%;
+    min-width: 0;
+    height: 64px;
+    padding: 0 3.75rem 0 1.2rem;
+    box-sizing: border-box;
+  }
+
+  .SctHero .SearchInputWrapper,
+  .SctHero .SearchInputWrapper.SearchInputWrapper-focused {
+    width: min(760px, calc(100vw - 3rem));
+    max-width: 100%;
+  }
+}
+
 @media (max-width: 600px) {
   .SearchInputIcon {
     right: 9px;
@@ -268,17 +292,18 @@
   .InpPesquisa-focused {
     height: 58px;
     min-height: 58px;
-    padding-left: 1rem;
+    padding: 0 3.5rem 0 1rem;
+    box-sizing: border-box;
   }
 
   #homeInicio .SearchInputWrapper,
   #homeInicio .SearchInputWrapper.SearchInputWrapper-focused {
-    width: 88vw;
+    width: min(27rem, calc(100vw - 2.5rem));
   }
 
   .SctHero .SearchInputWrapper,
   .SctHero .SearchInputWrapper.SearchInputWrapper-focused {
-    width: 90vw;
+    width: calc(100vw - 3rem);
   }
 
   .SearchInputResults {
