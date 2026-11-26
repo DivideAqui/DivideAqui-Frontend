@@ -934,6 +934,24 @@ body {
   color: var(--branco);
 }
 
+/* Estado "solicitação enviada, aguardando o líder" */
+.division-dialog__action--aguardando {
+  background: #dbe4f0;
+  color: #3c506e;
+  opacity: 1;
+  cursor: default;
+}
+
+.division-dialog__action--aguardando:disabled {
+  background: #dbe4f0;
+  color: #3c506e;
+  opacity: 1;
+}
+
+.division-dialog__action--aguardando:hover {
+  background: #dbe4f0;
+}
+
 @media (max-width: 980px) {
   .vagas-card {
     flex-basis: calc((100% - 18px) / 2);

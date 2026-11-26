@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import "./../css/Nav.css";
 import { useAuth } from "../hooks/useAuth";
 import { useNotifications } from "../hooks/useNotifications";
 import { NotificationsPanel } from "./NotificationsPanel";
+import { responderSolicitacao } from "../services/solicitacoes.api";
+import type { Notificacao } from "../types/notificacao";
 import Logo from "../assets/Icons/logo1Branca.png";
 import { IoIosArrowDown } from "react-icons/io";
 import { IoMdNotifications } from "react-icons/io";
@@ -54,6 +56,39 @@ export function Nav() {
     marcarLida,
     recarregar,
   } = useNotifications();
+
+  const responderNotificacao = useCallback(
+    async (n: Notificacao, acao: "aprovar" | "rejeitar") => {
+      const token = user?.token;
+      if (!token || n.not_gru_id == null) {
+        return { ok: false, mensagem: "Solicitação indisponível." };
+      }
+
+      try {
+        const resultado = await responderSolicitacao(
+          token,
+          n.not_gru_id,
+          n.not_notificacao_destaques?.[0],
+          acao,
+        );
+
+        if (resultado.ok) {
+          void marcarLida(n.not_notificacao_id);
+        }
+
+        return resultado;
+      } catch (e) {
+        return {
+          ok: false,
+          mensagem:
+            e instanceof Error && e.message
+              ? e.message
+              : "Erro ao responder à solicitação.",
+        };
+      }
+    },
+    [user?.token, marcarLida],
+  );
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "auto";
@@ -301,6 +336,7 @@ export function Nav() {
 
             void marcarLida(n.not_notificacao_id, destino);
           }}
+          onResponder={responderNotificacao}
           onRecarregar={recarregar}
         />
       )}

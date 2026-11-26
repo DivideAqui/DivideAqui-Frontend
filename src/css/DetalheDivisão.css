@@ -65,7 +65,7 @@ svg {
   gap: clamp(16px, 2.5vw, 24px);
   margin-top: clamp(-200px, -18vw, -80px);
   margin-bottom: 24px;
-  width: min(100%, 1600px);
+  width: min(100%, 1300px);
   margin-left: auto;
   margin-right: auto;
 }
@@ -175,7 +175,7 @@ svg {
   align-items: flex-start;
   gap: clamp(12px, 2vw, 20px);
   margin-top: clamp(28px, 5vw, 50px);
-  width: min(100%, 1600px);
+  width: min(100%, 1300px);
   margin-left: auto;
   margin-right: auto;
 }
@@ -218,7 +218,7 @@ svg {
   justify-content: space-between;
   align-items: center;
   gap: clamp(24px, 4vw, 40px);
-  width: min(100%, 1600px);
+  width: min(100%, 1300px);
   background-color: #ffffff;
   border-radius: 8px;
   padding: clamp(20px, 3vw, 32px) var(--pad-x);
@@ -332,10 +332,17 @@ svg {
 .pg-qrcode {
   width: clamp(120px, 16vw, 200px);
   height: clamp(120px, 16vw, 200px);
-  background-color: #d1d5db;
+  background-color: #ffffff;
   border-radius: 16px;
   margin-right: clamp(0px, 3vw, 50px);
   flex-shrink: 0;
+  padding: clamp(8px, 1vw, 14px);
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
 .texto-qr-code {
@@ -356,7 +363,7 @@ svg {
   justify-content: space-between;
   align-items: center;
   gap: clamp(24px, 4vw, 40px);
-  width: min(100%, 1600px);
+  width: min(100%, 1300px);
   background-color: #ffffff;
   border-radius: 8px;
   padding: clamp(20px, 3vw, 32px) var(--pad-x);
@@ -441,6 +448,92 @@ svg {
   height: clamp(52px, 6vw, 64px);
   cursor: pointer;
   flex-shrink: 0;
+}
+
+/* ---------------------------------------------------------
+   senha de convite (grupos privados)
+--------------------------------------------------------- */
+.lkc-senha {
+  width: 100%;
+  margin-top: clamp(14px, 2vw, 20px);
+  background: #f5f5f0;
+  border: 1px solid #d9d9d4;
+  border-left: 4px solid #a3e635;
+  border-radius: 10px;
+  padding: clamp(12px, 2vw, 16px);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.lkc-senha-titulo {
+  font-family: var(--fonte-texto);
+  font-size: clamp(13px, 1.5vw, 15px);
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.lkc-senha-linha {
+  display: flex;
+  align-items: center;
+  gap: clamp(10px, 1.5vw, 14px);
+}
+
+.lkc-senha-acoes {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lkc-senha-olho {
+  width: clamp(38px, 5vw, 42px);
+  height: clamp(38px, 5vw, 42px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid #d9d9d4;
+  border-radius: 10px;
+  color: #4a4a4a;
+  font-size: clamp(16px, 2vw, 19px);
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.lkc-senha-olho:hover {
+  border-color: #1861ff;
+  color: #1861ff;
+  transform: scale(1.06);
+}
+
+.lkc-senha-olho:active {
+  transform: scale(0.95);
+}
+
+.lkc-senha-codigo {
+  font-family: "Consolas", "Courier New", monospace;
+  font-size: clamp(18px, 2.5vw, 24px);
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #0a0a2c;
+  background: #ffffff;
+  border: 1px dashed #a3b18a;
+  border-radius: 8px;
+  padding: 6px 14px;
+}
+
+.lkc-btn-copiar-senha {
+  height: clamp(38px, 5vw, 46px);
+  font-size: clamp(13px, 1.4vw, 15px);
+  padding: 0 clamp(14px, 2vw, 22px);
+  border-radius: 10px;
+}
+
+.lkc-senha-ajuda {
+  font-family: var(--fonte-texto);
+  font-size: clamp(12px, 1.4vw, 14px);
+  color: #6a6a6a;
+  line-height: 1.4;
 }
 
 .lkc-right {
@@ -640,18 +733,18 @@ svg {
 }
 
 /* ---------------------------------------------------------
-   STATUS "Disponível" (bolinha pulsante)
+   STATUS "Disponível" (bolinha pulsante depois do texto)
 --------------------------------------------------------- */
 .pagamento-status,
 .lkc-titulo-box .pagamento-status {
   position: relative;
-  padding-left: 22px;
+  padding-right: 22px;
 }
 
-.pagamento-status::before {
+.pagamento-status::after {
   content: "";
   position: absolute;
-  left: 0;
+  right: 0;
   top: 50%;
   width: 10px;
   height: 10px;
@@ -702,12 +795,16 @@ svg {
 .pg-btn-copiar,
 .lkc-btn-copiar,
 .lkc-rlt-problema {
-  transition: transform 0.12s ease, filter 0.2s ease;
+  transition: transform 0.12s ease, filter 0.2s ease, background-color 0.2s ease;
 }
 
 .pg-btn-copiar:hover,
 .lkc-btn-copiar:hover {
   filter: brightness(1.08);
+}
+
+.lkc-rlt-problema:hover {
+  background-color: #0a4de6;
 }
 
 .pg-btn-copiar:active,
@@ -758,7 +855,7 @@ svg {
 --------------------------------------------------------- */
 
 .Participantes {
-  width: min(100%, 1600px);
+  width: min(100%, 1300px);
   background-color: #ffffff;
   border: 1px solid #d9d9d4;
   border-radius: 8px;
@@ -853,3 +950,71 @@ svg {
   color: #000000;
 }
 
+
+/* ---------------------------------------------------------
+   Solicitações de participação (painel do líder)
+--------------------------------------------------------- */
+.Part-solicitacoes .Part-cabecalho {
+  height: 58px;
+  background-color: #f5f5f5;
+}
+
+.Part-solicitacoes .Part-cabecalho h3 {
+  color: #0a0a2c;
+}
+
+.Part-solicitacao {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  column-gap: 24px;
+  padding-top: 14px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #ececea;
+}
+
+.Part-solicitacao:last-child {
+  border-bottom: none;
+}
+
+.Part-solicitacao-acoes {
+  display: flex;
+  gap: 10px;
+}
+
+.Part-btn-aceitar,
+.Part-btn-recusar {
+  border: none;
+  border-radius: 10px;
+  padding: 10px clamp(18px, 3vw, 28px);
+  font-family: var(--fonte-texto);
+  font-size: clamp(13px, 1.5vw, 15px);
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.Part-btn-aceitar {
+  background: #a3e635;
+  color: #0a0a2c;
+}
+
+.Part-btn-aceitar:hover {
+  background: #b4ef52;
+  transform: scale(1.04);
+}
+
+.Part-btn-recusar {
+  background: #fde8e8;
+  color: #c23b3b;
+}
+
+.Part-btn-recusar:hover {
+  background: #fbd5d5;
+  transform: scale(1.04);
+}
+
+.Part-btn-aceitar:active,
+.Part-btn-recusar:active {
+  transform: scale(0.97);
+}

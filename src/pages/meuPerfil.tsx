@@ -72,7 +72,7 @@ export function MeuPerfil() {
 
     return parts[0];
   };
-  const ediatarCampo = async (
+  const editarCampo = async (
     campo: string,
     label: string,
     tipo: "text" | "email" | "tel" | "date" = "text",
@@ -431,7 +431,7 @@ export function MeuPerfil() {
         <p className="ola-usuario">
           Olá,{" "}
           <span className="nome-usuario-color">
-            {formatDisplayName(user?.name) ?? "Nome Usuario"}
+            {formatDisplayName(user?.name) ?? "Nome Usuário"}
           </span>
           !
         </p>
@@ -477,7 +477,7 @@ export function MeuPerfil() {
               <FaPen
                 className="icone-caneta"
                 style={{ cursor: "pointer" }}
-                onClick={() => ediatarCampo("usu_nome", "nome")}
+                onClick={() => editarCampo("usu_nome", "nome")}
               />
             </div>
           </div>
@@ -495,7 +495,7 @@ export function MeuPerfil() {
               <FaPen
                 className="icone-caneta"
                 style={{ cursor: "pointer" }}
-                onClick={() => ediatarCampo("usu_descricao", "descricao")}
+                onClick={() => editarCampo("usu_descricao", "Descrição")}
               />
             </div>
           </div>
@@ -514,7 +514,7 @@ export function MeuPerfil() {
                 className="icone-caneta"
                 style={{ cursor: "pointer" }}
                 onClick={() =>
-                  ediatarCampo("usu_data_nasc", "dataNascimento", "date")
+                  editarCampo("usu_data_nasc", "dataNascimento", "date")
                 }
               />
             </div>
@@ -549,13 +549,13 @@ export function MeuPerfil() {
               <FaPen
                 className="icone-caneta"
                 style={{ cursor: "pointer" }}
-                onClick={() => ediatarCampo("usu_telefone", "telefone")}
+                onClick={() => editarCampo("usu_telefone", "telefone")}
               />
             </div>
           </div>
 
           <div className="form-group">
-            <label>Email:</label>
+            <label>E-mail:</label>
             <div className="input-wrapper">
               <input
                 type="email"

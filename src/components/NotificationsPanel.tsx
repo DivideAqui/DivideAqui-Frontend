@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import type { Notificacao } from "../types/notificacao";
 import { resolverVisual } from "./notificacoes.tipos";
@@ -15,6 +15,10 @@ type Props = {
   onFechar: () => void;
   onCarregarMais: () => void;
   onClicarItem: (n: Notificacao) => void;
+  onResponder: (n: Notificacao, acao: "aprovar" | "rejeitar") => Promise<{
+    ok: boolean;
+    mensagem: string;
+  }>;
   onRecarregar: () => void;
 };
 
@@ -86,10 +90,44 @@ export function NotificationsPanel({
   onFechar,
   onCarregarMais,
   onClicarItem,
+  onResponder,
   onRecarregar,
 }: Props) {
   const painelRef = useRef<HTMLDivElement | null>(null);
   const listaRef = useRef<HTMLDivElement | null>(null);
+
+  const [estados, setEstados] = useState<
+    Record<number, { processando: boolean; ok: boolean; mensagem: string }>
+  >({});
+
+  const responder = async (n: Notificacao, acao: "aprovar" | "rejeitar") => {
+    const id = n.not_notificacao_id;
+    setEstados((prev) => ({ ...prev, [id]: { processando: true, ok: false, mensagem: "" } }));
+
+    try {
+      const resultado = await onResponder(n, acao);
+      setEstados((prev) => ({
+        ...prev,
+        [id]: {
+          processando: false,
+          ok: resultado.ok,
+          mensagem: resultado.mensagem,
+        },
+      }));
+    } catch (e) {
+      setEstados((prev) => ({
+        ...prev,
+        [id]: {
+          processando: false,
+          ok: false,
+          mensagem:
+            e instanceof Error && e.message
+              ? e.message
+              : "Erro ao responder à solicitação.",
+        },
+      }));
+    }
+  };
 
   const temItens = notificacoes.length > 0;
   const grupos = agruparPorData(notificacoes);
@@ -215,6 +253,12 @@ export function NotificationsPanel({
                         hour: "2-digit",
                         minute: "2-digit",
                       });
+                      const chave = n.not_notificacao_icone ?? n.not_notificacao_tipo;
+                      const ehPedidoDeEntrada =
+                        (chave === "solicitacao" || chave === "SOLICITACAO_PARTICIPACAO") &&
+                        n.not_gru_id != null;
+                      const est = estados[n.not_notificacao_id];
+
                       return (
                         <li key={`${n.not_notificacao_id}-${idx}`}>
                           <button
@@ -246,6 +290,40 @@ export function NotificationsPanel({
 
                             {!n.not_notificacao_lida && <span className="notif-ponto" />}
                           </button>
+
+                          {ehPedidoDeEntrada && (
+                            <div className="notif-acoes">
+                              {est?.processando ? (
+                                <span className="notif-acoes-resultado">Respondendo…</span>
+                              ) : est?.ok ? (
+                                <span className="notif-acoes-resultado ok">
+                                  ✓ {est.mensagem}
+                                </span>
+                              ) : (
+                                <>
+                                  <button
+                                    type="button"
+                                    className="notif-btn-aceitar"
+                                    onClick={() => void responder(n, "aprovar")}
+                                  >
+                                    Aceitar
+                                  </button>
+                                  <button
+                                    type="button"
+                                    className="notif-btn-recusar"
+                                    onClick={() => void responder(n, "rejeitar")}
+                                  >
+                                    Recusar
+                                  </button>
+                                  {est?.mensagem && (
+                                    <span className="notif-acoes-resultado erro">
+                                      {est.mensagem}
+                                    </span>
+                                  )}
+                                </>
+                              )}
+                            </div>
+                          )}
                         </li>
                       );
                     })}

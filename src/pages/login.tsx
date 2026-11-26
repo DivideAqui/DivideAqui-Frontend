@@ -69,11 +69,22 @@ export function Login() {
 
   const navigate = useNavigate();
 
+  // Se o usuário chegou ao site por um convite e precisou logar,
+  // retoma o fluxo do convite em vez de ir para a home.
+  const navegarPosLogin = () => {
+    const convitePendente = sessionStorage.getItem("convite-pendente");
+    sessionStorage.removeItem("convite-pendente");
+    navigate(
+      convitePendente ? `/convite/${convitePendente}` : "/home",
+      { replace: true },
+    );
+  };
+
   const handleGoogleSuccess = async (credentialResponse: any) => {
     console.log("Login bem-sucedido:", credentialResponse);
     try {
       await loginWithGoogle(credentialResponse);
-      navigate("/home", { replace: true });
+      navegarPosLogin();
     } catch (e) {
       console.error("Erro no login:", e);
     }
@@ -148,7 +159,7 @@ export function Login() {
 
       localStorage.setItem("token", token);
       await loginWithToken(token);
-      navigate("/home", { replace: true });
+      navegarPosLogin();
     } catch (error) {
       console.error("Erro ao realizar login:", error);
 

@@ -1,5 +1,5 @@
 import type { ComponentType } from "react";
-import { FaRegSmile, FaUserEdit, FaUserFriends } from "react-icons/fa";
+import { FaRegSmile, FaUserEdit, FaUserFriends, FaUserPlus, FaCheck, FaTimes } from "react-icons/fa";
 import { FiDivideCircle } from "react-icons/fi";
 
 type IconeNotificacaoProps = { className?: string };
@@ -14,12 +14,18 @@ const VISUAL_TIPO: Record<string, EntradaTipo> = {
   WELCOME: { Icone: FaRegSmile, cor: "#B8FB3C", corIcone: "#0C0C0C" },
   PROFILE_SUGGESTION: { Icone: FaUserEdit, cor: "#053CC8", corIcone: "#F5F5F0" },
   DIVISAO_CRIADA: { Icone: FiDivideCircle, cor: "#79C734", corIcone: "#0C0C0C" },
+  SOLICITACAO_PARTICIPACAO: { Icone: FaUserPlus, cor: "#053CC8", corIcone: "#F5F5F0" },
+  SOLICITACAO_APROVADA: { Icone: FaCheck, cor: "#3BC25A", corIcone: "#0C0C0C" },
+  SOLICITACAO_REJEITADA: { Icone: FaTimes, cor: "#E05252", corIcone: "#0C0C0C" },
 };
 
 const VISUAL_ICONE: Record<string, EntradaTipo> = {
   welcome: VISUAL_TIPO.WELCOME,
   profile: VISUAL_TIPO.PROFILE_SUGGESTION,
   created: VISUAL_TIPO.DIVISAO_CRIADA,
+  solicitacao: VISUAL_TIPO.SOLICITACAO_PARTICIPACAO,
+  aprovada: VISUAL_TIPO.SOLICITACAO_APROVADA,
+  rejeitada: VISUAL_TIPO.SOLICITACAO_REJEITADA,
 };
 
 const FALLBACK: EntradaTipo = {

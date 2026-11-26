@@ -215,6 +215,63 @@
   to { transform: translateY(-50%) scale(1); opacity: 1; }
 }
 
+.notif-acoes {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 16px 10px 65px;
+  flex-wrap: wrap;
+}
+
+.notif-btn-aceitar,
+.notif-btn-recusar {
+  border: none;
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.12s ease;
+}
+
+.notif-btn-aceitar {
+  background: #79C734;
+  color: #0C0C0C;
+}
+
+.notif-btn-aceitar:hover {
+  background: #6ab82b;
+}
+
+.notif-btn-recusar {
+  background: #E8E8E8;
+  color: #333333;
+}
+
+.notif-btn-recusar:hover {
+  background: #d8d8d8;
+}
+
+.notif-btn-aceitar:active,
+.notif-btn-recusar:active {
+  transform: scale(0.97);
+}
+
+.notif-acoes-resultado {
+  font-size: 0.78rem;
+  color: #666666;
+}
+
+.notif-acoes-resultado.ok {
+  color: #2e7d32;
+  font-weight: 600;
+}
+
+.notif-acoes-resultado.erro {
+  color: #c62828;
+}
+
 .notif-mais {
   width: 100%;
   display: grid;

@@ -11,11 +11,12 @@ import { PerfilParticipante } from "./pages/perfilParticipante";
 import { MeusGrupos } from "./pages/meusGrupos";
 import { Historico } from "./pages/Historico";
 import { DetalheDivisão } from "./pages/DetalheDivisão";
+import { Convite } from "./pages/Convite";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import { AuthProvider } from "./hooks/useAuth";
 import { DivideAI } from "./components/DivideAI";
-import { LoadingScreen } from "./components/LoadingScreen";
+import { LoadingScreen } from "./components/LoadingScreen"; // rotas
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID as string | undefined;
 
@@ -48,6 +49,7 @@ export function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/divisoes" element={<ProtectedRoute><Divisoes /></ProtectedRoute>} />
             <Route path="/Cadastro" element={<Cadastro />} />
+            <Route path="/convite/:id" element={<Convite />} />
           </Routes>
         </Router>
       </AuthProvider>

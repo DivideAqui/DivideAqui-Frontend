@@ -1,0 +1,359 @@
+/* ---------------------------------------------------------
+   PÁGINA DE CONVITE
+--------------------------------------------------------- */
+.convite-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(16px, 4vw, 40px);
+  background: var(--azul-escuro);
+  background-image: radial-gradient(
+      circle at 85% 15%,
+      rgba(35, 95, 255, 0.25),
+      transparent 45%
+    ),
+    radial-gradient(circle at 10% 90%, rgba(163, 230, 53, 0.12), transparent 40%);
+  background-size: cover;
+}
+
+.convite-card {
+  width: min(100%, 440px);
+  background: #f5f5f0;
+  border-radius: clamp(18px, 3vw, 28px);
+  padding: clamp(24px, 5vw, 36px);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: clamp(14px, 2.5vw, 20px);
+  font-family: var(--fonte-texto, "Segoe UI", sans-serif);
+  animation: conviteEntrar 0.45s cubic-bezier(0.34, 1.4, 0.64, 1) both;
+}
+
+@keyframes conviteEntrar {
+  from {
+    opacity: 0;
+    transform: translateY(26px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ---------------------------------------------------------
+   BADGE / SELO
+--------------------------------------------------------- */
+.convite-badge {
+  align-self: flex-start;
+  background: #a3e635;
+  color: #0a0a2c;
+  font-weight: 800;
+  font-size: clamp(11px, 1.6vw, 13px);
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  padding: 7px 14px;
+  border-radius: 999px;
+}
+
+.convite-badge-erro {
+  background: #fde8e8;
+  color: #c23b3b;
+}
+
+.convite-badge-verde {
+  background: #dcfce7;
+  color: #1d7a3e;
+}
+
+/* ---------------------------------------------------------
+   TOPO: ícone + nome
+--------------------------------------------------------- */
+.convite-topo {
+  display: flex;
+  align-items: center;
+  gap: clamp(14px, 3vw, 18px);
+}
+
+.convite-icone {
+  width: clamp(64px, 16vw, 76px);
+  height: clamp(64px, 16vw, 76px);
+  border-radius: clamp(14px, 2.5vw, 18px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: clamp(28px, 7vw, 34px);
+  flex-shrink: 0;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.convite-icone svg {
+  width: 50%;
+  height: 50%;
+}
+
+.convite-info {
+  min-width: 0;
+}
+
+.convite-info h1 {
+  font-family: var(--fonte-titulo, inherit);
+  font-size: clamp(22px, 5vw, 28px);
+  font-weight: 800;
+  color: #0a0a2c;
+  line-height: 1.15;
+  margin-bottom: 4px;
+  overflow-wrap: break-word;
+}
+
+.convite-info p {
+  font-size: clamp(13px, 2.4vw, 15px);
+  color: #4a4a4a;
+}
+
+.convite-info p strong {
+  color: #1861ff;
+}
+
+/* ---------------------------------------------------------
+   DESCRIÇÃO
+--------------------------------------------------------- */
+.convite-descricao {
+  font-size: clamp(13px, 2.6vw, 15px);
+  line-height: 1.55;
+  color: #333336;
+  background: #ffffff;
+  border: 1px solid #e4e4de;
+  border-radius: 12px;
+  padding: clamp(12px, 3vw, 16px);
+}
+
+/* ---------------------------------------------------------
+   PARTICIPANTES
+--------------------------------------------------------- */
+.convite-participantes {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.convite-participantes-avatars {
+  display: flex;
+}
+
+.convite-avatar {
+  position: relative;
+  width: clamp(38px, 9vw, 44px);
+  height: clamp(38px, 9vw, 44px);
+  border-radius: 50%;
+}
+
+.convite-avatar + .convite-avatar {
+  margin-left: -12px;
+}
+
+.convite-avatar img,
+.convite-avatar span {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #1861ff;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: clamp(15px, 3.5vw, 18px);
+  border: 2px solid #f5f5f0;
+}
+
+.convite-avatar-moldura {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid #f5f5f0;
+  pointer-events: none;
+}
+
+.convite-participantes-texto {
+  font-size: clamp(13px, 2.4vw, 14px);
+  font-weight: 600;
+  color: #4a4a4a;
+}
+
+/* ---------------------------------------------------------
+   VALOR
+--------------------------------------------------------- */
+.convite-valor {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: clamp(12px, 3vw, 14px) 0;
+}
+
+.convite-valor strong {
+  font-size: clamp(26px, 6vw, 32px);
+  font-weight: 700;
+  color: #1861ff;
+  line-height: 1.1;
+}
+
+.convite-valor span {
+  font-size: clamp(12px, 2.4vw, 13px);
+  color: #6a6a6a;
+}
+
+/* ---------------------------------------------------------
+   SENHA DE CONVITE (grupos privados)
+--------------------------------------------------------- */
+.convite-senha {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: #ffffff;
+  border: 1px solid #e4e4de;
+  border-radius: 12px;
+  padding: clamp(12px, 3vw, 16px);
+}
+
+.convite-senha label {
+  font-size: clamp(13px, 2.6vw, 14px);
+  font-weight: 700;
+  color: #0a0a2c;
+}
+
+.convite-senha-input {
+  height: clamp(46px, 10vw, 52px);
+  border: 2px solid #d9d9d4;
+  border-radius: 10px;
+  background: #f5f5f0;
+  padding: 0 14px;
+  font-family: "Consolas", "Courier New", monospace;
+  font-size: clamp(15px, 3.5vw, 18px);
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #0a0a2c;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.convite-senha-input:focus {
+  border-color: #1861ff;
+  box-shadow: 0 0 0 3px rgba(24, 97, 255, 0.15);
+}
+
+.convite-senha-input.convite-senha-erro {
+  border-color: #e05252;
+  box-shadow: 0 0 0 3px rgba(224, 82, 82, 0.15);
+}
+
+.convite-senha-aviso {
+  font-size: clamp(12px, 2.4vw, 13px);
+  font-weight: 600;
+  color: #c23b3b;
+}
+
+.convite-senha-ajuda {
+  font-size: clamp(12px, 2.4vw, 13px);
+  color: #6a6a6a;
+}
+
+/* ---------------------------------------------------------
+   BOTÃO PRINCIPAL
+--------------------------------------------------------- */
+.convite-botao {
+  height: clamp(52px, 10vw, 56px);
+  border: none;
+  border-radius: 12px;
+  background: #a3e635;
+  color: #0a0a2c;
+  font-family: var(--fonte-texto, inherit);
+  font-size: clamp(15px, 3.5vw, 17px);
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  box-shadow: 0 6px 16px rgba(163, 230, 53, 0.35);
+}
+
+.convite-botao:hover:enabled {
+  transform: scale(1.03);
+  background: #b4ef52;
+}
+
+.convite-botao:active:enabled {
+  transform: scale(0.98);
+}
+
+.convite-botao:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.convite-botao-azul {
+  background: #1861ff;
+  color: #ffffff;
+  box-shadow: 0 6px 16px rgba(24, 97, 255, 0.35);
+}
+
+.convite-botao-azul:hover:enabled {
+  background: #2f6fff;
+}
+
+/* Botão aguardando aprovação do líder */
+.convite-botao-aguardando {
+  background: #dbe4f0;
+  color: #3c506e;
+  box-shadow: none;
+  cursor: default;
+}
+
+.convite-botao-aguardando:hover:enabled {
+  transform: none;
+  background: #dbe4f0;
+}
+
+/* Botão menor para entrar com a senha */
+.convite-botao-secundario {
+  height: clamp(46px, 9vw, 50px);
+  background: #1861ff;
+  color: #ffffff;
+  font-size: clamp(13px, 3vw, 15px);
+  box-shadow: 0 4px 12px rgba(24, 97, 255, 0.3);
+}
+
+.convite-botao-secundario:hover:enabled {
+  background: #2f6fff;
+}
+
+/* ---------------------------------------------------------
+   ESTADO DE ERRO
+--------------------------------------------------------- */
+.convite-card-erro {
+  text-align: center;
+  align-items: center;
+}
+
+.convite-badge-erro {
+  align-self: center;
+}
+
+.convite-erro-titulo {
+  font-family: var(--fonte-titulo, inherit);
+  font-size: clamp(20px, 5vw, 26px);
+  font-weight: 800;
+  color: #0a0a2c;
+}
+
+.convite-erro-texto {
+  font-size: clamp(13px, 2.6vw, 15px);
+  color: #4a4a4a;
+  line-height: 1.5;
+}
+
+.convite-card-erro .convite-botao {
+  width: 100%;
+}

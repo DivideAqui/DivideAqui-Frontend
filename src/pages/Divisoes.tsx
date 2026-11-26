@@ -652,6 +652,9 @@ export function Divisoes() {
   const [loading, setLoading] = useState(true);
   const [heroPointer, setHeroPointer] = useState({ x: 0, y: 0 });
   const [isParticipating, setIsParticipating] = useState(false);
+  const [statusSolicitacoes, setStatusSolicitacoes] = useState<
+    Record<string, string | null>
+  >({});
   const heroRef = useRef<HTMLElement | null>(null);
   const [searchParams, setSearchParams] = useSearchParams();
   const { user, isAuthenticated } = useAuth();
@@ -850,6 +853,41 @@ export function Divisoes() {
     setSearchParams(nextParams);
   };
 
+  // Grupo privado: ao abrir o diálogo, verifica se o usuário já tem solicitação.
+  useEffect(() => {
+    if (!selectedItem || !selectedItem.privado || !isAuthenticated || !user?.token) {
+      return;
+    }
+
+    let isMounted = true;
+
+    const consultarSolicitacao = async () => {
+      try {
+        const response = await fetch(
+          `${API_BASE_URL}/grupos/${selectedItem.id}/solicitacoes/minha`,
+          { headers: { Authorization: `Bearer ${user.token}` } },
+        );
+        if (!response.ok || !isMounted) return;
+
+        const data = await response.json();
+        if (isMounted) {
+          setStatusSolicitacoes((atual) => ({
+            ...atual,
+            [selectedItem.id]: data?.status ?? null,
+          }));
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    void consultarSolicitacao();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [selectedItem?.id, selectedItem?.privado, isAuthenticated, user?.token]);
+
   const handleParticipate = async (item: CardItem) => {
     if (!isAuthenticated) {
       Swal.fire({
@@ -875,12 +913,64 @@ export function Divisoes() {
     if (!cpfOk) return;
 
     if (item.privado) {
-      Swal.fire({
-        title: "Grupo privado",
-        text: "Este grupo é privado. Solicite participação ao líder.",
-        icon: "info",
-        confirmButtonText: "Entendi",
-      });
+      if (statusSolicitacoes[item.id] === "PENDENTE") return;
+
+      setIsParticipating(true);
+
+      try {
+        const response = await fetch(
+          `${API_BASE_URL}/grupos/${item.id}/solicitacoes`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              ...(user?.token ? { Authorization: `Bearer ${user.token}` } : {}),
+            },
+          },
+        );
+
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+          throw new Error(
+            data.erro || data.message || "Não foi possível enviar a solicitação.",
+          );
+        }
+
+        setStatusSolicitacoes((atual) => ({
+          ...atual,
+          [item.id]: data.status || "PENDENTE",
+        }));
+
+        await Swal.fire({
+          title: "Solicitação enviada!",
+          text:
+            data.mensagem ||
+            "O líder vai analisar seu pedido e você receberá uma notificação quando ele responder.",
+          icon: "success",
+          confirmButtonText: "OK",
+          customClass: {
+            icon: "meu-icone-verde",
+            confirmButton: "meu-botao-verde",
+          },
+        });
+      } catch (error) {
+        Swal.fire({
+          title: "Erro",
+          text:
+            error instanceof Error
+              ? error.message
+              : "Não foi possível enviar a solicitação. Tente novamente.",
+          icon: "error",
+          confirmButtonText: "Entendi",
+          customClass: {
+            icon: "meu-icone-verde",
+            confirmButton: "meu-botao-verde",
+          },
+        });
+      } finally {
+        setIsParticipating(false);
+      }
       return;
     }
 
@@ -1078,21 +1168,31 @@ export function Divisoes() {
 
                 <button
                   type="button"
-                  className="division-dialog__action"
+                  className={
+                    selectedItem.privado &&
+                    statusSolicitacoes[selectedItem.id] === "PENDENTE"
+                      ? "division-dialog__action division-dialog__action--aguardando"
+                      : "division-dialog__action"
+                  }
                   onClick={() => handleParticipate(selectedItem)}
                   disabled={
                     isParticipating ||
                     selectedItem.userParticipates ||
-                    selectedItem.slots <= 0 ||
-                    selectedItem.privado
+                    (selectedItem.privado
+                      ? statusSolicitacoes[selectedItem.id] === "PENDENTE"
+                      : selectedItem.slots <= 0)
                   }
                 >
                   {isParticipating
-                    ? "Participando..."
+                    ? selectedItem.privado
+                      ? "Enviando solicitação..."
+                      : "Participando..."
                     : selectedItem.userParticipates
                       ? "Você já participa"
                       : selectedItem.privado
-                        ? "Solicitar participação"
+                        ? statusSolicitacoes[selectedItem.id] === "PENDENTE"
+                          ? "Solicitação enviada — aguardando o líder"
+                          : "Solicitar participação"
                         : selectedItem.slots <= 0
                           ? "Grupo cheio"
                           : "Participar da Divisão"}
