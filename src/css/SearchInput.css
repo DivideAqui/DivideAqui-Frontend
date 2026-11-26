@@ -87,18 +87,29 @@
 
 .SearchInputIcon {
   position: absolute;
-  right: 11px;
-  display: grid;
-  place-items: center;
-  width: 42px;
-  height: 42px;
-  padding: 10px;
-  border-radius: 12px;
+  top: 50%;
+  right: 18px;
+  display: block;
+  width: 24px;
+  height: 24px;
+  padding: 0;
   background: transparent;
-  font-size: 1.3rem;
+  font-size: 1.4rem;
   color: var(--azul-escuro);
   pointer-events: none;
   z-index: 5;
+  box-sizing: border-box;
+  transform: translateY(-50%);
+}
+
+/* Keep the home search independent from legacy hero input sizing rules. */
+#homeInicio .InpPesquisa,
+#homeInicio .InpPesquisa.InpPesquisa-focused {
+  width: 100%;
+  min-width: 0;
+  height: 64px;
+  min-height: 64px;
+  padding: 0 3.75rem 0 1.2rem;
   box-sizing: border-box;
 }
 
@@ -281,15 +292,12 @@
 }
 
 @media (max-width: 600px) {
-  .SearchInputIcon {
-    right: 9px;
-    width: 40px;
-    height: 40px;
-    padding: 10px;
+  #homeInicio .SearchInputIcon {
+    right: 16px;
   }
 
-  .InpPesquisa,
-  .InpPesquisa-focused {
+  #homeInicio .InpPesquisa,
+  #homeInicio .InpPesquisa.InpPesquisa-focused {
     height: 58px;
     min-height: 58px;
     padding: 0 3.5rem 0 1rem;
