@@ -103,11 +103,11 @@
 }
 
 .BolinhaSuperior {
-  inset-block-start: clamp(1rem, 5vw, 5rem);
+  inset-block-start: clamp(2rem, 6vw, 6rem);
   inset-inline-start: -8%;
 }
 
 .BolinhaInferior {
-  inset-block-end: clamp(1rem, 5vw, 5rem);
+  inset-block-end: clamp(2rem, 6vw, 6rem);
   inset-inline-end: -8%;
 }

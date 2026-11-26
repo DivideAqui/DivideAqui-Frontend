@@ -1,21 +1,39 @@
-@media (max-width: 1280px) {
-
+@media (min-width: 1920px) {
   .sctComoFunciona {
-    min-height: 40em;   
-    font-size: clamp(13px, 1.3vw, 20px);        
+    font-size: 22px;
+    grid-template-columns: 30em 35em;
+    column-gap: 6em;
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
+
+  .comoFuncionaConteudo {
+    width: 34em;
   }
 
   .ComoFuncionaIlustracao {
-    flex: 0 1 36em;             
-    max-width: 30em;             
+    width: 35em;
+  }
+
+  .TextoPasso p {
+  margin: 0;
+  font-size: 1.2em;
+  line-height: 1.5;
+  text-align: justify;           
+  color: var(--preto);
+}
+}
+
+
+
+@media (max-width: 1280px) {
+  .sctComoFunciona {
+    min-height: 40em;
+    font-size: clamp(13px, 1.3vw, 20px);
   }
 
   .ImgPessoa {
-    width: 100%;
-    max-width: 100%;
-    max-height: 70em;           
-    object-fit: contain;
-    object-position: bottom;
+    max-height: none;
   }
 }
 

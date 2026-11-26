@@ -1,4 +1,70 @@
+@media screen and (min-width: 1920px) {
+  .sctSobre {
+    padding: 5em max(3rem, calc((100% - 85rem) / 2));
+  }
 
+  .sctSobre .SobreConteudo {
+    display: grid;
+    grid-template-columns: 36em 34em;
+    grid-template-areas: "imagem texto";
+    align-items: center;
+    justify-content: center;
+    column-gap: 5em;
+    font-size: clamp(12px, 1.2vw, 18px);
+  }
+
+  .sctSobre .SobreImagem {
+    grid-column: 1;
+    grid-row: 1;
+    width: 36em;
+    max-width: none;
+    justify-self: center;
+  }
+
+  .sctSobre .ImgCelular {
+    width: 100%;
+    height: auto;
+  }
+
+  .sctSobre .DivTexto {
+    grid-column: 2;
+    grid-row: 1;
+    width: 34em;
+    max-width: none;
+    gap: 1.7em;
+  }
+
+  .sctSobre .H1Titulo-Sobre {
+    font-size: 3.9rem;
+    max-width: 18ch;
+  }
+
+  .sctSobre .PTexto {
+    width: 90%;
+    font-size: 1.6em;
+    line-height: 1.65;
+  }
+
+  .sctSobre .DivBeneficios {
+    width: 90%;
+    gap: 1.2em;
+    padding: 1.1em 1.5em;
+  }
+
+  .sctSobre .DivBeneficios p {
+    font-size: 1.35em;
+  }
+
+  .BolinhaSuperior {
+    inset-block-start: 5rem;
+    inset-inline-start: -8%;
+  }
+
+  .BolinhaInferior {
+    inset-block-end: 5rem;
+    inset-inline-end: -8%;
+  }
+}
 
 @media (max-width: 1280px) {
   .sctSobre .SobreConteudo {
