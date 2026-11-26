@@ -125,26 +125,56 @@ export function DetalheDivisão() {
         if (!silencioso) setCarregando(false);
       }
     },
-    [id, user?.token],
+    [id, user],
   );
 
   useEffect(() => {
-    void buscarGrupo();
-  }, [buscarGrupo]);
+    let ativo = true;
+
+    async function carregarGrupo() {
+      try {
+        const resposta = await fetch(`${API_BASE_URL}/grupos/${id}`, {
+          headers: user?.token
+            ? { Authorization: `Bearer ${user.token}` }
+            : undefined,
+        });
+
+        if (!resposta.ok) {
+          throw new Error(`Erro ${resposta.status} ao buscar a divisão.`);
+        }
+
+        const dados: Grupo = await resposta.json();
+        if (ativo) setGrupo(dados);
+      } catch (error) {
+        if (ativo) {
+          setErro(error instanceof Error ? error.message : "Erro ao buscar.");
+          setGrupo(null);
+        }
+      } finally {
+        if (ativo) setCarregando(false);
+      }
+    }
+
+    void carregarGrupo();
+
+    return () => {
+      ativo = false;
+    };
+  }, [id, user]);
 
   const souLider =
     grupo != null &&
     String(grupo.criador?.usu_id ?? grupo.gru_criador_id ?? "") ===
       String(user?.dbId ?? user?.id ?? "");
 
+  const podeVerSolicitacoes =
+    !!grupo && !!id && souLider && grupo.gru_visibilidade === false;
+  const solicitacoesVisiveis = podeVerSolicitacoes ? solicitacoes : [];
+
   useEffect(() => {
-    if (!grupo || !id || !souLider || grupo.gru_visibilidade !== false) {
-      setSolicitacoes([]);
-      return;
-    }
+    if (!podeVerSolicitacoes || !id) return;
 
     let ativo = true;
-    setSolicitacoesCarregando(true);
 
     async function carregarSolicitacoes() {
       try {
@@ -173,7 +203,7 @@ export function DetalheDivisão() {
     return () => {
       ativo = false;
     };
-  }, [grupo?.gru_id, grupo?.gru_visibilidade, souLider, id, user?.token]);
+  }, [podeVerSolicitacoes, id, user?.token]);
 
   const responderSolicitacao = async (
     solId: number,
@@ -561,15 +591,15 @@ export function DetalheDivisão() {
 
             {souLider &&
               grupo.gru_visibilidade === false &&
-              solicitacoes.length > 0 && (
+              solicitacoesVisiveis.length > 0 && (
                 <div className="Participantes Part-solicitacoes">
                   <div className="Part-cabecalho">
                     <h3>
-                      Solicitações de participação ({solicitacoes.length})
+                      Solicitações de participação ({solicitacoesVisiveis.length})
                     </h3>
                   </div>
 
-                  {solicitacoes.map((s) => (
+                  {solicitacoesVisiveis.map((s) => (
                     <div key={s.sol_id} className="Part-linha Part-solicitacao">
                       <div className="Part-user">
                         <div className="Part-avatar">
