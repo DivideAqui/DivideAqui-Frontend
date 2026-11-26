@@ -1,183 +1,113 @@
-/* SECTION 2 */
 .sctSobre {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  background: var(--branco);
-  color: rgb(0, 0, 0);
-  padding: 50px 35px;
-  gap: 35px;
-  min-height: 100vh;
   position: relative;
+  isolation: isolate;
   overflow: hidden;
+  padding: 4em max(1.5rem, calc((100% - 75rem) / 2));
+  background-color: var(--branco);
+  color: #000;
+  font-family: var(--fonte-titulo, sans-serif);
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: 30px;
+  box-sizing: border-box;
 }
 
-.BolinhaSuperior {
-  position: absolute;
-  top: 5vw;
-  left: -10%;
-  width: 20%;
-  rotate: 90deg;
-  pointer-events: none;
+.sctSobre .SobreConteudo {
+  position: relative;
   z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-areas: "imagem texto";
+  align-items: center;
+  gap: 1em;
+  width: 100%;
 }
 
-.DivBeneficios p {
- white-space: nowrap;
- margin-top: 3%;
- position: absolute;
- font-size: 1.8vw;
- font-family: var(--fonte-texto);
- line-height: 40px;
- font-weight: bold;
- background-color: var(--verde-claro);
- padding: 3vh 2vw;
- border-radius: 10px;
-}
-
-.BolinhaInferior {
-  position: absolute;
-  bottom: 5vw;
-  right: -10%;
-  width: 20%;
-  rotate: 90deg;
-  pointer-events: none;
-  z-index: 1;
-}
-
-.ImgCelular {
-  margin-left: 5vw;
-  width: 38vw;
-  
-  height: auto;
-  object-fit: contain;
-}
-
-.DivTexto {
-  width: 40vw;
+.sctSobre .DivTexto {
+  --largura-conteudo:90%;          
+  grid-area: texto;
+  min-width: 0;
+  width: 100%;
+  max-width: 30em;                 
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  margin-right: 5vw;
+  align-items: center;         
+  gap: 1.5em;
 }
 
-.H1Titulo-Sobre {
-  
-  color: var(--azul-escuro);
-  margin-top: -15%;
-  font-size: 3.8vw;
-  font-weight: bold;
-  font-family: var(--fonte-titulo);
-  line-height: 4.2vw;
-  font-weight: 600;
+.sctSobre .H1Titulo-Sobre {
+  width: 100%;
+  max-width: 18ch;                 
+  margin: 0;
+  color: var(--preto);
+  font-size: clamp(2rem, 1.20rem + 2vw, 3.5rem); 
+  font-weight: 800;
+  line-height: 1.15;
+  text-align: center;               
+  text-wrap: balance;
+  overflow-wrap: anywhere;
 }
 
-.BDestaque-Azul{
-  background: linear-gradient(90deg, #03045E 0%, #053CC8 100%);
+.sctSobre .BDestaque-Azul {
+  background: var(--azul-claro);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  font-weight:900;
+  font-weight: 900;
 }
 
-.PTexto{
-  text-align: justify;
-  font-size: 1.4vw;
-  font-family: var(--fonte-titulo); 
-  line-height: 2.2vw;
+.sctSobre .PTexto {
+  width: var(--largura-conteudo);
+  margin: 0;
+  font-size: 1.4em;              
   font-weight: 600;
-  width: 30vw;
+  line-height: 1.65;
+  text-align: justify;
+  overflow-wrap: anywhere;
 }
 
-
-@media (max-height: 800px) {
-  .sctSobre {
-    padding: 40px 30px;
-    gap: 30px;
-  }
-
-  .ImgCelular {
-    max-width: 30vw;
-    max-height: 80vh;
-    margin-left: 15vw;
-  }
-
- 
-
-  .H1Titulo-Sobre {
-    margin-top: -10%;
-    font-size: 8vh;
-    line-height: 9vh;
-  }
-
-  .PTexto {
-    font-size: 3.5vh;
-    line-height: 5vh;
-  }
-
-  
-  .DivBeneficios p {
-  margin-top: 1vh;
-  font-size: 4.2vh;
-  font-family: var(--fonte-texto); 
-  line-height: 40px;
-  font-weight: bold;
-  padding: 1vw 2vw;
-  border-radius: 10px;
-}
+.sctSobre .DivBeneficios {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;                         
+  width: var(--largura-conteudo);
+  padding: 1em 1.3em;              
+  font-size: 1em;                   
+  background: var(--verde-claro);
+  border-radius: 12px;
+  box-sizing: border-box;
 }
 
-@media (max-height: 700px){
- .DivTexto {
-    max-height: 60vw;
-  }
+.sctSobre .DivBeneficios p {
+  margin: 0;
+  font-family: var(--fonte-texto, sans-serif);
+  font-size: 1.3em;                
+  font-weight: 700;
+  text-align: center;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
 }
 
+.sctSobre .SobreImagem {
+  grid-area: imagem;
+  min-width: 0;
+  width: 100%;
+  max-width: 28rem;                
+  justify-self: center;
+}
 
+.sctSobre .ImgCelular {
+  display: block;
+  width: 100%;
+  height: auto;
+}
 
-@media (max-width: 900px) {
-  .sctSobre {
-    flex-direction: column;
-    min-height: auto;
-    padding: 30px 20px;
-    gap: 20px;
-    justify-content: center;
-  }
+.BolinhaSuperior {
+  inset-block-start: clamp(1rem, 5vw, 5rem);
+  inset-inline-start: -8%;
+}
 
-  .DivTexto {
-    width: 100%;
-    order: -1;
-    text-align: center;
-  }
-
-  .ImgCelular {
-    width: 70%;
-    max-width: 350px;
-    margin-left: 6vh;
-  }
-
-  .H1Titulo-Sobre {
-    font-size: 2.2rem;
-    line-height: 2.8rem;
-    margin-top: 0;
-  }
-
-  .PTexto {
-    font-size: 1.1rem;
-    line-height: 1.8rem;
-  }
-
-  .DivBeneficios {
-    gap: 15px;
-  }
-
-  .DivBeneficios p {
-    display: none;
-  }
-
-  .BolinhaSuperior,
-  .BolinhaInferior {
-    width: 30%;
-  }
+.BolinhaInferior {
+  inset-block-end: clamp(1rem, 5vw, 5rem);
+  inset-inline-end: -8%;
 }

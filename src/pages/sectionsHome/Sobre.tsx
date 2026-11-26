@@ -3,6 +3,7 @@ import "../../css/MinCss/SobreMin.css"
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { FaSmileWink } from "react-icons/fa";
 
 import Celular from "../../assets/Imgs/imgCelular.png";
 import BolinhasAzul from "../../assets/Imgs/bolinhasAzuis.png";
@@ -57,31 +58,57 @@ export function Sobre() {
   }, []);
 
   return (
-    <section className="sctSobre" id="homeSobre" ref={sectionRef}>
-      <img src={BolinhasAzul} alt="" className="BolinhaSuperior" />
-      <img src={BolinhasAzul} alt="" className="BolinhaInferior" />
+  <section
+    className="sctSobre"
+    id="homeSobre"
+    ref={sectionRef}
+    aria-labelledby="titulo-sobre"
+  >
+    <img
+      src={BolinhasAzul}
+      alt=""
+      aria-hidden="true"
+      className="BolinhaSuperior"
+    />
 
-      <div ref={celularRef}>
-        <img src={Celular} alt="Celular" className="ImgCelular" />
-      </div>
+    <img
+      src={BolinhasAzul}
+      alt=""
+      aria-hidden="true"
+      className="BolinhaInferior"
+    />
 
+    <div className="SobreConteudo">
       <div className="DivTexto" ref={textoRef}>
-        <h1 className="H1Titulo-Sobre">
-          Qual a proposta <br />
-          do <b className="BDestaque-Azul">DivideAqui</b>?
-        </h1>
+        <h2 className="H1Titulo-Sobre" id="titulo-sobre">
+          Qual é a proposta do{" "}
+          <strong className="BDestaque-Azul">DivideAqui</strong>
+          ?
+        </h2>
 
         <p className="PTexto">
-          Conectar pessoas para dividir
-          custos de forma prática, com
-          divisão automática de gastos
-          e lembretes de pagamento.
+          Conectar pessoas para dividir custos de forma prática,
+          com divisão automática de gastos e lembretes de pagamento.
         </p>
 
         <div className="DivBeneficios">
+          <FaSmileWink
+            className="iconAlert"
+            size={30}
+            aria-hidden="true"
+            />
           <p>+ Economia | - Estresse</p>
         </div>
       </div>
-    </section>
-  );
+
+      <div className="SobreImagem" ref={celularRef}>
+        <img
+          src={Celular}
+          alt="Celular"
+          className="ImgCelular"
+        />
+      </div>
+    </div>
+  </section>
+);
 }

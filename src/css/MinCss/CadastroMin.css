@@ -1,0 +1,98 @@
+@media (max-width: 1280px) {
+  .cadastro-side {
+    padding: 2em;
+  }
+}
+
+
+
+@media (max-width: 1032px) {
+
+    .cadastro-side-left {
+    display: none;                         
+  }
+
+  .cadastro-page {
+    font-size: clamp(25px, 2vw, 28px); 
+  }
+
+  .cadastro-side {
+    padding: 1.8em;
+  }
+
+  .cadastro-hero {
+    max-width: 90%;
+    padding: 1em;
+  }
+
+  .DivSideTexte-cadastro {
+    left: 1.8em;
+    right: 1.8em;
+  }
+}
+
+
+
+@media (max-width: 768px) {
+  .cadastro-side-left {
+    display: none;                         
+  }
+
+  .cadastro-page {
+    font-size: clamp(14px, 2.6vw, 22px);   
+    min-height: max(100vh, 70em);           
+  }
+
+  .cadastro-side-right {
+    flex: 1 1 100%;
+    min-height: max(100vh, 70em);
+    padding: 6em 4em 3em;                   
+  }
+
+  .conteudo-cadastro {
+    width: min(100%, 25em);              
+    margin-block: 0;
+  }
+
+  .InpCadastro {
+    font-size: max(16px, 1em);              
+    margin: 0.8em 0;                        
+  }
+}
+
+
+
+@media (max-width: 375px) {
+  .cadastro-page {
+    font-size: clamp(10px, 3.6vw, 13px); 
+    min-height: max(100dvh, 62em);
+  }
+
+  .cadastro-side-right {
+    min-height: max(100dvh, 75em);
+    padding: 3.8em 3em 5em;
+  }
+
+  .conteudo-cadastro {
+    width: 100%;
+  }
+
+  .Btn-Cadastrar {
+    font-size: 1.25em;
+  }
+
+  .Logar {
+    font-size: 1em;
+  }
+
+  .google-cadastro-button .Btn-Google {
+    font-size: 1em;
+  }
+
+  .google-cadastro-button .Btn-Google-Icon {
+    width: 1.4em;
+    height: 1.4em;
+    margin-right: 0.6em;
+  }
+
+}

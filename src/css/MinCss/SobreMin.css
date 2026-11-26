@@ -1,124 +1,124 @@
-/* Celular */
-@media (max-width: 767px) {
 
-    .sectionInicio {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-    }
 
-    .DivTexto {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 20px;
-    }
+@media (max-width: 1280px) {
+  .sctSobre .SobreConteudo {
+    gap: 1.5em;
+  }
 
-    .H1Titulo-Sobre {
-        color: var(--azul-escuro);
-        margin-top: 10%;
-        font-size: 8vw;
-        font-weight: 600;
-        font-family: var(--fonte-titulo);
-        line-height: 9vw;
-        text-align: center;
-    }
+  .sctSobre .SobreImagem {
+    max-width: 24rem;
+  }
 
-    .PTexto {
-        text-align: justify;
-        font-size: 3.8vw;
-        font-family: var(--fonte-titulo);
-        line-height: 5vw;
-        font-weight: 600;
-        width: 65vw;
-    }
+     .sctSobre .DivBeneficios {
+    font-size: clamp(0.7em, 1.5vw + 0.3em, 0.95em);
+    padding: 0.7em 1em;      
+    gap: 0.6em;
+    width: fit-content;     
+    max-width: 100%;
+    margin-inline: auto;
+  }
 
-    .ImgCelular {
-    width: 70vw;
-    height: auto;
-    object-fit: contain;
-    transform: translateX(-6vw);
-    }
-
-    .BolinhaSuperior {
-    position: absolute;
-    top: 25vw;
-    left: -10%;
-    rotate: 90deg;
-    pointer-events: none;
-    z-index: 1;
-    }
-
-    .BolinhaInferior {
-    position: absolute;
-    bottom: 20vw;
-    right: -10%;
-    rotate: 90deg;
-    pointer-events: none;
-    z-index: 1;
-    }
+  .sctSobre .DivBeneficios p {
+    font-size: 1em;         
+    line-height: 1.25;
+  }
 }
 
-/* Tablet */
-@media (min-width: 768px) and (max-width: 1023px) {
-    .sectionInicio {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-    }
 
-    .DivTexto {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 20px;
-    }
 
-    .H1Titulo-Sobre {
-        color: var(--azul-escuro);
-        margin-top: 1%;
-        font-size: 7vw;
-        font-weight: 600;
-        font-family: var(--fonte-titulo);
-        line-height: 9vw;
-        text-align: center;
-    }
+@media (max-width: 1032px) {
+  .sctSobre {
+    font-size: clamp(20px, 2vw, 30px);
+  }
 
-    .PTexto {
-        text-align: justify;
-        font-size: 3.4vw;
-        font-family: var(--fonte-titulo);
-        line-height: 5vw;
-        font-weight: 600;
-        width: 56vw;
-    }
+  .sctSobre .SobreImagem {
+    max-width: 20rem;
+  }
+}
 
-    .ImgCelular {
-        width: 60vw;
-        height: auto;
-        object-fit: contain;
-        transform: translateX(-6vw);
-    }
 
-    .BolinhaSuperior {
-        position: absolute;
-        top: 15vw;
-        left: -13%;
-        rotate: 90deg;
-        pointer-events: none;
-        z-index: 1;
-    }
 
-    .BolinhaInferior {
-        position: absolute;
-        bottom: 20vw;
-        right: -13%;
-        rotate: 90deg;
-        pointer-events: none;
-        z-index: 1;
-    }
+@media (max-width: 769px) {
+  .sctSobre {
+    font-size: 1.3vw;
+  }
+}
+
+
+
+@media (max-width: 768px) {
+  .sctSobre {
+    font-size: 16px;
+    padding-top: 3em;
+    padding-bottom: 3em;
+  }
+
+  
+  .sctSobre .SobreConteudo {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "texto"
+      "imagem";
+    justify-items: center;
+    gap: 2em;
+  }
+
+  .sctSobre .DivTexto {
+    max-width: 28em;
+    align-items: center;
+    text-align: center;
+  }
+
+  .sctSobre .H1Titulo-Sobre {
+    max-width: 100%;
+    font-size: 2.2em;
+    text-align: center;
+  }
+
+  .sctSobre .PTexto {
+    max-width: 100%;
+    font-size: 1.2em;
+    text-align: center;
+  }
+
+  .sctSobre .DivBeneficios {
+    width: 100%;
+  }
+
+  .sctSobre .DivBeneficios p {
+    font-size: 1.1em;
+  }
+
+  .sctSobre .SobreImagem {
+    max-width: 18rem;
+  }
+}
+
+
+
+@media (max-width: 375px) {
+  .sctSobre {
+    font-size: clamp(11px, 3.4vw, 16px);
+    padding-inline: 4rem;
+  }
+
+  .sctSobre .SobreConteudo {
+    gap: 2em;
+  }
+
+  .sctSobre .DivTexto {
+    gap: 1em;
+  }
+
+  .sctSobre .PTexto {
+    text-align: justify;
+  }
+
+    .sctSobre .DivBeneficios {
+    padding: 1em 1.3em;
+  }
+
+  .sctSobre .SobreImagem {
+    max-width: min(14rem, 100%);
+  }
 }

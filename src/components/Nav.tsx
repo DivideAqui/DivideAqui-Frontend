@@ -159,7 +159,7 @@ export function Nav() {
       <header className="NavHeader">
         <div className="Navegacao">
           <div className="NavLogo">
-            <img src={Logo} alt="Logo DivideAqui" />
+            <Link to="/"><img src={Logo} alt="Logo DivideAqui" /></Link>
           </div>
 
           <div className="nav-hamburger" onClick={handleMenuClick} aria-label="Abrir menu" tabIndex={0}>

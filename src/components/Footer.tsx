@@ -1,6 +1,7 @@
 
 
 import "../css/Footer.css";
+import "../css/MinCss/FooterMin.css";
 
 import { RiInstagramFill } from "react-icons/ri";
 import { FaGithub } from "react-icons/fa";

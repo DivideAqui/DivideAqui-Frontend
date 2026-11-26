@@ -9,6 +9,7 @@ import Swal from "sweetalert2";
 
 import { useAuth } from "../hooks/useAuth";
 import "../css/Login.css";
+import "../css/MinCss/LoginMin.css";
 import "../css/sweetAlert/sweetAlert.css"
 import Logo from "../assets/Icons/íconeBranco.png";
 import GoogleIcon from "../assets/Icons/google-icon.svg";
@@ -169,7 +170,7 @@ export function Login() {
     }
   };
 
-  return (
+    return (
     <main className="login-page">
       <section className="login-side login-side-left">
         <ShaderGradientCanvas
@@ -187,92 +188,90 @@ export function Login() {
         </ShaderGradientCanvas>
 
         <div className="login-hero">
-          <img src={Logo} alt="Logo" className="ImgLogoLogin" />
+          <img src={Logo} alt="Logo DivideAqui" className="ImgLogoLogin" />
         </div>
+
         <div className="DivSideTexte">
           <h1>
-            Bora Economizar sem <p></p>Perder o Streaming?
+            Bora Economizar sem <br />
+            Perder o Streaming?
           </h1>
-          <h3>Seu bolso agradece!</h3>
+          <p className="SubtituloLogin">Seu bolso agradece!</p>
         </div>
       </section>
 
       <section className="login-side login-side-right">
-  <form onSubmit={enviar}>
+        <form onSubmit={enviar}>
+          <BtnClose onClick={() => navigate("/home")} cor="preto" />
 
-    <BtnClose onClick={() => navigate("/home")} cor="preto"/>
+          <div className="conteudo-login">
+            <div className="login-card">
+              <label htmlFor="identificador">Digite seu Email ou CPF: *</label>
+              <input
+                id="identificador"
+                type="text"
+                inputMode="email"
+                autoComplete="username"
+                className="InpLogin"
+                placeholder="joaodasilva@gmail.com"
+                name="indentificador"
+                value={formData.indentificador}
+                onChange={handleChange}
+              />
 
-    <div className="conteudo-login">
+              <div className="senha-container-login">
+                <label htmlFor="senha">Digite sua senha: *</label>
 
-      <div className="login-card">
-        
-        <label>Digite seu Email ou CPF: *</label>
+                <div className="senha-input-wrapper-login">
+                  <input
+                    id="senha"
+                    type={mostrarSenha ? "text" : "password"}
+                    autoComplete="current-password"
+                    className="InpLogin"
+                    placeholder="Senha"
+                    name="passorwd"
+                    value={formData.passorwd}
+                    onChange={handleChange}
+                  />
+                  <button
+                    type="button"
+                    className="eye-button-login"
+                    aria-label={mostrarSenha ? "Ocultar senha" : "Mostrar senha"}
+                    onClick={() => setMostrarSenha(!mostrarSenha)}
+                  >
+                    {mostrarSenha ? <HiMiniEyeSlash /> : <HiEye />}
+                  </button>
+                </div>
+              </div>
+            </div>
 
-        <input
-          type="text"
-          className="InpLogin"
-          placeholder="joaodasilva@gmail.com"
-          name="indentificador"
-          value={formData.indentificador}
-          onChange={handleChange}
-        />
+            <a href="#" className="Asenha">
+              Esqueceu a senha?
+            </a>
 
-        <div className="senha-container-login">
-          <label>Digite sua senha: *</label>
+            <button className="Btn-Logar" type="submit">
+              <span>Logar</span>
+            </button>
 
-          <div className="senha-input-wrapper-login">
-            <input
-              type={mostrarSenha ? "text" : "password"}
-              className="InpLogin"
-              placeholder="Senha"
-              name="passorwd"
-              value={formData.passorwd}
-              onChange={handleChange}
-            />
-            <span
-              className="eye-button-login"
-              onClick={() => setMostrarSenha(!mostrarSenha)}
-            >
-              {mostrarSenha ? <HiMiniEyeSlash /> : <HiEye />}
-            </span>
+            <div className="SpanLinha">
+              <hr className="linha-login" />
+              <span>Ou</span>
+              <hr className="linha-login" />
+            </div>
+
+            <div className="google-login-button">
+              <button
+                className="Btn-Google"
+                type="button"
+                onClick={() => login()}
+              >
+                <img src={GoogleIcon} alt="" className="Btn-Google-Icon" />
+                <span>Continuar com Google</span>
+              </button>
+            </div>
           </div>
-
-        </div>
-      </div>
-
-      <a href="#" className="Asenha">
-        Esqueceu a senha?
-      </a>
-
-      <button className="Btn-Logar" type="submit">
-        <span>Logar</span>
-      </button>
-
-      <span className="SpanLinha">
-        <hr className="linha-login" />
-        <h3>Ou</h3>
-        <hr className="linha-login" />
-      </span>
-
-      <div className="google-login-button">
-        <button
-          className="Btn-Google"
-          type="button"
-          onClick={() => login()}
-        >
-          <img
-            src={GoogleIcon}
-            alt="Google"
-            className="Btn-Google-Icon"
-          />
-          <span>Continuar com Google</span>
-        </button>
-      </div>
-
-    </div>
-
-  </form>
-</section>
+        </form>
+      </section>
     </main>
   );
 }

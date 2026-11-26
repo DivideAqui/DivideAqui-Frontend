@@ -1,14 +1,14 @@
 footer {
+  position: relative;
+  z-index: 1;
+  margin-top: -2rem;
   font-family: var(--fonte-texto);
-
-  background:
-    url("../assets/Imgs/texturaFooter.png"),
+  background: url("../assets/Imgs/texturaFooter.png"),
     linear-gradient(
       to bottom,
       var(--azul-escuro) 70%,
       #000143 30%
     );
-
   background-size: cover;
   background-position: center;
   color: var(--branco);
@@ -20,17 +20,15 @@ footer {
 
 #sctFooter1 {
   padding: clamp(0.8rem, 2vw, 2rem) clamp(1.5rem, 6vw, 6rem) 0;
-  max-height: 24.3125rem; /* 389px */
+  max-height: 24.3125rem;
   box-sizing: border-box;
 }
 
 #divFooter1 {
   width: 100%;
-
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-
   gap: clamp(1.5rem, 2.5vw, 4rem);
 }
 
@@ -145,142 +143,3 @@ footer {
   margin: 0;
 }
 
-@media (min-width: 769px) {
-  #sctFooter2 hr {
-    margin-bottom: 1.4rem;
-  }
-}
-
-/* =====================================
-   NOTEBOOKS
-===================================== */
-
-@media (max-width: 1200px) {
-
-  #sctFooter1 {
-    padding: 0.3rem 4rem 0rem;
-  }
-
-  #art1 img {
-    width: 18rem;
-  }
-
-  #art1 p {
-    font-size: 1.2rem;
-    line-height: 1.5rem;
-  }
-
-  .artLinks h1 {
-    font-size: 1.2rem;
-  }
-
-  .linkFooter {
-    font-size: 1.1rem;
-  }
-
-  #sctFooter2 h1 {
-    font-size: 1.3rem;
-  }
-}
-
-/* =====================================
-   TABLET
-===================================== */
-
-@media (max-width: 768px) {
-
-  #sctFooter1 {
-    padding: 2rem;
-  }
-
-  #divFooter1 {
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 2rem;
-  }
-
-  #art1 {
-    width: 100%;
-    text-align: center;
-  }
-
-  #art1 img {
-    width: 17rem;
-    margin: 0 auto;
-  }
-
-  #art1 p {
-    padding-left: 0;
-    font-size: 1.1rem;
-    line-height: 1.6rem;
-  }
-}
-
-/* =====================================
-   MOBILE
-===================================== */
-
-@media (max-width: 600px) {
-
-  #divFooter1 {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-
-  #art1,
-  #art2,
-  #art3 {
-    width: 100%;
-  }
-
-  #art1 img {
-    width: 14rem;
-  }
-
-  #art1 p {
-    font-size: 1rem;
-    line-height: 1.5rem;
-    margin-top: 0.5rem;
-  }
-
-  .artLinks h1 {
-    font-size: 1rem;
-  }
-
-  .linkFooter {
-    font-size: 1rem;
-  }
-
-  #artIcon {
-    justify-content: center;
-  }
-
-  .iconFooter {
-    font-size: 1.8rem;
-  }
-
-  #sctFooter2 h1 {
-    font-size: 0.95rem;
-    line-height: 1.5rem;
-  }
-}
-
-/* =====================================
-   CELULARES PEQUENOS
-===================================== */
-
-@media (max-width: 400px) {
-
-  #sctFooter1 {
-    padding: 1.5rem 1rem;
-  }
-
-  #art1 img {
-    width: 12rem;
-  }
-
-  .iconFooter {
-    font-size: 1.5rem;
-  }
-}

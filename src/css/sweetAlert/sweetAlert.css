@@ -54,6 +54,8 @@
 
 .swal2-icon.swal2-success {
     color: white !important;
+    background-color: var(--azul-claro) !important;
+    border: none !important;
 }
 
 .swal2-icon.swal2-success .swal2-success-line-tip,
@@ -63,7 +65,11 @@
 }
 
 .swal2-icon.swal2-success .swal2-success-ring {
-    border-color: white !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+.swal2-icon.swal2-success [class^="swal2-success-circular-line"] {
+    background-color: transparent !important;
 }
 
 

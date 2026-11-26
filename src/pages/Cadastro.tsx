@@ -1,13 +1,13 @@
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import { ShaderGradientCanvas, ShaderGradient } from "@shadergradient/react";
-import { Link } from "react-router-dom"; // removido "data,"
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import { useGoogleLogin } from "@react-oauth/google";
-import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
 import "../css/Cadastro.css";
-import "../css/sweetAlert/sweetAlert.css"
+import "../css/MinCss/CadastroMin.css";
+import "../css/sweetAlert/sweetAlert.css";
 import GoogleIcon from "../assets/Icons/google-icon.svg";
 import logoCadastro from "../assets/Icons/íconeBranco.png";
 import { HiEye, HiMiniEyeSlash } from "react-icons/hi2";
@@ -17,6 +17,14 @@ import { formatCPF, regexCPF, validarCPF } from "../utils/cpf";
 const API_BASE_URL = (
   import.meta.env.VITE_API_URL || "https://divide-aqui-backend.vercel.app"
 ).replace(/\/$/, "");
+
+
+const estiloSwal = {
+  customClass: {
+    icon: "meu-icone-verde",
+    confirmButton: "meu-botao-verde",
+  },
+};
 
 export function Cadastro() {
   const [mostrarSenha, setMostrarSenha] = useState(false);
@@ -87,7 +95,6 @@ export function Cadastro() {
   const navigate = useNavigate();
 
   const handleGoogleSuccess = async (credentialResponse: any) => {
-    console.log("Login bem-sucedido:", credentialResponse);
     try {
       await loginWithGoogle(credentialResponse);
       navigate("/home", { replace: true });
@@ -106,98 +113,77 @@ export function Cadastro() {
     scope: "openid profile email",
   });
 
-  const handleCadastro = async () => {
-  setErro(null);
+  const handleCadastro = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setErro(null);
 
-  if (!nome || !dataNascimento || !cpf || !telefone || !email || !senha) {
+    if (!nome || !dataNascimento || !cpf || !telefone || !email || !senha) {
       Swal.fire({
         icon: "warning",
         title: "Atenção!",
         text: "Você precisa preencher todos os campos.",
         confirmButtonText: "OK",
+        ...estiloSwal,
+      });
+      return;
+    }
 
-        customClass: {
-        icon: "meu-icone-verde",
-        confirmButton: "meu-botao-verde"
-      }
-    });
-    return;
-  }
-  if (!regexNome.test(nome)) {
-       Swal.fire({
+    if (!regexNome.test(nome)) {
+      Swal.fire({
         icon: "error",
         title: "Nome inválido",
         text: "Digite um nome válido.",
         confirmButtonText: "OK",
+        ...estiloSwal,
+      });
+      return;
+    }
 
-        customClass: {
-        icon: "meu-icone-verde",
-        confirmButton: "meu-botao-verde"
-      }
-    });
-    return;
-  }
-  if (!regexCPF.test(cpf) || !validarCPF(cpf)) {
-    Swal.fire({
-      icon: "error",
-      title: "CPF inválido",
-      text: "Digite um CPF válido.",
-      confirmButtonText: "OK",
+    if (!regexCPF.test(cpf) || !validarCPF(cpf)) {
+      Swal.fire({
+        icon: "error",
+        title: "CPF inválido",
+        text: "Digite um CPF válido.",
+        confirmButtonText: "OK",
+        ...estiloSwal,
+      });
+      return;
+    }
 
-        customClass: {
-        icon: "meu-icone-verde",
-        confirmButton: "meu-botao-verde"
-      }
-    });
-    return;
-  }
+    if (!regexTelefone.test(telefone)) {
+      Swal.fire({
+        icon: "error",
+        title: "Telefone inválido",
+        text: "Digite um telefone válido.",
+        confirmButtonText: "OK",
+        ...estiloSwal,
+      });
+      return;
+    }
 
-  if (telefone && !regexTelefone.test(telefone)) {
-    Swal.fire({
-      icon: "error",
-      title: "Telefone inválido",
-      text: "Digite um telefone válido.",
-      confirmButtonText: "OK",
-      
-        customClass: {
-        icon: "meu-icone-verde",
-        confirmButton: "meu-botao-verde"
-      }
-    });
-    return;
-  }
-  if (!regexEmail.test(email)) {
-    Swal.fire({
-      icon: "error",
-      title: "E-mail inválido",
-      text: "Digite um e-mail válido.",
-      confirmButtonText: "OK",
+    if (!regexEmail.test(email)) {
+      Swal.fire({
+        icon: "error",
+        title: "E-mail inválido",
+        text: "Digite um e-mail válido.",
+        confirmButtonText: "OK",
+        ...estiloSwal,
+      });
+      return;
+    }
 
-      
-        customClass: {
-        icon: "meu-icone-verde",
-        confirmButton: "meu-botao-verde"
-      }
-    });
-    return;
-  }
+    if (!regexSenha.test(senha)) {
+      Swal.fire({
+        icon: "error",
+        title: "Senha inválida",
+        text: "A senha deve ter pelo menos 8 caracteres, uma letra maiúscula, um número e um caractere especial.",
+        confirmButtonText: "OK",
+        ...estiloSwal,
+      });
+      return;
+    }
 
-  if (!regexSenha.test(senha)) {
-    Swal.fire({
-      icon: "error",
-      title: "Senha inválida",
-      text: "A senha deve ter pelo menos 8 caracteres, uma letra maiúscula, um número e um caractere especial.",
-      confirmButtonText: "OK",
-      
-        customClass: {
-        icon: "meu-icone-verde",
-        confirmButton: "meu-botao-verde"
-      }
-    });
-    return;
-  }
-
-  setCarregando(true);
+    setCarregando(true);
     try {
       const [ano, mes, dia] = dataNascimento.split("-");
       const dataFormatada = `${dia}/${mes}/${ano}`;
@@ -228,13 +214,8 @@ export function Cadastro() {
           title: "Ops!",
           text: data.erro || "Houve um erro no seu cadastro.",
           confirmButtonText: "Tentar novamente",
-
-        customClass: {
-        icon: "meu-icone-verde",
-        confirmButton: "meu-botao-verde"
-      }
+          ...estiloSwal,
         });
-
         return;
       }
 
@@ -246,29 +227,23 @@ export function Cadastro() {
         title: "Cadastro realizado!",
         text: "Agora vamos dividir!",
         confirmButtonText: "Continuar",
-
-        customClass: {
-        icon: "meu-icone-verde",
-        confirmButton: "meu-botao-verde"
-      }
+        ...estiloSwal,
       });
 
       navigate("/home", { replace: true });
+    } catch (e) {
+      console.error("Erro no cadastro:", e);
 
-      } catch (e) {
-        console.error("Erro no cadastro:", e);
-
-        Swal.fire({
-          icon: "error",
-          title: "Ops!",
-          text: e instanceof Error ? e.message : "Erro desconhecido.",
-          confirmButtonText: "Tentar novamente"
-        });
-
-      } finally {
-        setCarregando(false);
-      }
-
+      Swal.fire({
+        icon: "error",
+        title: "Ops!",
+        text: e instanceof Error ? e.message : "Erro desconhecido.",
+        confirmButtonText: "Tentar novamente",
+        ...estiloSwal,
+      });
+    } finally {
+      setCarregando(false);
+    }
   };
 
   return (
@@ -289,7 +264,11 @@ export function Cadastro() {
         </ShaderGradientCanvas>
 
         <div className="cadastro-hero">
-          <img src={logoCadastro} alt="Logo" className="logoCadastro" />
+          <img
+            src={logoCadastro}
+            alt="Logo DivideAqui"
+            className="logoCadastro"
+          />
         </div>
         <div className="DivSideTexte-cadastro">
           <h1>Pronto para Dividir sem Discussão? Então crie sua Conta aqui</h1>
@@ -297,118 +276,139 @@ export function Cadastro() {
       </section>
 
       <section className="cadastro-side cadastro-side-right">
-        
-        <BtnClose onClick={() => navigate("/home")} cor="preto"/>
+        <BtnClose onClick={() => navigate("/home")} cor="preto" />
 
-        <div className="conteudo-cadastro">
-
-        <div className="nome-card">
-          <label>Nome Completo: *</label>
-          <input
-            type="text"
-            className="InpCadastro"
-            placeholder="Ex.: João da Silva"  
-            value={nome}
-            onChange={(e) => setNome(e.target.value)}
-          />
-        </div>
-
-        <div className="data-card">
-          <label>Data de Nascimento: *</label>
-          <input
-            type="date"
-            className="InpCadastro"
-            min="1950-01-01"
-            max="2008-12-31"
-            value={dataNascimento}
-            onChange={(e) => setDataNascimento(e.target.value)}
-          />
-        </div>
-
-        <div className="cpf-card">
-          <label>CPF: *</label>
-          <input
-            type="text"
-            className="InpCadastro"
-            placeholder="000.000.000-00"
-            value={cpf}
-            maxLength={14}
-            onChange={(e) => setCpf(formatCPF(e.target.value))}
-          />
-        </div>
-
-        <div className="telefone-card">
-          <label>Número de Telefone: *</label>
-          <input
-            type="tel"
-            className="InpCadastro"
-            placeholder="(00) 00000-0000"
-            pattern="^\(\d{2}\)\s\d{5}-\d{4}$"
-            value={telefone}
-            onChange={(e) => setTelefone(formatTelefone(e.target.value))}
-            maxLength={15}
-          />
-        </div>
-
-        <div className="email-card">
-          <label>Seu Email: *</label>
-          <input
-            type="email"
-            className="InpCadastro"
-            placeholder="joaodasilva@gmail.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-
-        <div className="senha-container-cadastro">
-          <label>Crie uma Senha Segura: *</label>
-          <div className="senha-input-wrapper-cadastro">
-          <input
-            type={mostrarSenha ? "text" : "password"}
-            className="InpCadastro"
-            placeholder="Senha"
-            value={senha}
-            onChange={(e) => setSenha(e.target.value)}
-          />
-          <span
-            className="eye-icon-cadastro"
-            onClick={() => setMostrarSenha(!mostrarSenha)}
-          >
-            {mostrarSenha ? <HiMiniEyeSlash /> : <HiEye />}
-          </span>
-          </div>
-        </div>
-
-        {erro && <p className="erro-cadastro">{erro}</p>}
-
-        <button
-          className="Btn-Cadastrar"
-          onClick={handleCadastro}
-          disabled={carregando}
+        <form
+          className="conteudo-cadastro"
+          onSubmit={handleCadastro}
+          noValidate
         >
-          <span>{carregando ? "Cadastrando..." : "Cadastrar"}</span>
-        </button>
+          <div className="campo-cadastro nome-card">
+            <label htmlFor="nome">Nome Completo: *</label>
+            <input
+              id="nome"
+              type="text"
+              autoComplete="name"
+              className="InpCadastro"
+              placeholder="Ex.: João da Silva"
+              value={nome}
+              onChange={(e) => setNome(e.target.value)}
+            />
+          </div>
 
-        <p className="Logar">
-          Já tem uma conta?{" "}
-          <Link to="/login" className="btn-logar">
-            Faça seu Login.
-          </Link>
-        </p>
+          <div className="campo-cadastro data-card">
+            <label htmlFor="nascimento">Data de Nascimento: *</label>
+            <input
+              id="nascimento"
+              type="date"
+              autoComplete="bday"
+              className="InpCadastro"
+              min="1950-01-01"
+              value={dataNascimento}
+              onChange={(e) => setDataNascimento(e.target.value)}
+              required
+            />
+          </div>
 
-        <span className="SpanLinha">
-          <hr className="linha" /> <h3>Ou</h3> <hr className="linha" />
-        </span>
+          <div className="campo-cadastro cpf-card">
+            <label htmlFor="cpf">CPF: *</label>
+            <input
+              id="cpf"
+              type="text"
+              inputMode="numeric"
+              className="InpCadastro"
+              placeholder="000.000.000-00"
+              value={cpf}
+              maxLength={14}
+              onChange={(e) => setCpf(formatCPF(e.target.value))}
+            />
+          </div>
 
-        <div className="google-cadastro-button">
-          <button className="Btn-Google" type="button" onClick={() => login()}>
-            <img src={GoogleIcon} alt="Google" className="Btn-Google-Icon" />
-            <span>Continuar com Google</span>
+          <div className="campo-cadastro telefone-card">
+            <label htmlFor="telefone">Número de Telefone: *</label>
+            <input
+              id="telefone"
+              type="tel"
+              autoComplete="tel"
+              className="InpCadastro"
+              placeholder="(00) 00000-0000"
+              pattern="^\(\d{2}\)\s\d{5}-\d{4}$"
+              value={telefone}
+              onChange={(e) => setTelefone(formatTelefone(e.target.value))}
+              maxLength={15}
+            />
+          </div>
+
+          <div className="campo-cadastro email-card">
+            <label htmlFor="email">Seu Email: *</label>
+            <input
+              id="email"
+              type="email"
+              autoComplete="email"
+              className="InpCadastro"
+              placeholder="joaodasilva@gmail.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+
+          <div className="campo-cadastro senha-container-cadastro">
+            <label htmlFor="senha">Crie uma Senha Segura: *</label>
+            <div className="senha-input-wrapper-cadastro">
+              <input
+                id="senha"
+                type={mostrarSenha ? "text" : "password"}
+                autoComplete="new-password"
+                className="InpCadastro"
+                placeholder="Senha"
+                value={senha}
+                onChange={(e) => setSenha(e.target.value)}
+              />
+              <button
+                type="button"
+                className="eye-icon-cadastro"
+                aria-label={mostrarSenha ? "Ocultar senha" : "Mostrar senha"}
+                onClick={() => setMostrarSenha(!mostrarSenha)}
+              >
+                {mostrarSenha ? <HiMiniEyeSlash /> : <HiEye />}
+              </button>
+            </div>
+          </div>
+
+          {erro && (
+            <p className="erro-cadastro" role="alert">
+              {erro}
+            </p>
+          )}
+
+          <button className="Btn-Cadastrar" type="submit" disabled={carregando}>
+            <span>{carregando ? "Cadastrando..." : "Cadastrar"}</span>
           </button>
-        </div>
-        </div>
 
+          <p className="Logar">
+            Já tem uma conta?{" "}
+            <Link to="/login" className="btn-logar">
+              Faça seu Login.
+            </Link>
+          </p>
+
+          <div className="SpanLinha">
+            <hr className="linha" />
+            <span>Ou</span>
+            <hr className="linha" />
+          </div>
+
+          <div className="google-cadastro-button">
+            <button
+              className="Btn-Google"
+              type="button"
+              onClick={() => login()}
+            >
+              <img src={GoogleIcon} alt="" className="Btn-Google-Icon" />
+              <span>Continuar com Google</span>
+            </button>
+          </div>
+        </form>
       </section>
     </main>
   );

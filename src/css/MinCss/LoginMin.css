@@ -1,0 +1,91 @@
+/* ===== Notebook (até 1280px): a base já usa 1vw, só ajusto o respiro ===== */
+@media (max-width: 1280px) {
+  .login-side {
+    padding: 2em;
+  }
+}
+
+
+
+@media (max-width: 1032px) {
+
+      .login-side-left {
+    display: none;                         
+  }
+  
+  .login-page {
+    font-size: clamp(20px, 2.5vw, 30px);   
+  }
+
+  .login-side {
+    padding: 1.8em;
+  }
+
+  .login-hero {
+    max-width: 90%;
+    padding: 1em;
+  }
+
+  .DivSideTexte {
+    left: 1.8em;
+    bottom: 1.2em;
+  }
+}
+
+
+
+@media (max-width: 768px) {
+  .login-side-left {
+    display: none;                         
+  }
+
+  .login-page {
+    font-size: clamp(14px, 2.6vw, 22px); 
+  }
+
+  .login-side-right {
+    flex: 1 1 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: 4em 2em 2em;                 
+  }
+
+  .conteudo-login {
+    width: min(100%, 25em);               
+  }
+
+  .InpLogin {
+    font-size: max(16px, 1em);             
+  }
+}
+
+
+
+
+@media (max-width: 375px) {
+  .login-page {
+    font-size: clamp(13px, 3.9vw, 16px); 
+  }
+
+  .login-side-right {
+    padding: 3.5em 1.2em 1.5em;
+  }
+
+  .conteudo-login {
+    width: 100%;
+  }
+
+  .Btn-Logar {
+    font-size: 1.25em;
+  }
+
+  .google-login-button .Btn-Google {
+    font-size: 1em;
+  }
+
+  .Btn-Google-Icon {
+    width: 1.4em;
+    height: 1.4em;
+    margin-right: 0.6em;
+  }
+}

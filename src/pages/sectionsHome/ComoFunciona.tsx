@@ -4,11 +4,11 @@ import "../../css/MinCss/ComoFuncionaMin.css";
 import BolinhasAzuis from "../../assets/Imgs/bolinhasAzuis.png";
 import ImgPessoa from "../../assets/Imgs/imgPessoa.png";
 
-import { GiPadlock } from "react-icons/gi";
 import { useEffect, useRef } from "react";
 
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { TbAlertTriangleFilled } from "react-icons/tb";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -127,75 +127,105 @@ export function ComoFunciona() {
     return () => ctx.revert();
   }, []);
 
-  return (
-    <section
-      ref={sectionRef}
-      className="sctComoFunciona"
-      id="homeComoFunciona"
-    >
-      <img
-        src={BolinhasAzuis}
-        alt=""
-        className="ImgBolinhasAzuis1"
-      />
+  
+return (
+  <section
+    className="sctComoFunciona"
+    id="homeComoFunciona"
+    ref={sectionRef}
+    aria-labelledby="tituloComoFunciona"
+  >
 
+    <img
+      src={BolinhasAzuis}
+      alt=""
+      aria-hidden="true"
+      className="BolinhaSuperior"
+    />
+
+    <img
+      src={BolinhasAzuis}
+      alt=""
+      aria-hidden="true"
+      className="BolinhaInferior"
+    />
+
+    <figure className="ComoFuncionaIlustracao">
       <img
         src={ImgPessoa}
         alt="Ilustração de uma pessoa utilizando o DivideAqui"
         className="ImgPessoa"
       />
+    </figure>
 
-      <div className="DivComoFunciona">
-        <h1>
-          Veja como é{" "}
-          <span className="BDestaque-azul">fácil</span>:
-        </h1>
+    <div className="comoFuncionaConteudo">
 
-        <div className="DivComoFunciona-Texto">
-          <h3>Crie ou entre em um grupo</h3>
-          <p>
-            Comece do zero ou participe de uma divisão que já existe.
-          </p>
+      <header className="DivTexto">
+        <h2 id="tituloComoFunciona">
+          Veja como é{" "}<span className="BDestaque-azul">fácil</span>:
+        </h2>
+      </header>
 
-          <h3>Adicione as pessoas</h3>
-          <p>
-            Convide amigos ou entre com quem também está interessado.
-          </p>
+      <div className="comoFunciona-Passos">
 
-          <h3>Relaxe!</h3>
-          <p>O sistema cuida das contas pra você, sem cobranças manuais.</p>
-        </div>
+        <article className="Passo">
 
-        <div className="LinhaComoFunciona">
-          <div className="LinhaParagrafo">
-            <div className="CircleComoFunciona">1</div>
-            <div className="Linha"></div>
-          </div>
+  <div className="IndicadorPasso">
+    <div className="CircleComoFunciona">1</div>
+    <div className="Linha"></div>
+  </div>
 
-          <div className="LinhaParagrafo">
-            <div className="CircleComoFunciona">2</div>
-            <div className="Linha"></div>
-          </div>
+  <div className="TextoPasso">
+    <h3>Registre as despesas</h3>
+    <p>O líder autoriza participantes a registrar despesas nos grupos.
+    </p>
+  </div>
 
-          <div className="LinhaParagrafo">
-            <div className="CircleComoFunciona">3</div>
-          </div>
-        </div>
+</article>
 
-        <div className="CardComoFunciona">
-          <GiPadlock className="IconCadeado" size={40} />
+<article className="Passo">
 
-          <h3>
-            Suas divisões protegidas do início ao fim.
-          </h3>
-        </div>
+  <div className="IndicadorPasso">
+    <div className="CircleComoFunciona">2</div>
+    <div className="Linha"></div>
+  </div>
+
+  <div className="TextoPasso">
+    <h3>Copie os links de pagamento</h3>
+    <p>Cada despesa gera um link para realizar o pagamento pelo seu banco.
+    </p>
+  </div>
+
+  </article>
+
+  <article className="Passo">
+
+    <div className="IndicadorPasso">
+    <div className="CircleComoFunciona">3</div>
+  </div>
+
+  <div className="TextoPasso">
+    <h3>Realize os pagamentos</h3>
+    <p>Em grupos de streaming, envie o valor ao líder.
+    </p>
+  </div>
+
+  </article>
+
       </div>
 
-      <img
-        src={BolinhasAzuis}
-        alt=""
-        className="ImgBolinhasAzuis2"
-      />
-    </section>
-  );
+      <aside className="CardComoFunciona">
+        <TbAlertTriangleFilled
+          className="iconAlert"
+          size={45}
+          aria-hidden="true"
+        />
+
+        <h3>Encontrou alguma irregularidade? Relate para nossa equipe.</h3>
+      </aside>
+
+    </div>
+
+  </section>
+);
 }
