@@ -252,7 +252,7 @@ export function Nav() {
           }
           aria-expanded={painelAberto}
         >
-          <IoMdNotifications className="nav-bell" />
+          <IoMdNotifications className={`nav-bell ${naoLidas > 0 ? "tem-nao-lidas" : ""}`} />
           <span
             className={`nav-bell-dot ${naoLidas > 0 ? "tem-nao-lidas" : ""}`}
             aria-hidden="true"

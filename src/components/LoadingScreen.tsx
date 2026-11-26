@@ -4,12 +4,10 @@ import iconeBranco from "../assets/Imgs/iconeBranco.png";
 import "../css/LoadingScreen.css";
 
 const ROTAS_COM_LOADING = [
-  "/CriarDivisao",
   "/meuperfil",
   "/meusgrupos",
   "/historico",
   "/detalhedivisao",
-  "/criarDivisao",
   "/meuperfil",
   "/perfilparticipante",
 ];

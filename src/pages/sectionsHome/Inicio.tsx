@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { gsap } from 'gsap';
 import { useAuth } from '../../hooks/useAuth';
 import { SearchInput } from '../../components/SearchInput';
 import Amazon from "../../assets/Icons/imgAmazon.png";
@@ -84,6 +85,7 @@ const getStream = (stream: StreamData): { str_telas?: number | null } | null => 
 };
 
 export function Inicio(){
+  const heroRef = useRef<HTMLElement | null>(null);
   const [isFocused, setIsFocused] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [groups, setGroups] = useState<BackendGroup[]>([]);
@@ -105,6 +107,61 @@ export function Inicio(){
 
     loadGroups();
   }, []);
+
+  useEffect(() => {
+    const hero = heroRef.current;
+    const canHover = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+    if (!hero || isFocused || !canHover.matches || reduceMotion.matches) return;
+
+    const icons = Array.from(
+      hero.querySelectorAll<HTMLElement>(".DivIcones #ImgIconeFlutuante"),
+    );
+    const movers = icons.map((icon) => ({
+      icon,
+      xTo: gsap.quickTo(icon, "x", { duration: 0.65, ease: "power3.out" }),
+      yTo: gsap.quickTo(icon, "y", { duration: 0.65, ease: "power3.out" }),
+    }));
+
+    const returnIcons = () => {
+      movers.forEach(({ xTo, yTo }) => {
+        xTo(0);
+        yTo(0);
+      });
+    };
+
+    const attractIcons = (event: PointerEvent) => {
+      if (event.pointerType !== "mouse") return;
+
+      movers.forEach(({ icon, xTo, yTo }) => {
+        const bounds = icon.getBoundingClientRect();
+        const dx = event.clientX - (bounds.left + bounds.width / 2);
+        const dy = event.clientY - (bounds.top + bounds.height / 2);
+        const distance = Math.hypot(dx, dy);
+        const radius = 260;
+
+        if (distance >= radius || distance === 0) {
+          xTo(0);
+          yTo(0);
+          return;
+        }
+
+        const strength = (1 - distance / radius) * 16;
+        xTo((dx / distance) * strength);
+        yTo((dy / distance) * strength);
+      });
+    };
+
+    hero.addEventListener("pointermove", attractIcons);
+    hero.addEventListener("pointerleave", returnIcons);
+
+    return () => {
+      hero.removeEventListener("pointermove", attractIcons);
+      hero.removeEventListener("pointerleave", returnIcons);
+      returnIcons();
+    };
+  }, [isFocused]);
 
   const searchResults = useMemo(() => {
     const normalized = searchTerm.trim().toLowerCase();
@@ -166,7 +223,7 @@ export function Inicio(){
 
   return (
     <>
-      <section className="sectionInicio" id="homeInicio">
+      <section className="sectionInicio" id="homeInicio" ref={heroRef}>
         <div className={`DivIcones ${isFocused ? 'DivIcones-hidden' : ''}`}>
           <div className="DivLado-esquerdo">
             <img src={Amazon} alt="Amazon" id="ImgIconeFlutuante" className={isFocused ? 'ImgIconeFlutuante-animado-ECima' : ''}/>

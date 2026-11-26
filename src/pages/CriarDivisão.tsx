@@ -1,4 +1,3 @@
-import { Footer } from "../components/Footer";
 import "../css/CriarDivisão.css";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -10,13 +9,14 @@ import BtnClose from "../components/btnClose";
 import {
   FaArrowCircleLeft,
   FaArrowCircleRight,
+  FaExclamationTriangle,
   FaMapMarkerAlt,
-  FaPlusCircle,
   FaCar,
   FaHouseUser,
   FaTv,
+  FaUsers,
 } from "react-icons/fa";
-import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
+import { FiArrowLeft, FiArrowRight, FiMinus, FiPlus } from "react-icons/fi";
 import { MdOutlineAttachMoney } from "react-icons/md";
 import { FaDivide } from "react-icons/fa6";
 import { CiCircleInfo } from "react-icons/ci";
@@ -112,6 +112,8 @@ export function CriarDivisão() {
   const [descricaoDoGrupo, setDescricaoDoGrupo] = useState("");
   const [visibilidade, setVisibilidade] = useState("");
   const [numeroDeParticipantes, setNumeroDeParticipantes] = useState("");
+  const [animacaoParticipantes, setAnimacaoParticipantes] = useState<{ anterior: string; atual: string } | null>(null);
+  const timeoutAnimacaoParticipantes = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [streamingSelecionado, setStreamingSelecionado] = useState("");
   const [planoSelecionado, setPlanoSelecionado] = useState("");
   const [valorStreaming, setValorStreaming] = useState("");
@@ -124,7 +126,7 @@ export function CriarDivisão() {
   const [localizacaoDestino, setLocalizacaoDestino] = useState<SugestaoEndereco | null>(null);
   const [dataPartida, setDataPartida] = useState("");
   const [dataRetorno, setDataRetorno] = useState("");
-  const [despesasAdicionais, setDespesasAdicionais] = useState<Array<{ nome: string; valor: string }>>([]);
+  const [despesasAdicionais, setDespesasAdicionais] = useState<Array<{ id: string; nome: string; valor: string }>>([]);
   const [sugestoesEndereco, setSugestoesEndereco] = useState<SugestaoEndereco[]>([]);
   const [sugestoesPartida, setSugestoesPartida] = useState<SugestaoEndereco[]>([]);
   const [sugestoesDestino, setSugestoesDestino] = useState<SugestaoEndereco[]>([]);
@@ -186,14 +188,31 @@ export function CriarDivisão() {
   };
 
   const atualizarNumeroParticipantes = (valor: string) => {
+    const anterior = numeroDeParticipantes;
     if (valor === "") {
+      if (timeoutAnimacaoParticipantes.current) clearTimeout(timeoutAnimacaoParticipantes.current);
+      timeoutAnimacaoParticipantes.current = null;
+      setAnimacaoParticipantes(null);
       setNumeroDeParticipantes("");
       return;
     }
 
     const numero = Number(valor);
-    setNumeroDeParticipantes(String(Math.max(0, numero)));
+    const atual = String(Math.max(0, numero));
+    if (anterior && atual !== anterior) {
+      setAnimacaoParticipantes({ anterior, atual });
+      if (timeoutAnimacaoParticipantes.current) clearTimeout(timeoutAnimacaoParticipantes.current);
+      timeoutAnimacaoParticipantes.current = setTimeout(() => {
+        setAnimacaoParticipantes(null);
+        timeoutAnimacaoParticipantes.current = null;
+      }, 280);
+    }
+    setNumeroDeParticipantes(atual);
   };
+
+  useEffect(() => () => {
+    if (timeoutAnimacaoParticipantes.current) clearTimeout(timeoutAnimacaoParticipantes.current);
+  }, []);
 
   const buscarEndereco = async (valor: string) => {
     setEndereco(valor);
@@ -474,7 +493,8 @@ export function CriarDivisão() {
   };
 
   const adicionarDespesa = () => {
-    setDespesasAdicionais((despesas) => [...despesas, { nome: "", valor: "" }]);
+    const id = globalThis.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+    setDespesasAdicionais((despesas) => [...despesas, { id, nome: "", valor: "" }]);
   };
 
   const atualizarDespesa = (indice: number, campo: "nome" | "valor", valor: string) => {
@@ -491,48 +511,116 @@ export function CriarDivisão() {
 
   const renderListaDespesas = (prefixo: string) => despesasAdicionais.length > 0 && (
     <div className="ListaDespesas">
+      <div className="ListaDespesasHeader">
+        <div>
+          <h3>Despesas adicionadas</h3>
+          <p>Informe o nome e o valor de cada despesa.</p>
+        </div>
+        <span className="ContadorDespesas" aria-live="polite">
+          <strong>{despesasAdicionais.length}</strong>
+          {despesasAdicionais.length === 1 ? " despesa adicionada" : " despesas adicionadas"}
+        </span>
+      </div>
       {despesasAdicionais.map((despesa, indice) => (
-        <div key={`${prefixo}-${indice}`} className="CampoDespesa">
+        <div key={despesa.id} className="CampoDespesa">
           <div className="CampoDespesaHeader">
-            <label htmlFor={`${prefixo}-Nome-${indice}`}>Nome da despesa *</label>
-            <button type="button" className="BtnRemoverDespesa" onClick={() => removerDespesa(indice)}>
-              Remover
+            <span className="DespesaNumero">Despesa {String(indice + 1).padStart(2, "0")}</span>
+            <button type="button" className="BtnRemoverDespesa" onClick={() => removerDespesa(indice)} aria-label={`Remover despesa ${indice + 1}`}>
+              <FiMinus aria-hidden="true" />
+              <span>Remover</span>
             </button>
           </div>
-          <input
-            id={`${prefixo}-Nome-${indice}`}
-            type="text"
-            className="InputText"
-            placeholder="Ex.: Pedágio, hospedagem, gás..."
-            value={despesa.nome}
-            onChange={(event) => atualizarDespesa(indice, "nome", event.target.value)}
-          />
-          <label htmlFor={`${prefixo}-Valor-${indice}`}>Valor da despesa *</label>
-          <input
-            id={`${prefixo}-Valor-${indice}`}
-            type="number"
-            className="InputText"
-            min="0"
-            step="0.01"
-            placeholder="R$ 0,00"
-            value={despesa.valor}
-            onChange={(event) => atualizarDespesa(indice, "valor", event.target.value)}
-          />
-          <span className="TextoAuxiliar">
-            Participante registrado: {user?.name || "criador do grupo"}
-          </span>
+          <div className="CampoDespesaCampos">
+            <div className="CampoDespesaCampo">
+              <label htmlFor={`${prefixo}-Nome-${indice}`}>Nome da despesa *</label>
+              <input
+                id={`${prefixo}-Nome-${indice}`}
+                type="text"
+                className="InputText"
+                placeholder="Ex.: Pedágio, hospedagem, gás..."
+                value={despesa.nome}
+                onChange={(event) => atualizarDespesa(indice, "nome", event.target.value)}
+              />
+            </div>
+            <div className="CampoDespesaCampo">
+              <label htmlFor={`${prefixo}-Valor-${indice}`}>Valor da despesa *</label>
+              <div className="CampoDespesaInputMoeda">
+                <span aria-hidden="true">R$</span>
+                <input
+                  id={`${prefixo}-Valor-${indice}`}
+                  type="number"
+                  className="InputText"
+                  min="0"
+                  step="0.01"
+                  placeholder="0,00"
+                  value={despesa.valor}
+                  onChange={(event) => atualizarDespesa(indice, "valor", event.target.value)}
+                />
+              </div>
+            </div>
+          </div>
+          <span className="DespesaResponsavel">Valor registrado por {user?.name || "criador do grupo"}</span>
         </div>
       ))}
-      <span className="ContadorDespesas">{despesasAdicionais.length} despesa(s) adicional(is)</span>
     </div>
   );
+
+  const renderCampoParticipantes = (
+    id: string,
+    minimo: number,
+    maximo: number | undefined,
+    ajuda: string,
+    placeholder: string,
+  ) => {
+    const quantidade = Number(numeroDeParticipantes || 0);
+    const ajustar = (delta: number) => {
+      const proximo = Math.max(minimo, quantidade + delta);
+      atualizarNumeroParticipantes(String(maximo === undefined ? proximo : Math.min(maximo, proximo)));
+    };
+
+    return (
+      <div className="CampoParticipantes">
+        <FaUsers className="IconeParticipantes" aria-hidden="true" />
+        <div className="CampoParticipantesValor">
+          {animacaoParticipantes && (
+            <span className="AnimacaoNumero" key={animacaoParticipantes.atual} aria-hidden="true">
+              <span className="NumeroAnterior">{animacaoParticipantes.anterior}</span>
+              <span className="NumeroAtual">{animacaoParticipantes.atual}</span>
+            </span>
+          )}
+          <input
+            type="number"
+            id={id}
+            min={minimo}
+            max={maximo}
+            step="1"
+            className={animacaoParticipantes ? "NumeroParticipantesAnimando" : undefined}
+            value={numeroDeParticipantes}
+            onChange={(event) => atualizarNumeroParticipantes(event.target.value)}
+            aria-describedby={`${id}-ajuda`}
+            required
+            placeholder={placeholder}
+          />
+          <span id={`${id}-ajuda`}>{ajuda}</span>
+        </div>
+        <div className="ControlesParticipantes" aria-label="Ajustar número de participantes">
+          <button type="button" aria-label="Diminuir participantes" disabled={quantidade <= minimo} onClick={() => ajustar(-1)}>
+            <FiMinus aria-hidden="true" />
+          </button>
+          <button type="button" aria-label="Aumentar participantes" disabled={maximo !== undefined && quantidade >= maximo} onClick={() => ajustar(1)}>
+            <FiPlus aria-hidden="true" />
+          </button>
+        </div>
+      </div>
+    );
+  };
 
   const renderBlocoPagamento = (nomeCampo: string) => (
     <div className="ConteudoEtapa">
       <label>Como será o pagamento? *</label>
-      <p>Selecione como os valores serão divididos</p>
-      <div className="RadioGroup">
-        <label>
+      <p className="SubtituloPagamento">Selecione como os valores serão divididos</p>
+      <div className="RadioGroup RadioGroupPagamento" role="radiogroup" aria-label="Forma de pagamento">
+        <label className="RadioOption">
           <input
             type="radio"
             name={nomeCampo}
@@ -540,11 +628,10 @@ export function CriarDivisão() {
             checked={formaPagamento === "igualitaria"}
             onChange={(event) => setFormaPagamento(event.target.value)}
           />
-          <MdOutlineAttachMoney className="iconPagamento" />
-          Divisão Igualitária
+          <MdOutlineAttachMoney className="iconPagamento" aria-hidden="true" />
+          <span className="RadioOptionTexto"><strong>Divisão Igualitária</strong><small>Todos os participantes pagam o mesmo valor.</small></span>
         </label>
-        <span>Todos os participantes pagam o mesmo valor.</span>
-        <label>
+        <label className="RadioOption">
           <input
             type="radio"
             name={nomeCampo}
@@ -552,10 +639,9 @@ export function CriarDivisão() {
             checked={formaPagamento === "personalizada"}
             onChange={(event) => setFormaPagamento(event.target.value)}
           />
-          <FaDivide className="iconPagamento" />
-          Divisão Personalizada
+          <FaDivide className="iconPagamento" aria-hidden="true" />
+          <span className="RadioOptionTexto"><strong>Divisão Personalizada</strong><small>Defina valores diferentes para todos ou apenas selecionados.</small></span>
         </label>
-        <span>Defina valores diferentes para todos ou apenas selecionados.</span>
       </div>
     </div>
   );
@@ -578,6 +664,7 @@ export function CriarDivisão() {
         </section>
         <main className="SctMain">
           <div className="SctMainContent">
+            <div className="TransicaoEtapa" key={`${divisaoSelecionada ?? "inicio"}-${etapaAtual}`}>
             <h1>{tituloEtapa}</h1>
             {!divisaoSelecionada ? (
               <div className="DivCards">
@@ -627,29 +714,22 @@ export function CriarDivisão() {
                   required={fluxoStreaming}
                 />
                 <label htmlFor="VisibilidadeDoGrupo">Visibilidade do grupo *</label>
-                <div className="RadioGroup" >
-                  <label>
+                <div className="RadioGroup" role="radiogroup" aria-label="Visibilidade do grupo">
+                  <label className="RadioOption">
                     <input type="radio" name="VisibilidadeDoGrupo" value="publico" checked={visibilidade === "publico"} onChange={(event) => setVisibilidade(event.target.value)} required={fluxoStreaming} />
-                    <FaUnlock className="iconCadeado" /> Grupo público
+                    <FaUnlock className="iconCadeado" aria-hidden="true" />
+                    <span className="RadioOptionTexto"><strong>Grupo público</strong><small>Visível para todos</small></span>
                   </label>
-                  <label>
+                  <label className="RadioOption">
                     <input type="radio" name="VisibilidadeDoGrupo" value="privado" checked={visibilidade === "privado"} onChange={(event) => setVisibilidade(event.target.value)} />
-                   <FaLock className="iconCadeado" /> Grupo privado
+                    <FaLock className="iconCadeado" aria-hidden="true" />
+                    <span className="RadioOptionTexto"><strong>Grupo privado</strong><small>Acesso por convite</small></span>
                   </label>
                 </div>
                 {!fluxoStreaming && (
                   <>
                     <label htmlFor="NumeroDeParticipantes">Número de participantes *</label>
-                    <input
-                      type="number"
-                      id="NumeroDeParticipantes"
-                      className="InputText"
-                      min="0"
-                      value={numeroDeParticipantes}
-                      onChange={(event) => atualizarNumeroParticipantes(event.target.value)}
-                      required
-                      placeholder="1"
-                    />
+                    {renderCampoParticipantes("NumeroDeParticipantes", 0, undefined, "Pessoas que farão parte desta divisão", "1")}
                   </>
                 )}
               </div>
@@ -700,10 +780,7 @@ export function CriarDivisão() {
                 </div>
                 <div className="ControlesDespesas">
                   <button type="button" className="BtnAdicionarDespesa" onClick={adicionarDespesa}>
-                    Adicionar despesas
-                  </button>
-                  <button type="button" className="BtnAdicionarDespesaIcone" onClick={adicionarDespesa} aria-label="Adicionar nova despesa">
-                    <FaPlusCircle />
+                    <FiPlus aria-hidden="true" /> Adicionar despesa
                   </button>
                 </div>
                 {renderListaDespesas("ViagemDespesa")}
@@ -730,24 +807,14 @@ export function CriarDivisão() {
                   required
                 >
                   <option value="">Selecione um plano</option>
-                  {planosDoServico.map(({ plano }) => <option key={plano} value={plano}>{plano}</option>)}
+                  {planosDoServico.map(({ plano, preco, telas }) => {
+                    const detalhes = [
+                      preco !== null ? formatarBRL(preco) : null,
+                      telas !== null ? `${telas} telas` : null,
+                    ].filter(Boolean).join(" · ");
+                    return <option key={plano} value={plano}>{detalhes ? `${plano} — ${detalhes}` : plano}</option>;
+                  })}
                 </select>
-                <label htmlFor="NumeroParticipantesStreaming">Número de participantes *</label>
-                <input
-                  type="number"
-                  id="NumeroParticipantesStreaming"
-                  className="InputText"
-                  min="2"
-                  max={planoStreamingAtual?.telas ?? undefined}
-                  step="1"
-                  placeholder="Mínimo 2"
-                  value={numeroDeParticipantes}
-                  onChange={(event) => setNumeroDeParticipantes(event.target.value)}
-                  required
-                />
-                {planoStreamingAtual?.telas !== null && planoStreamingAtual?.telas !== undefined && (
-                  <p className="TextoAuxiliar">Este plano permite até {planoStreamingAtual.telas} participantes simultâneos.</p>
-                )}
                 <label htmlFor="ValorStreaming">Valor mensal total do plano *</label>
                 <input
                   type={precoEditavel ? "number" : "text"}
@@ -761,12 +828,23 @@ export function CriarDivisão() {
                   readOnly={!precoEditavel}
                   required
                 />
-                <div className="ResumoStreaming" aria-live="polite">
-                  <p>Valor total: <strong>{Number.isFinite(totalStreaming) && totalStreaming > 0 ? formatarBRL(totalStreaming) : "Aguardando valor"}</strong></p>
-                  <p>Por participante: <strong>{valorPorParticipante !== null ? formatarBRL(valorPorParticipante) : "Aguardando dados válidos"}</strong></p>
-                </div>
                 <label htmlFor="DataVencimento">Data de Vencimento *</label>
                 <input type="date" id="DataVencimento" className="InputText" value={dataVencimento} onChange={(event) => setDataVencimento(event.target.value)} required />
+                <label htmlFor="NumeroParticipantesStreaming">Número de participantes *</label>
+                {renderCampoParticipantes("NumeroParticipantesStreaming", 2, planoStreamingAtual?.telas ?? undefined, "Participantes que dividirão este plano", "Mínimo 2")}
+                {planoStreamingAtual?.telas !== null && planoStreamingAtual?.telas !== undefined && (
+                  <p className="TextoAuxiliar">Este plano permite até {planoStreamingAtual.telas} participantes simultâneos.</p>
+                )}
+                <div className="ResumoStreaming" aria-live="polite">
+                  <div className="ResumoStreamingItem">
+                    <span>Valor total do plano</span>
+                    <strong>{Number.isFinite(totalStreaming) && totalStreaming > 0 ? formatarBRL(totalStreaming) : "Aguardando valor"}</strong>
+                  </div>
+                  <div className="ResumoStreamingItem">
+                    <span>Valor por participante</span>
+                    <strong>{valorPorParticipante !== null ? formatarBRL(valorPorParticipante) : "Aguardando dados válidos"}</strong>
+                  </div>
+                </div>
               </div>
             ) : (fluxoDespesas || fluxoOutros) && etapaAtual === 1 ? (
               renderBlocoPagamento("FormaPagamento")
@@ -803,29 +881,29 @@ export function CriarDivisão() {
                 )}
                 <div className="ControlesDespesas">
                   <button type="button" className="BtnAdicionarDespesa" onClick={adicionarDespesa}>
-                    Adicionar outra despesa
-                  </button>
-                  <button type="button" className="BtnAdicionarDespesaIcone" onClick={adicionarDespesa} aria-label="Adicionar outra despesa">
-                    <FaPlusCircle />
+                    <FiPlus aria-hidden="true" /> Adicionar despesa
                   </button>
                 </div>
                 {renderListaDespesas("DomesticaDespesa")}
               </div>
             ) : fluxoOutros && etapaAtual === 2 ? (
               <div className="ConteudoEtapa">
-                <label>Adicionar despesas</label>
+                <h3 className="TituloDespesas">Despesas adicionais</h3>
                 <div className="ControlesDespesas">
                   <button type="button" className="BtnAdicionarDespesa" onClick={adicionarDespesa}>
-                    Adicionar despesas
-                  </button>
-                  <button type="button" className="BtnAdicionarDespesaIcone" onClick={adicionarDespesa} aria-label="Adicionar nova despesa">
-                    <FaPlusCircle />
+                    <FiPlus aria-hidden="true" /> Adicionar despesa
                   </button>
                 </div>
                 {renderListaDespesas("OutraDespesa")}
               </div>
             ) : null}
-            {erroValidacao && <p role="alert">{erroValidacao}</p>}
+            </div>
+            {erroValidacao && (
+              <div className="ErroValidacao" role="alert" aria-live="assertive">
+                <FaExclamationTriangle aria-hidden="true" />
+                <span>{erroValidacao}</span>
+              </div>
+            )}
             <div className="DivBtns">
               <button className="BtnVoltar" onClick={voltar} disabled={!divisaoSelecionada}>
                 {fluxoViagem ? <FiArrowLeft /> : <FaArrowCircleLeft />} {fluxoViagem ? "Sair" : "Voltar"}
@@ -843,7 +921,6 @@ export function CriarDivisão() {
           </div>
         </main>
       </section>
-      <Footer />
     </>
   );
 }

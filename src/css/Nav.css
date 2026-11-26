@@ -30,6 +30,21 @@
   color: var(--verde-claro);
 }
 
+.nav-bell.tem-nao-lidas {
+  transform-origin: 50% 12%;
+  animation: navBellSwing 1.8s ease-in-out infinite;
+}
+
+@keyframes navBellSwing {
+  0%, 58%, 100% { transform: rotate(0); }
+  5% { transform: rotate(12deg); }
+  10% { transform: rotate(-10deg); }
+  16% { transform: rotate(8deg); }
+  22% { transform: rotate(-6deg); }
+  28% { transform: rotate(3deg); }
+  34% { transform: rotate(0); }
+}
+
 .nav-notification {
   position: relative;
   display: inline-flex;
@@ -124,6 +139,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .nav-bell.tem-nao-lidas,
   .nav-bell-dot.tem-nao-lidas,
   .nav-bell-badge {
     animation: none;

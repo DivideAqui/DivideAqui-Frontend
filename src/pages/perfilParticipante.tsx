@@ -1,6 +1,8 @@
 import "../css/perfilParticipante.css";
 import "../css/MinCss/perfilParticipanteMin.css";
 import "../css/divisoes.css";
+import { DivisionSkeleton } from "../components/DivisionSkeleton";
+import { PerfilParticipanteSkeleton } from "../components/PerfilParticipanteSkeleton";
 
 import { useAuth } from "../hooks/useAuth";
 import { useState, useEffect } from "react";
@@ -45,6 +47,7 @@ interface Divisao {
     id: string;
     nome: string;
     avatar: string;
+    foto?: string | null;
   }>;
 }
 
@@ -73,6 +76,21 @@ const getDivisaoColor = (icone: Divisao["icone"]) => {
     return "var(--azul-claro)";
   }
 };
+
+const parseValor = (valor: string | number | null | undefined): number | null => {
+  if (valor == null || valor === "") return null;
+  if (typeof valor === "number") return Number.isFinite(valor) ? valor : null;
+
+  const normalizado = valor.trim().replace(/[^\d,.-]/g, "");
+  const canonical = normalizado.includes(",")
+    ? normalizado.replace(/\./g, "").replace(",", ".")
+    : normalizado;
+  const numero = Number(canonical);
+  return Number.isFinite(numero) ? numero : null;
+};
+
+const formatarBRL = (valor: number) =>
+  new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(valor);
 
 export function PerfilParticipante() {
 const { user } = useAuth();
@@ -110,6 +128,7 @@ const [fotoZoom, setFotoZoom] = useState(false);
 // Este estado é usado somente para EXIBIR as divisões.
 const [divisoesUsuarioState, setDivisoesUsuarioState] =
 useState<Divisao[]>([]);
+const [carregandoDivisoes, setCarregandoDivisoes] = useState(true);
 
 // GRUPOS EM COMUM: usado para verificar se o usuário pode avaliar o perfil do outro usuário.
 const [gruposEmComum, setGruposEmComum] = useState<Divisao[]>([]);
@@ -136,6 +155,8 @@ useEffect(() => {
   setCurrentIndex(0);
   setFeedbacks([]);
   setDivisoesUsuarioState([]);
+  setCarregandoDivisoes(true);
+  setCarregandoAvaliacoes(true);
   setGruposEmComum([]);
   setMediaAvaliacoes(0);
 }, [perfilUsuarioId]);
@@ -170,6 +191,8 @@ let cancelado = false;
 
 const buscarDadosPerfil = async () => {
 if (!perfilUsuarioId) return;
+
+  setCarregandoDivisoes(true);
 
   try {
     // DADOS DO USUÁRIO
@@ -214,6 +237,15 @@ if (!perfilUsuarioId) return;
 
     const gruposFormatados: Divisao[] =
       gruposDoUsuario.map((grupo: any) => {
+        const streamData = Array.isArray(grupo.stream) ? grupo.stream[0] : grupo.stream;
+        const mensalidadeData = Array.isArray(grupo.mensalidade)
+          ? grupo.mensalidade[0]
+          : grupo.mensalidade;
+        const itensGrupo = Array.isArray(grupo.item)
+          ? grupo.item
+          : grupo.item
+            ? [grupo.item]
+            : [];
         const categoria =
           grupo.categoria?.cat_nome || "Outros";
 
@@ -246,6 +278,7 @@ if (!perfilUsuarioId) return;
         const participantes = (grupo.participacoes ?? []).map((participacao: any) => ({
           id: String(participacao.usuario?.usu_id ?? participacao.usu_id),
           nome: participacao.usuario?.usu_nome || `Usuário ${participacao.usu_id}`,
+          foto: participacao.usuario?.usu_foto || null,
           avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(String(participacao.usuario?.usu_id ?? participacao.usu_id))}`,
         }));
 
@@ -259,19 +292,30 @@ if (!perfilUsuarioId) return;
         const participationCount = grupo._count?.participacoes ?? 0;
         const creatorIsParticipant = grupo.gru_criador_id != null;
         const memberCount = Math.max(1, participationCount + (creatorIsParticipant ? 0 : 1));
-        const maxParticipants = grupo.stream?.str_telas == null
-          ? (grupo.gru_num_part ?? grupo.gru_num_vagas ?? memberCount)
-          : Math.min(grupo.gru_num_part ?? grupo.gru_num_vagas ?? memberCount, grupo.stream.str_telas);
-        const slots = Math.max(0, (grupo.gru_num_vagas || 0));
+        const configuredCapacity = Math.max(
+          memberCount,
+          grupo.gru_num_part ?? grupo.gru_num_vagas ?? memberCount,
+        );
+        const streamScreens = parseValor(streamData?.str_telas);
+        const maxParticipants = streamScreens == null
+          ? configuredCapacity
+          : Math.min(configuredCapacity, streamScreens);
+        const slots = Math.max(0, maxParticipants - memberCount);
 
-        const streamTotal = grupo.stream?.str_valor == null ? null : Number(grupo.stream.str_valor);
-        const divisionCount = Math.min(maxParticipants, memberCount + (slots > 0 ? 1 : 0));
-        const perParticipantTotal = streamTotal === null || !Number.isFinite(streamTotal)
+        const streamTotal = parseValor(streamData?.str_valor);
+        const divisionCount = Math.max(1, Math.min(maxParticipants, memberCount + (slots > 0 ? 1 : 0)));
+        const perParticipantTotal = streamTotal === null
           ? null
           : Math.round(Math.round(streamTotal * 100) / divisionCount) / 100;
-        const perParticipantPrice = streamTotal !== null && Number.isFinite(streamTotal)
-          ? `R$ ${perParticipantTotal?.toFixed(2).replace(".", ",")}`
-          : "R$ —";
+        const itemsTotal = itensGrupo.reduce(
+          (total: number, item: { ite_valor: string | number }) => total + (parseValor(item.ite_valor) ?? 0),
+          0,
+        );
+        const itemPrice = itensGrupo.length ? formatarBRL(itemsTotal) : null;
+        const monthlyPrice = parseValor(mensalidadeData?.men_valor);
+        const perParticipantPrice = streamTotal !== null
+          ? formatarBRL(perParticipantTotal ?? streamTotal)
+          : itemPrice ?? (monthlyPrice !== null ? formatarBRL(monthlyPrice) : "R$ —");
 
         // Dados da viagem
         const viagem = grupo.viagem ?? null;
@@ -280,11 +324,12 @@ if (!perfilUsuarioId) return;
           id: grupo.gru_id,
           nome: grupo.gru_nome || "Sem nome",
           categoria,
-          valor: grupo.stream?.str_valor
-            ? `R$ ${Number(grupo.stream.str_valor).toFixed(2).replace(".", ",")}` : "Valor não informado",
+          valor: streamTotal !== null
+            ? formatarBRL(streamTotal)
+            : itemPrice ?? (monthlyPrice !== null ? formatarBRL(monthlyPrice) : "Valor não informado"),
           price: perParticipantPrice,
-          totalPlanPrice: streamTotal != null ? `R$ ${streamTotal.toFixed(2).replace(".", ",")}` : null,
-          planName: grupo.stream?.str_plano ?? null,
+          totalPlanPrice: streamTotal != null ? formatarBRL(streamTotal) : null,
+          planName: streamData?.str_plano ?? null,
           vagas: grupo.gru_num_vagas || 0,
           memberCount,
           slots,
@@ -323,6 +368,8 @@ if (!perfilUsuarioId) return;
     setCurrentDivisaoIndex(0);
   } catch (error) {
     console.error( "Erro ao carregar dados do perfil:",error );
+  } finally {
+    if (!cancelado) setCarregandoDivisoes(false);
   }
 };
 
@@ -663,6 +710,10 @@ try {
 }
 };
 
+if (carregandoDivisoes || carregandoAvaliacoes) {
+  return <PerfilParticipanteSkeleton onClose={() => navigate(-1)} />;
+}
+
 return (
   <>
   <section className="perfil-participante-container">
@@ -851,8 +902,9 @@ return (
       <div className="participante-divisoes">
         <h1 className="titulo-participante">Divisões de {displayName}:</h1>
 
-        {divisoesUsuarioState.length >
-        0 ? (
+        {carregandoDivisoes ? (
+          <DivisionSkeleton rows={1} />
+        ) : divisoesUsuarioState.length > 0 ? (
           <>
             <div className="participante-divisoes-carousel-wrapper">
               <button type="button"
@@ -871,7 +923,7 @@ return (
                   {divisoesUsuarioState.map(
                     (divisao) => (
                       <div key={divisao.id} className="participante-divisao-slide">
-                        <article className="participante-divisao-card" role="button"
+                        <article className="participante-divisao-card vagas-card" role="button"
                           tabIndex={0} onClick={() => setDivisaoSelecionada(divisao)}
                           onKeyDown={(event) => {
                             if ( event.key === "Enter" || event.key === " ") {
@@ -880,29 +932,29 @@ return (
                             }
                           }}
                         >
-                          <div className="participante-divisao-card-top">
-                            <div className="participante-divisao-card-icone"
+                          <div className="participante-divisao-card-top vagas-card__header">
+                            <div className="participante-divisao-card-icone vagas-card__icon"
                               style={{backgroundColor:getDivisaoColor(divisao.icone),}}
                             >
-                              <span className="participante-divisao-card-lock"><FaLock /></span>
+                              {divisao.privado && <span className="vagas-card__lock" role="img" aria-label="Grupo fechado"><FaLock /></span>}
                               {getDivisaoIcon(divisao.icone)}
                             </div>
 
-                            <div className="participante-divisao-card-participantes">
+                            <div className="participante-divisao-card-participantes vagas-card__avatars">
                               {divisao.participantes && divisao.participantes.length > 0 ? (
                                 divisao.participantes.slice(0, 4).map((participante) => (
                                   <button
                                     key={participante.id}
                                     type="button"
-                                    className="participante-divisao-card-avatar-btn"
+                                    className="participante-divisao-card-avatar-btn vagas-card__avatar"
                                     onClick={(e) => {
                                       e.stopPropagation();
                                       navigate(`/perfilparticipante/${participante.id}`);
                                     }}
                                     title={`${participante.nome} - Clique para ver o perfil`}
                                   >
-                                    <img src={participante.avatar} alt={participante.nome}
-                                      className="participante-divisao-card-avatar"
+                                    <img src={participante.foto || participante.avatar} alt={participante.nome}
+                                      className="participante-divisao-card-avatar vagas-card__avatar-image"
                                     />
                                     <span className="participante-divisao-card-avatar-tooltip">{participante.nome}</span>
                                   </button>
@@ -910,7 +962,7 @@ return (
                               ) : (
                                 <div className="participante-divisao-card-lider">
                                   <img src={divisao.liderAvatar} alt={divisao.lider}
-                                    className="participante-divisao-card-avatar"
+                                    className="participante-divisao-card-avatar vagas-card__avatar-image"
                                   />
                                   <span>{divisao.lider}</span>
                                 </div>
@@ -921,20 +973,22 @@ return (
                             </div>
                           </div>
 
-                          <div className="participante-divisao-card-conteudo">
-                            <div className="participante-divisao-card-conteudo-heading">
-                              <h2>{divisao.nome}</h2>
-                              <span className="participante-divisao-card-conteudo-price">
+                          <div className="participante-divisao-card-conteudo vagas-card__body">
+                            <div className="participante-divisao-card-conteudo-heading vagas-card__body-heading">
+                              <h4>{divisao.nome}</h4>
+                              <span className="participante-divisao-card-conteudo-price vagas-card__price">
                                 {divisao.price}{divisao.icone === "streaming" ? " / pessoa" : ""}
                               </span>
                             </div>
                             <p>Líder: {divisao.lider}</p>
-                            {divisao.planName && <p>Plano: {divisao.planName}</p>}
-                            <p>{divisao.memberCount} pessoa(s) no grupo</p>
+                            {divisao.planName && <p className="vagas-card__hide-mobile">Plano: {divisao.planName}</p>}
+                            <p className="vagas-card__hide-mobile">{divisao.memberCount} pessoa(s) no grupo</p>
                             <p>{divisao.slots} vagas disponíveis</p>
                           </div>
 
-                          <span className="participante-divisao-card-abrir">Ver divisão →</span>
+                          <button type="button" className="vagas-card__more" aria-label="Abrir divisão" onClick={(event) => { event.stopPropagation(); setDivisaoSelecionada(divisao); }}>
+                            <FaEllipsisH />
+                          </button>
                         </article>
                       </div>
                     )

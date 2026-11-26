@@ -72,7 +72,7 @@ export function SearchInput({
   const shouldShowResults = isFocused && (normalizedValue.length > 0 || results.length > 0);
 
   return (
-    <div className={`SearchInputWrapper ${isFocused ? "SearchInputWrapper-focused" : ""} ${className}`.trim()}>
+    <div className={`SearchInputWrapper ${isFocused ? "SearchInputWrapper-focused" : ""} ${shouldShowResults ? "SearchInputWrapper-results-open" : ""} ${className}`.trim()}>
       <input
         type="text"
         value={value}

@@ -4,11 +4,13 @@ import { gsap } from "gsap";
 import { Nav } from "../components/Nav";
 import { Footer } from "../components/Footer";
 import { SearchInput } from "../components/SearchInput";
+import { DivisionSkeleton } from "../components/DivisionSkeleton";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "../components/ui/dialog";
 import "../css/divisoes.css";
 import "../css/SearchInput.css";
 import moeda from "../assets/Imgs/moeda.png";
 import { useSearchParams, useNavigate } from "react-router-dom";
+import { FiX } from "react-icons/fi";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import Swal from "sweetalert2";
@@ -441,6 +443,8 @@ function VagasLinha({
   const rowRef = useRef<HTMLDivElement | null>(null);
   const [showLeft, setShowLeft] = useState(false);
   const [showRight, setShowRight] = useState(true);
+  const [animatedArrow, setAnimatedArrow] = useState<"left" | "right" | null>(null);
+  const [arrowAnimationId, setArrowAnimationId] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -501,6 +505,9 @@ function VagasLinha({
   const handleScroll = (direction: "left" | "right") => {
     if (!trackRef.current) return;
 
+    setAnimatedArrow(direction);
+    setArrowAnimationId((id) => id + 1);
+
     const track = trackRef.current;
     const currentLeft = track.scrollLeft;
     const firstCard = track.querySelector(".vagas-card") as HTMLElement | null;
@@ -543,7 +550,11 @@ function VagasLinha({
           onClick={() => handleScroll("left")}
           aria-label="Anterior"
         >
-          <FaArrowCircleLeft />
+          <FaArrowCircleLeft
+            key={`left-${arrowAnimationId}`}
+            className={animatedArrow === "left" ? "is-clicking" : undefined}
+            onAnimationEnd={() => setAnimatedArrow(null)}
+          />
         </button>
 
         <div className="vagas-row__track" ref={trackRef}>
@@ -563,7 +574,12 @@ function VagasLinha({
             >
               <div className="vagas-card__header">
                 <div className="vagas-card__icon" style={{ backgroundColor: item.color }}>
-                  {item.privado && <span className="vagas-card__lock"><FaLock /></span>}
+                  {item.privado && (
+                    <span className="vagas-card__lock" role="img" aria-label="Grupo fechado" tabIndex={0} onKeyDown={(event) => event.stopPropagation()}>
+                      <FaLock aria-hidden="true" />
+                      <span className="vagas-card__avatar-tooltip" aria-hidden="true">Grupo fechado</span>
+                    </span>
+                  )}
                   {item.icon}
                 </div>
 
@@ -639,7 +655,11 @@ function VagasLinha({
           onClick={() => handleScroll("right")}
           aria-label="Próximo"
         >
-          <FaArrowCircleRight />
+          <FaArrowCircleRight
+            key={`right-${arrowAnimationId}`}
+            className={animatedArrow === "right" ? "is-clicking" : undefined}
+            onAnimationEnd={() => setAnimatedArrow(null)}
+          />
         </button>
       </div>
     </div>
@@ -1075,9 +1095,7 @@ export function Divisoes() {
         <section className="SctDivision">
           <div className="vagas-section">
             {loading ? (
-              <div className="vagas-row__title">
-                <h3>Carregando divisões...</h3>
-              </div>
+              <DivisionSkeleton />
             ) : rows.length > 0 ? (
               rows.map((row, index) => (
                 <VagasLinha
@@ -1099,6 +1117,14 @@ export function Divisoes() {
         <Dialog open={Boolean(selectedItem)} onOpenChange={(open) => !open && setSelectedItem(null)}>
           {selectedItem ? (
             <DialogContent className="division-dialog">
+              <button
+                type="button"
+                className="division-dialog__close"
+                onClick={() => setSelectedItem(null)}
+                aria-label="Fechar detalhes da divisão"
+              >
+                <FiX />
+              </button>
               <DialogHeader>
                 <div className="division-dialog__header">
                   <div className="division-dialog__service-block">
